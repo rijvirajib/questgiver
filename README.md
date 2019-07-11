@@ -91,6 +91,7 @@ class Hero() {
   
   health: number // (0, 100)
   attack: number // [0, 100)
+  defense: number // [0, 100)
   accuracy: number // Chance of successfully hitting
   speed: number // default 1, .5 means 2x attack
   
