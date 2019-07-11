@@ -54,6 +54,7 @@ class Quest() {
   
   async onStart() // sets acceptedTime
   async onTick() // roll for random events, check arriveTime, fight Monsters
+  combat() // based on tick, who attacks whom
   async onComplete() // heroes/items could be lost, rewards if possible
 }
 
@@ -68,7 +69,7 @@ class Event() {
 class Hero() {
   name: string
   description: string // not sure if I'll have this
-  gold: number
+  salary: number
   
   type: enum // brawler? archer? types define generic skills
   skills: [...Skill]
@@ -82,6 +83,7 @@ class Hero() {
     leftHand: Item
     armor: Item
     helm: Item
+    trinket: Item
   }
   
   onAttack() // run through all ATTACK items
@@ -93,7 +95,7 @@ class Item() {
   name: string
   isQuestItem: boolean // Quest Items are global and do not need a hero to hold it
   
-  type: enum // ATTACK or DEFEND or PASSIVE
+  type: enum // one hand, two hand, armor, helm, trinket
   damage?: number // if ATTACK
   armor?: number // if DEFEND
   skills?: [...Skill] // passive stuff
