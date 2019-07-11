@@ -13,11 +13,18 @@ const gameState = {
   time: number,
   gold: number,
   player: {
+    position: {
+      x: 0,
+      y: 0
+    },
     rank: number,
   },
   inventory: [...Item],
   quests: [...Quest],
   heroes: [...Hero],
+  locations: { // location position stored as key for easy filtering
+    posXposY: Location
+  }
 }
 ```
 
@@ -26,13 +33,17 @@ class Quest() {
   name: string
   description: string
   location: Location
+  currentPosition: {
+    x: number
+    y: number
+  }
 
   addedTime: number
   acceptedTime: number
   arriveTime: number // how long it will take to complete mission
   completedTime: number
   
-  type: enum // bounty? hunting? delivery?
+  type: enum // bounty? hunting? delivery? search?
   requirements: {
     level?: number // sum total of all hero levels (ie 500 means at least 5 heroes at 100 level)
     monsters?: [...Monster] // any monsters that will be fought
@@ -42,9 +53,11 @@ class Quest() {
     gold?: number
     items?: [...Item]
     heros?: [...Hero]
+    quests?: [...Quest] // Follow up quests!
   }
   
   status: {
+    time: number // for search, hunting, or delivery quests
     monsters: [...Monster],
   }
   
@@ -71,12 +84,15 @@ class Hero() {
   description: string // not sure if I'll have this
   salary: number
   
+  rarity: number // chance to successfully win as reward
+  
   type: enum // brawler? archer? types define generic skills
   skills: [...Skill]
   
   health: number // (0, 100)
-  level: number // [0, 100)
+  attack: number // [0, 100)
   accuracy: number // Chance of successfully hitting
+  speed: number // default 1, .5 means 2x attack
   
   gear: {
     rightHand: Item
@@ -86,40 +102,48 @@ class Hero() {
     trinket: Item
   }
   
-  onAttack() // run through all ATTACK items
-  onDefend() // run through all DEFEND items
+  onAttack() // attack + ATTACK items
+  onDefend() // armor + DEFENSE items
   onDeath() // roll for gear recovery
 }
 
 class Item() {
   name: string
-  isQuestItem: boolean // Quest Items are global and do not need a hero to hold it
+  description: string
+  rarity: number // chance of success as reward and how item is colored
   
   type: enum // one hand, two hand, armor, helm, trinket
-  damage?: number // if ATTACK
-  armor?: number // if DEFEND
-  skills?: [...Skill] // passive stuff
-  quality: number // (0, 100) keeps track of damage 
-
-  description: string
+  skills?: [...Skill] // character modifiers
   
+  quality: number // (0, 100) keeps track of damage and usage
+
   isSellable = true
   sellValue: number
   
   isStoreItem: boolean
   buyValue: number
   
-  rarity: .1 // must score > 90% to get this item as reward
-
   requirements: {
-    questType?: enum
-    skills?: [...Skill]
-    items?: [...Item]
+    skills?: [...Skill] // hero must have these skills
+    items?: [...Item] // hero must have these items
   }
   
+  // run through each skill and update character
   onEquip()
-  onUse() // uses hero level + item modifiers
   onDrop()
+}
+
+class Skill() {
+  name: string
+  description: string
+  type: enum // item, magic, hero, quest, monster
+  rarity: number // chance of success as reward
+  element?: enum // normal, fire, water, electric, rock, ice, poison, psychic, ghost, dark
+  health?: number // change in health
+  attack?: number // change in attack
+  defense?: number // change in defense
+  accuracy?: number // % change in accuracy
+  speed?: number // % change in speed
 }
 
 class Monster() {
@@ -131,17 +155,31 @@ class Monster() {
   accuracy: number // default accuracy to successfully hit
  
   beastiary: string // description of the monster and weaknesses
-  weaknesses: [...Skill] 
+  weaknesses: [...Skill]
+  
+  // Items could be rewarded to
+  rarity: number // used to generate random rewards and their qualities onDeath
+  rewards: {
+    gold: number
+    items?: [...Item]
+  }
   
   onAttack() // attack + type modifier
   onDefend() // armor + type modifier
   onDeath()
 }
 
-class Skill() {
+class Location() {
   name: string
   description: string
-  type: enum // item, magic, hero, quest, monster
-  modifier() // ie. + .3 to accuracy, + Poison Damage
+  type: enum // city, cave, underwater, jungle, forest, plains, etc
+  // The center of the map is player location: 0,0
+  position: {
+    x: number
+    y: number
+  }
+  requirements: {
+    skills: [...Skills] // perhaps you need a flying hero
+  }
 }
 ```
