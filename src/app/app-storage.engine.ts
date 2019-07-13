@@ -1,5 +1,5 @@
-import { StorageEngine } from "@ngxs/storage-plugin";
-require("nativescript-localstorage");
+import { StorageEngine } from '@ngxs/storage-plugin';
+require('nativescript-localstorage');
 
 export class AppStorageEngine implements StorageEngine {
   get length(): number {

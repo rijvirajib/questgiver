@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
-import { RadSideDrawer } from "nativescript-ui-sidedrawer";
-import * as app from "tns-core-modules/application";
+import { Component, OnInit } from '@angular/core';
+import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
+import * as app from 'tns-core-modules/application';
 
 @Component({
-    selector: "Settings",
+    selector: 'Settings',
     moduleId: module.id,
-    templateUrl: "./settings.component.html"
+    templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit {
 

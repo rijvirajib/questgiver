@@ -35,6 +35,7 @@
     "one-variable-per-declaration": [true, "ignore-for-loop"],
     "ordered-imports": false,
     "prefer-conditional-expression": false,
+    "quotemark": [true, "single"],
     "use-host-property-decorator": true,
     "use-input-property-decorator": true,
     "use-life-cycle-interface": true,

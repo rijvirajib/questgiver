@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { NavigationEnd, Router } from "@angular/router";
-import { RouterExtensions } from "nativescript-angular/router";
-import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
-import { filter } from "rxjs/operators";
-import * as app from "tns-core-modules/application";
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { RouterExtensions } from 'nativescript-angular/router';
+import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nativescript-ui-sidedrawer';
+import { filter } from 'rxjs/operators';
+import * as app from 'tns-core-modules/application';
 
 @Component({
   moduleId: module.id,
-  selector: "ns-app",
-  templateUrl: "app.component.html"
+  selector: 'ns-app',
+  templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
   private _activatedUrl: string;
@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._activatedUrl = "/home";
+    this._activatedUrl = '/home';
     this._sideDrawerTransition = new SlideInOnTopTransition();
 
     this.router.events
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
   onNavItemTap(navItemRoute: string): void {
     this.routerExtensions.navigate([navItemRoute], {
       transition: {
-        name: "fade"
+        name: 'fade'
       }
     });
 
