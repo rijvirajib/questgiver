@@ -1,5 +1,5 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { AppStateModel } from './models/app-state.model';
+import { AppStateModel } from './app.model';
 /* const gameState = {
   time: number,
   gold: number,
@@ -33,6 +33,7 @@ export class AppState {
     return state.time;
   }
 
+  @Selector()
   static getGold(state: AppStateModel) {
     return state.gold;
   }
