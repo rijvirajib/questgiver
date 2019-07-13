@@ -14,10 +14,18 @@ import { AppComponent } from "./app.component";
   imports: [
     AppRoutingModule,
     NativeScriptModule,
-    NativeScriptUISideDrawerModule
+    NativeScriptUISideDrawerModule,
+    NgxsModule.forRoot([]),
+    NgxsStoragePluginModule.forRoot()
   ],
   declarations: [
     AppComponent
+  ],
+  providers: [
+    {
+      provide: STORAGE_ENGINE,
+      useClass: AppStorageEngine
+    }
   ],
   schemas: [
     NO_ERRORS_SCHEMA
