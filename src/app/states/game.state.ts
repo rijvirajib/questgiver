@@ -32,8 +32,8 @@ const TICKSPEED = 1
     speed: TICKSPEED,
     loading: false,
 
-    gold: 0
-  }
+    gold: 0,
+  },
 })
 
 export class GameState {
@@ -65,21 +65,21 @@ export class GameState {
   tick({getState, patchState }: StateContext<GameStateModel>) {
     const state = getState()
     patchState({
-      time: state.time + 1
+      time: state.time + 1,
     })
   }
 
   @Action(ChangeSpeed)
   changeSpeed(
     {getState, patchState, dispatch }: StateContext<GameStateModel>,
-    { payload }: ChangeSpeed
+    { payload }: ChangeSpeed,
   ) {
     const state = getState()
     if (!state.loop) {
       dispatch(new Start())
     }
     patchState({
-      speed: payload
+      speed: payload,
     })
   }
 

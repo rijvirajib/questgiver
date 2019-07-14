@@ -10,26 +10,26 @@ import { GAMESTATES } from './states'
 
 @NgModule({
   bootstrap: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     AppRoutingModule,
     NativeScriptModule,
     NativeScriptUISideDrawerModule,
     NgxsModule.forRoot(GAMESTATES, { developmentMode: true }),
-    NgxsStoragePluginModule.forRoot()
+    NgxsStoragePluginModule.forRoot(),
   ],
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   providers: [
     {
       provide: STORAGE_ENGINE,
-      useClass: AppStorageEngine
-    }
+      useClass: AppStorageEngine,
+    },
   ],
   schemas: [
-    NO_ERRORS_SCHEMA
-  ]
+    NO_ERRORS_SCHEMA,
+  ],
 })
 export class AppModule { }

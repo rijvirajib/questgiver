@@ -5,7 +5,7 @@ import * as app from 'tns-core-modules/application'
 @Component({
     selector: 'Featured',
     moduleId: module.id,
-    templateUrl: './featured.component.html'
+    templateUrl: './featured.component.html',
 })
 export class FeaturedComponent implements OnInit {
 

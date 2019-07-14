@@ -45,7 +45,7 @@
     "use-pipe-transform-interface": true,
     "semicolon": [true, "never"],
     "trailing-comma": [true, {
-      "multiline": "never",
+      "multiline": "always",
       "singleline": "never"
     }],
     "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
