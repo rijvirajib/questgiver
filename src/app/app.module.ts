@@ -6,6 +6,7 @@ import { NgxsStoragePluginModule, STORAGE_ENGINE } from '@ngxs/storage-plugin';
 import { AppStorageEngine } from './app-storage.engine';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { GAMESTATES } from './states';
 
 @NgModule({
   bootstrap: [
@@ -15,7 +16,7 @@ import { AppComponent } from './app.component';
     AppRoutingModule,
     NativeScriptModule,
     NativeScriptUISideDrawerModule,
-    NgxsModule.forRoot([]),
+    NgxsModule.forRoot(GAMESTATES, { developmentMode: true }),
     NgxsStoragePluginModule.forRoot()
   ],
   declarations: [

@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nativescript-ui-sidedrawer';
+import { Store } from '@ngxs/store';
 import { filter } from 'rxjs/operators';
+import { Start } from './states/game.actions';
 import * as app from 'tns-core-modules/application';
 
 @Component({
@@ -14,7 +16,11 @@ export class AppComponent implements OnInit {
   private _activatedUrl: string;
   private _sideDrawerTransition: DrawerTransitionBase;
 
-  constructor(private router: Router, private routerExtensions: RouterExtensions) {
+  constructor(
+    private router: Router,
+    private routerExtensions: RouterExtensions,
+    private store: Store
+  ) {
     // Use the component constructor to inject services.
   }
 
@@ -25,6 +31,8 @@ export class AppComponent implements OnInit {
     this.router.events
     .pipe(filter((event: any) => event instanceof NavigationEnd))
     .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects);
+
+    this.store.dispatch(Start);
   }
 
   get sideDrawerTransition(): DrawerTransitionBase {

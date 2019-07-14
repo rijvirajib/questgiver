@@ -1,0 +1,13 @@
+{
+  "xml.fileAssociations": [
+    {
+      "systemId": "/Users/rijvirajib/questgiver/schema/tns.xsd",
+      "pattern": "**/**/*.xml"
+    }
+  ],
+  "files.exclude": {
+    "schema": true
+  },
+  "editor.snippetSuggestions": "top",
+  "NE.enable.snippets": true
+}
