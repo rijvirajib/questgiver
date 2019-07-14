@@ -75,7 +75,7 @@ export class GameState {
   @Action(ChangeSpeed)
   changeSpeed(
     {getState, patchState, dispatch }: StateContext<GameStateModel>,
-    { payload }: ChangeSpeed,
+    { payload }: ChangeSpeed
   ) {
     const state = getState()
     if (state.loop) {
