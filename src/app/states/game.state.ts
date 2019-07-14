@@ -26,7 +26,7 @@ const TICKSPEED = 1
   name: 'game',
   defaults: {
     time: 0,
-    loop: undefined,
+    loop: null,
     currentScreen: 'home',
     paused: false,
     speed: TICKSPEED,
@@ -55,9 +55,13 @@ export class GameState {
   @Action(Start)
   start({getState, patchState, dispatch}: StateContext<GameStateModel>) {
     const state = getState()
+    // Do not run it more than once
+    if (state.loop) {
+      return
+    }
     const loop = setInterval(() => {
       dispatch(new Tick())
-    }, state.speed * 1000)
+    }, (1 / state.speed) * 1000)
     patchState({loop})
   }
 
@@ -75,17 +79,24 @@ export class GameState {
     { payload }: ChangeSpeed,
   ) {
     const state = getState()
-    if (!state.loop) {
-      dispatch(new Start())
+    if (state.loop) {
+      clearInterval(state.loop)
     }
+    const loop = setInterval(() => {
+      dispatch(new Tick())
+    }, (1 / payload) * 1000)
     patchState({
+      loop,
       speed: payload,
     })
   }
 
   @Action(Pause)
-  pause({getState}: StateContext<GameStateModel>) {
+  pause({getState, patchState}: StateContext<GameStateModel>) {
     const state = getState()
     clearInterval(state.loop)
+    patchState({
+      loop: null,
+    })
   }
 }
