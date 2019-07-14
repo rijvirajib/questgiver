@@ -28,7 +28,6 @@ const TICKSPEED = 1
     time: 0,
     loop: null,
     currentScreen: 'home',
-    paused: false,
     speed: TICKSPEED,
     loading: false,
 

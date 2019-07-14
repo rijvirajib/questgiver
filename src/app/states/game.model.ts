@@ -3,7 +3,6 @@ export class GameStateModel {
   loop: any
   currentScreen: string
   loading: boolean
-  paused: boolean
   speed: number
 
   gold: number
