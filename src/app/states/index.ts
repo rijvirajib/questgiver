@@ -1,5 +1,5 @@
-import { GameState } from './game.state';
+import { GameState } from './game.state'
 
-export const GAMESTATES = [GameState];
+export const GAMESTATES = [GameState]
 
-export * from './game.actions';
+export * from './game.actions'

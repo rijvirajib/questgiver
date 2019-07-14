@@ -1,6 +1,6 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Start, Tick, ChangeSpeed, Pause } from './game.actions';
-import { GameStateModel } from './game.model';
+import { State, Action, StateContext, Selector } from '@ngxs/store'
+import { Start, Tick, ChangeSpeed, Pause } from './game.actions'
+import { GameStateModel } from './game.model'
 
 /* const gameState = {
   time: number,
@@ -20,7 +20,7 @@ import { GameStateModel } from './game.model';
   }
 }
 */
-const TICKSPEED = 1;
+const TICKSPEED = 1
 
 @State<GameStateModel>({
   name: 'game',
@@ -39,34 +39,34 @@ const TICKSPEED = 1;
 export class GameState {
   @Selector()
   static currentTime(state: GameStateModel) {
-    return state.time;
+    return state.time
   }
 
   @Selector()
   static currentGold(state: GameStateModel) {
-    return state.gold;
+    return state.gold
   }
 
   @Selector()
   static currentSpeed(state: GameStateModel) {
-    return state.speed;
+    return state.speed
   }
 
   @Action(Start)
   start({getState, patchState, dispatch}: StateContext<GameStateModel>) {
-    const state = getState();
+    const state = getState()
     const loop = setInterval(() => {
-      dispatch(new Tick());
-    }, state.speed * 1000);
-    patchState({loop});
+      dispatch(new Tick())
+    }, state.speed * 1000)
+    patchState({loop})
   }
 
   @Action(Tick)
   tick({getState, patchState }: StateContext<GameStateModel>) {
-    const state = getState();
+    const state = getState()
     patchState({
       time: state.time + 1
-    });
+    })
   }
 
   @Action(ChangeSpeed)
@@ -74,18 +74,18 @@ export class GameState {
     {getState, patchState, dispatch }: StateContext<GameStateModel>,
     { payload }: ChangeSpeed
   ) {
-    const state = getState();
+    const state = getState()
     if (!state.loop) {
-      dispatch(new Start());
+      dispatch(new Start())
     }
     patchState({
       speed: payload
-    });
+    })
   }
 
   @Action(Pause)
   pause({getState}: StateContext<GameStateModel>) {
-    const state = getState();
-    clearInterval(state.loop);
+    const state = getState()
+    clearInterval(state.loop)
   }
 }

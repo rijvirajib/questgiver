@@ -10,10 +10,12 @@
   ],
   "rules": {
     "array-type": [true, "generic"],
+    "arrow-parens": [false, "as-needed"],
     "arrow-return-shorthand": true,
     "component-class-suffix": true,
     "deprecation": true,
     "directive-class-suffix": true,
+    "max-classes-per-file": [false, 0],
     "member-access": [true, "no-public"],
     "newline-before-return": true,
     "no-angle-bracket-type-assertion": false,
@@ -41,6 +43,7 @@
     "use-life-cycle-interface": true,
     "use-output-property-decorator": true,
     "use-pipe-transform-interface": true,
+    "semicolon": [true, "never"],
     "trailing-comma": [true, {
       "multiline": "never",
       "singleline": "never"

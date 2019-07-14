@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { RouterExtensions } from 'nativescript-angular/router';
-import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nativescript-ui-sidedrawer';
-import { Store } from '@ngxs/store';
-import { filter } from 'rxjs/operators';
-import { Start } from './states/game.actions';
-import * as app from 'tns-core-modules/application';
+import { Component, OnInit } from '@angular/core'
+import { NavigationEnd, Router } from '@angular/router'
+import { RouterExtensions } from 'nativescript-angular/router'
+import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nativescript-ui-sidedrawer'
+import { Store } from '@ngxs/store'
+import { filter } from 'rxjs/operators'
+import { Start } from './states/game.actions'
+import * as app from 'tns-core-modules/application'
 
 @Component({
   moduleId: module.id,
@@ -13,8 +13,8 @@ import * as app from 'tns-core-modules/application';
   templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
-  private _activatedUrl: string;
-  private _sideDrawerTransition: DrawerTransitionBase;
+  private _activatedUrl: string
+  private _sideDrawerTransition: DrawerTransitionBase
 
   constructor(
     private router: Router,
@@ -25,22 +25,22 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._activatedUrl = '/home';
-    this._sideDrawerTransition = new SlideInOnTopTransition();
+    this._activatedUrl = '/home'
+    this._sideDrawerTransition = new SlideInOnTopTransition()
 
     this.router.events
     .pipe(filter((event: any) => event instanceof NavigationEnd))
-    .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects);
+    .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects)
 
-    this.store.dispatch(Start);
+    this.store.dispatch(Start)
   }
 
   get sideDrawerTransition(): DrawerTransitionBase {
-    return this._sideDrawerTransition;
+    return this._sideDrawerTransition
   }
 
   isComponentSelected(url: string): boolean {
-    return this._activatedUrl === url;
+    return this._activatedUrl === url
   }
 
   onNavItemTap(navItemRoute: string): void {
@@ -48,9 +48,9 @@ export class AppComponent implements OnInit {
       transition: {
         name: 'fade'
       }
-    });
+    })
 
-    const sideDrawer = <RadSideDrawer>app.getRootView();
-    sideDrawer.closeDrawer();
+    const sideDrawer = <RadSideDrawer>app.getRootView()
+    sideDrawer.closeDrawer()
   }
 }
