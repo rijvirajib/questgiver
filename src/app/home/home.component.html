@@ -16,11 +16,10 @@
 </ActionBar>
 
 <StackLayout class="page page-content">
-  <Label class="page-icon fa" text="&#xf015;"></Label>
   <Label class="page-placeholder" text="{{ currentTime$ | async }} seconds"></Label>
   <StackLayout orientation="horizontal" width="100%" class="page page-content">
-    <Label class="fa control-buttons" id="pause" text="&#xf04c;" (tap)="onPause($event)"></Label>
-    <Label class="fa control-buttons" id="start" text="&#xf04b;" (tap)="onPlay($event)"></Label>
-    <Label class="fa control-buttons" id="speed" text="&#xf04e;" (tap)="onSpeed($event)"></Label>
+    <Button class="fa control-buttons" id="pause" text="&#xf04c;" (tap)="onPause($event)"></Button>
+    <Button class="fa control-buttons" id="start" text="&#xf04b;" (tap)="onPlay($event)"></Button>
+    <Button class="fa control-buttons" id="speed" text="&#xf04e;" (tap)="onSpeed($event)"></Button>
   </StackLayout>
 </StackLayout>
