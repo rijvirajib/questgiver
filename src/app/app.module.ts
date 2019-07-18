@@ -25,11 +25,11 @@ import { GAMESTATES } from './states'
   providers: [
     {
       provide: STORAGE_ENGINE,
-      useClass: AppStorageEngine,
+      useClass: AppStorageEngine
     },
   ],
   schemas: [
     NO_ERRORS_SCHEMA,
-  ],
+  ]
 })
 export class AppModule { }

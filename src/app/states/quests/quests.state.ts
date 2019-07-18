@@ -6,8 +6,8 @@ import { AddQuest } from './quests.actions'
   name: 'quests',
   defaults: {
     quests: {},
-    questIds: [],
-  },
+    questIds: []
+  }
 })
 
 export class QuestsState {
@@ -24,7 +24,7 @@ export class QuestsState {
     const state = getState()
     patchState({
       quests: { ...state.quests, [payload.quest.id]: payload.quest },
-      questIds: [...state.questIds, payload.quest.id],
+      questIds: [...state.questIds, payload.quest.id]
     })
   }
 }

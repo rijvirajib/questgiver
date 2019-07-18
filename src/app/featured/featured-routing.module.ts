@@ -10,6 +10,6 @@ const routes: Routes = [
 
 @NgModule({
     imports: [NativeScriptRouterModule.forChild(routes)],
-    exports: [NativeScriptRouterModule],
+    exports: [NativeScriptRouterModule]
 })
 export class FeaturedRoutingModule { }

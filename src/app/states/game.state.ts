@@ -31,8 +31,8 @@ const TICKSPEED = 1
     speed: TICKSPEED,
     loading: false,
 
-    gold: 0,
-  },
+    gold: 0
+  }
 })
 
 export class GameState {
@@ -68,7 +68,7 @@ export class GameState {
   tick({getState, patchState }: StateContext<GameStateModel>) {
     const state = getState()
     patchState({
-      time: state.time + 1,
+      time: state.time + 1
     })
   }
 
@@ -86,7 +86,7 @@ export class GameState {
     }, (1 / payload) * 1000)
     patchState({
       loop,
-      speed: payload,
+      speed: payload
     })
   }
 
@@ -95,7 +95,7 @@ export class GameState {
     const state = getState()
     clearInterval(state.loop)
     patchState({
-      loop: null,
+      loop: null
     })
   }
 }

@@ -14,6 +14,6 @@ import { FeaturedComponent } from './featured.component'
     ],
     schemas: [
         NO_ERRORS_SCHEMA,
-    ],
+    ]
 })
 export class FeaturedModule { }

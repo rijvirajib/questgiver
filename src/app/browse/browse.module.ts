@@ -14,6 +14,6 @@ import { BrowseComponent } from './browse.component'
     ],
     schemas: [
         NO_ERRORS_SCHEMA,
-    ],
+    ]
 })
 export class BrowseModule { }

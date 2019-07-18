@@ -9,7 +9,7 @@ import { Observable } from 'rxjs'
 @Component({
   selector: 'Home',
   moduleId: module.id,
-  templateUrl: './home.component.html',
+  templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
   @Select(GameState.currentTime)

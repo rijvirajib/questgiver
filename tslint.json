@@ -47,11 +47,12 @@
     "semicolon": [true, "never"],
     "trailing-comma": [true, {
       "multiline": {
-        "objects": "always",
+        "objects": "never",
         "arrays": "always",
         "functions": "never",
         "typeLiterals": "ignore"
       },
+      "singleline": "never",
       "esSpecCompliant": true
     }],
     "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],

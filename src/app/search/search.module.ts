@@ -14,6 +14,6 @@ import { SearchComponent } from './search.component'
     ],
     schemas: [
         NO_ERRORS_SCHEMA,
-    ],
+    ]
 })
 export class SearchModule { }

@@ -14,6 +14,6 @@ import { SettingsComponent } from './settings.component'
     ],
     schemas: [
         NO_ERRORS_SCHEMA,
-    ],
+    ]
 })
 export class SettingsModule { }

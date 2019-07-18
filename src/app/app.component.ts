@@ -10,7 +10,7 @@ import * as app from 'tns-core-modules/application'
 @Component({
   moduleId: module.id,
   selector: 'ns-app',
-  templateUrl: 'app.component.html',
+  templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
   private _activatedUrl: string
@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private routerExtensions: RouterExtensions,
-    private store: Store,
+    private store: Store
   ) {
     // Use the component constructor to inject services.
   }
@@ -46,8 +46,8 @@ export class AppComponent implements OnInit {
   onNavItemTap(navItemRoute: string): void {
     this.routerExtensions.navigate([navItemRoute], {
       transition: {
-        name: 'fade',
-      },
+        name: 'fade'
+      }
     })
 
     const sideDrawer = <RadSideDrawer>app.getRootView()

@@ -5,7 +5,7 @@ import * as app from 'tns-core-modules/application'
 @Component({
     selector: 'Search',
     moduleId: module.id,
-    templateUrl: './search.component.html',
+    templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit {
 
