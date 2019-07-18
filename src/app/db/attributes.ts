@@ -1,6 +1,7 @@
 import { AttributeModel, ATTRIBUTE_CLASS } from '../models/attribute.model'
 import { TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/target-modifier.model'
 
+// These items are cloned for re-use
 export const ATTRIBUTES: { [id: string]: AttributeModel } = {
   INVULNERABLEKRYPTONITE: {
     id: 'INVULNERABLEKRYPTONITE',

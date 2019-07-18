@@ -15,26 +15,27 @@ export class ItemModel {
     drop?: Array<TargetModifier>
   }
   quality?: number // [0, 1]: 0 = destroyed
-  isUsed?: boolean
+  isActive?: boolean
 }
 
 export enum EQUIP_CLASS {
-  'One Hand',
-  'Two Hand',
-  'Helm',
-  'Chest',
-  'Legs',
-  'Trinket',
-  'Quest'
+  Helm,
+  Chest,
+  Legs,
+  Trinket,
+  Quest,
+  OH = 'One Hand',
+  TH = 'Two Hand'
 }
 
 export enum ITEM_CLASS {
-  'Dagger',
-  'Sword',
-  'Broad Sword',
-  'Pistol',
-  'Shotgun',
-  'Melee',
-  'Rock',
-  Radioactive // [0, 1]: 0 = destroyed
+  Dagger,
+  Pistol,
+  Shotgun,
+  SMG,
+  Melee,
+  Rock,
+  Radioactive,
+  SS = 'Short Sword',
+  LS = 'Long Sword'
 }

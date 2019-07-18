@@ -6,6 +6,7 @@ export class NPCModel {
   name: string
   description: string
 
+  level: number
   BASE: {
     STR: number
     DEX: number
@@ -16,7 +17,9 @@ export class NPCModel {
   DEX: number
   INT: number
 
-  damage?: number
+  stamina?: number
+  minDamage?: number
+  maxDamage?: number
   criticalChance?: number
   criticalDamage?: number
   chanceToHit?: number
@@ -36,5 +39,6 @@ export class NPCModel {
   chest?: ItemModel['id']
   pants?: ItemModel['id']
   trinkets?: Array<ItemModel['id']>
+  maxTrinkets?: number
 
 }

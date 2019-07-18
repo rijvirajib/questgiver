@@ -5,24 +5,42 @@ import { TargetModifier, TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/tar
 export const STORYMODIFIERS: Array<TargetModifier> = [
   {
     targetType: TARGET_TYPE.QUEST,
-    targetID: '1',
-    targetKey: 'rewards.gold',
-    targetChange: -50,
+    targetID: 'STORYQUESTS1',
+    targetKey: 'quest.goons',
+    targetChange: 2,
     targetChangeSymbol: TARGET_CHANGE_SYMBOL['+']
   },
 ]
 
 export const STORYOBSTACLES: Array<ObstacleModel> = [
   {
-    id: '1',
-    name: 'Security Camera',
-    description: 'The Kwik Fix has ',
+    id: 'STORYOBSTACLES1',
+    name: 'CCTV',
+    description: 'The Kwik Fix has some cameras. Address them to avoid more goons.',
     attributes: [],
     results: [{
-      threshold: 1,
-      chance: 1,
+      threshold: .4,
+      chance: .5,
       modifiers: [
         STORYMODIFIERS[0],
+      ]
+    }, {
+      threshold: .6,
+      chance: .5,
+      modifiers: [
+        STORYMODIFIERS[0],
+      ]
+    }, {
+      threshold: .6,
+      chance: .5,
+      modifiers: [
+        STORYMODIFIERS[0],
+      ]
+    }, {
+      threshold: 1,
+      chance: .5,
+      modifiers: [
+        STORYMODIFIERS[1],
       ]
     }]
   },
@@ -30,7 +48,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [
 
 export const STORYQUESTS: Array<QuestModel> = [
   {
-    id: '1',
+    id: 'STORYQUESTS1',
     name: 'Kwik Fix',
     description: 'First mission. Unfortunately you are going to be fighting Superman',
     location: {

@@ -1,6 +1,5 @@
 import { TargetModifier, TARGET_TYPE } from './target-modifier.model'
 import { ItemModel } from './item.model'
-
 export class AttributeModel {
   id: string
   name: string
