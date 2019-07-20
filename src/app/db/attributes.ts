@@ -28,7 +28,6 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
     description: 'A villain whose skills rely on their incredible aerobic and gymnastic abilities.',
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
-      targetID: 'NPCID',
       targetKey: 'DEX',
       targetChange: .5, // Increase DEX by 50%
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
@@ -50,7 +49,6 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
     },
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
-      targetID: 'NPCID',
       targetKey: 'INT',
       targetChange: .5, // Increase INT by 50%
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']

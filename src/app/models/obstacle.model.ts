@@ -5,7 +5,6 @@ import { NPCModel } from './npc.model'
 export class ObstacleModel {
   id: string
   name: string
-  attributes: Array<AttributeModel>
   description: string
   isDisabled?: boolean // false
 
@@ -14,9 +13,8 @@ export class ObstacleModel {
   isNPC?: boolean
   npcId?: NPCModel['id']
 
-  weaknesses?: {
-
-  }
+  attributes?: Array<AttributeModel>
+  weaknesses?: {}
 
   // check for score  to generate effects 'COMBAT'
   score?: number

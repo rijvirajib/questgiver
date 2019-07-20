@@ -5,11 +5,11 @@ export class ItemModel {
   id: string
   name: string
   description: string
-  cost: number
-  classes: Array<ITEM_CLASS>
+  cost?: number
+  class: Array<ITEM_CLASS>
   equipClass: EQUIP_CLASS
 
-  attributes?: Array<AttributeModel>
+  attributes?: Array<AttributeModel['id']>
   modifiers?: {
     equip?: Array<TargetModifier>
     use?: Array<TargetModifier>
@@ -23,23 +23,24 @@ export class ItemModel {
 }
 
 export enum EQUIP_CLASS {
-  Helm,
   Chest,
+  Helm,
   Legs,
-  Trinket,
   Quest,
+  Trinket,
   OH = 'One Hand',
   TH = 'Two Hand'
 }
 
 export enum ITEM_CLASS {
+  Axe,
   Dagger,
-  Pistol,
-  Shotgun,
-  SMG,
   Melee,
-  Rock,
+  Pistol,
   Radioactive,
-  SS = 'Short Sword',
-  LS = 'Long Sword'
+  Rock,
+  SMG,
+  Shotgun,
+  LS = 'Long Sword',
+  SS = 'Short Sword'
 }

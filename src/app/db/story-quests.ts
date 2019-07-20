@@ -16,7 +16,6 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   id: 'STORYOBSTACLES1',
   name: 'CCTV',
   description: 'The Kwik Fix has some cameras. Address them to avoid more goons.',
-  attributes: [],
   results: {
     .4: {
       chance: .5,
@@ -25,6 +24,12 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
       ]
     }
   }
+}, {
+  id: 'STORYOBSACLES2',
+  name: 'Magic NPC',
+  description: 'A Magic NPC is guarding the Kiwk Fix. Weaken them before combat.',
+  isNPC: true,
+  npcId: 'STORYNPC1'
 }]
 
 export const STORYQUESTS: Array<QuestModel> = [

@@ -1,6 +1,8 @@
 import { TargetModifier, TARGET_TYPE } from './target-modifier.model'
 import { ItemModel } from './item.model'
 import { NPC_BASE_STATS } from './npc.model'
+import { Weakness } from './weaktness.model'
+
 export class AttributeModel {
   id: string
   name: string
@@ -24,10 +26,6 @@ export class AttributeModel {
     items?: Weakness
     attributes?: Weakness
   }
-}
-
-class Weakness {
-  [id: string]: Array<TargetModifier>
 }
 
 export enum ATTRIBUTE_CLASS {
