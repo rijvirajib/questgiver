@@ -42,3 +42,9 @@ export class NPCModel {
   maxTrinkets?: number
 
 }
+
+export enum NPC_BASE_STATS {
+  STR,
+  DEX,
+  INT
+}

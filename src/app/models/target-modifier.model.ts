@@ -1,10 +1,10 @@
 export class TargetModifier {
   targetType: TARGET_TYPE
   targetID?: string
-  targetKey: string
-  targetChange: number | boolean
-  targetChangeSymbol: TARGET_CHANGE_SYMBOL
-  undoModifiers?: boolean
+  targetKey?: string
+  willDisable?: boolean // Will the target be disabled?
+  targetChange?: number | boolean
+  targetChangeSymbol?: TARGET_CHANGE_SYMBOL
 
   dot?: {
     dotTick: number

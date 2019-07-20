@@ -5,6 +5,7 @@ export class ItemModel {
   id: string
   name: string
   description: string
+  cost: number
   classes: Array<ITEM_CLASS>
   equipClass: EQUIP_CLASS
 
@@ -15,7 +16,10 @@ export class ItemModel {
     drop?: Array<TargetModifier>
   }
   quality?: number // [0, 1]: 0 = destroyed
-  isActive?: boolean
+
+  // UX
+  isVisible?: boolean
+  isAvailabe?: boolean
 }
 
 export enum EQUIP_CLASS {

@@ -12,39 +12,20 @@ export const STORYMODIFIERS: Array<TargetModifier> = [
   },
 ]
 
-export const STORYOBSTACLES: Array<ObstacleModel> = [
-  {
-    id: 'STORYOBSTACLES1',
-    name: 'CCTV',
-    description: 'The Kwik Fix has some cameras. Address them to avoid more goons.',
-    attributes: [],
-    results: [{
-      threshold: .4,
+export const STORYOBSTACLES: Array<ObstacleModel> = [{
+  id: 'STORYOBSTACLES1',
+  name: 'CCTV',
+  description: 'The Kwik Fix has some cameras. Address them to avoid more goons.',
+  attributes: [],
+  results: {
+    .4: {
       chance: .5,
       modifiers: [
         STORYMODIFIERS[0],
       ]
-    }, {
-      threshold: .6,
-      chance: .5,
-      modifiers: [
-        STORYMODIFIERS[0],
-      ]
-    }, {
-      threshold: .6,
-      chance: .5,
-      modifiers: [
-        STORYMODIFIERS[0],
-      ]
-    }, {
-      threshold: 1,
-      chance: .5,
-      modifiers: [
-        STORYMODIFIERS[1],
-      ]
-    }]
-  },
-]
+    }
+  }
+}]
 
 export const STORYQUESTS: Array<QuestModel> = [
   {

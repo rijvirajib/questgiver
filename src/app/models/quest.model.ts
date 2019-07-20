@@ -16,10 +16,10 @@ export class QuestModel {
     y: number
   }
 
-  goons?: number // Random Goons that will be generated
   obstacles: Array<string> // ObstacleModel.id
 
   rewards: {
+    experience?: number
     gold?: number
     // items?: [...Item]
     // heros?: [...Hero]

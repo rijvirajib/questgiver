@@ -7,45 +7,41 @@ export class ObstacleModel {
   name: string
   attributes: Array<AttributeModel>
   description: string
-  value?: number // [0, 1]: 0 = DEFEATED
-  isDefeated?: boolean // false
+  isDisabled?: boolean // false
 
   requiredObstacles?: Array<ObstacleModel['id']>
 
   isNPC?: boolean
   npcId?: NPCModel['id']
-  attributeId?: AttributeModel['id']
 
-  // final checks when entering Quest.phase = 'COMBAT'
-  results?: Array<Result>
+  weaknesses?: {
+
+  }
+
+  // check for score  to generate effects 'COMBAT'
+  score?: number
+  results?: {
+    [threshold: number]: Result
+  }
 }
 class Result {
-  threshold: number
   chance: number
   modifiers: Array<TargetModifier>
 }
 
 /* Example Obstacle:
 [Environment] - Security Cameras
-[results] A value of .2 will add 6 random goons total
-* If value = 0, DISABLED
-* If value > .4 +2 random goons at a chance of .5
-* If value > .6 +2 random goons at a chance of .5
-* If value > .8 +2 random goons at a chance of .5
-* If value = 1 +2 random goons at a chance of .5
+[results] A score of .2 will add 6 random NPC total
+* If score = 0, DISABLED
+* If score > .4 +2 random NPC at a chance of .5
+* If score > .6 +2 random NPC at a chance of .5
+* If score > .8 +2 random NPC at a chance of .5
+* If score = 1 +2 random NPC at a chance of .5
 */
 
 export class EnvironmentObstacleModel extends ObstacleModel {
 
 }
-
-/* Example Obstacle:
-[NPC] - Superman
-[Attributes] - [Invulernable: Kryptonite, Fast, Strong, Laser Eyes]
-A few things are good against Superman
-* Item: [Kryptonite]
-* Attribute: [Magic]
-*/
 
 export class NPCObstacleModel extends ObstacleModel {
 
