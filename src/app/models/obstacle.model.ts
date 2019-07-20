@@ -1,6 +1,7 @@
 import { AttributeModel } from './attribute.model'
 import { TargetModifier } from './target-modifier.model'
 import { NPCModel } from './npc.model'
+import { Weakness } from './weakness.model'
 
 export class ObstacleModel {
   id: string
@@ -10,17 +11,22 @@ export class ObstacleModel {
 
   requiredObstacles?: Array<ObstacleModel['id']>
 
-  isNPC?: boolean
+  type: Array<OBSTACLE_TYPE>
   npcId?: NPCModel['id']
 
   attributes?: Array<AttributeModel>
-  weaknesses?: {}
+  weaknesses?: Array<Weakness>
 
   // check for score  to generate effects 'COMBAT'
   score?: number
   results?: {
     [threshold: number]: Result
   }
+}
+
+export enum OBSTACLE_TYPE {
+  'CCTV',
+  'NPC'
 }
 class Result {
   chance: number

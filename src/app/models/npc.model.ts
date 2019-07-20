@@ -5,7 +5,7 @@ export class NPCModel {
   id: string
   name: string
   description: string
-
+  baseStat: NPC_BASE_STATS
   level: number
   BASE: {
     STR: number
@@ -13,9 +13,9 @@ export class NPCModel {
     INT: number
   }
 
-  STR: number
-  DEX: number
-  INT: number
+  STR?: number
+  DEX?: number
+  INT?: number
 
   stamina?: number
   minDamage?: number
