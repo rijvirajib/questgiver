@@ -1,0 +1,25 @@
+<GridLayout rows="*, auto">
+  <StackLayout row="0">
+    <ActionBar class="action-bar">
+      <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
+      <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left"></ActionItem>
+      <Label class="action-bar-title" text="Mission Board"></Label>
+    </ActionBar>
+    <ListView [items]="availableQuests$ | async" minHeight="100" rowHeight="50">
+      <ng-template let-quest="item" let-i="index">
+        <StackLayout (tap)="onTap(quest)">
+          <Label textWrap="true">
+            <FormattedString>
+              <Span [text]="quest.name" fontAttributes="Bold"></Span>
+            </FormattedString>
+          </Label>
+          <Label textWrap="true">
+            <FormattedString>
+              <Span [text]="quest.description" fontSize="14"></Span>
+            </FormattedString>
+          </Label>
+        </StackLayout>
+      </ng-template>
+    </ListView>
+  </StackLayout>
+</GridLayout>

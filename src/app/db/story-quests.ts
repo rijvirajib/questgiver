@@ -16,8 +16,8 @@ export const STORYMODIFIERS: Array<TargetModifier> = [
 export const STORYNPCS: { [id: string]: NPCModel } = {
   STORYNPC1: {
     id: 'STORYNPC1',
-    name: 'Kwik-E Magician',
-    description: 'Just a simple magician working for the Kwik-E store.',
+    name: 'Kwik Fix Magician',
+    description: 'Just a simple magician working for the Kwik Fix store.',
     level: 1,
     baseStat: NPC_BASE_STATS.INT,
     BASE: {
@@ -47,23 +47,22 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
 }, {
   id: 'STORYOBSACLES2',
   name: 'Magic NPC',
-  description: 'A Magic NPC is guarding the Kiwk Fix. Weaken them before combat.',
+  description: 'A Magic NPC is guarding the Kwik Fix Store. Weaken them before combat.',
   type: [OBSTACLE_TYPE.NPC],
   npcId: 'STORYNPC1'
 }]
 
-export const STORYQUESTS: Array<QuestModel> = [
-  {
-    id: 'STORYQUESTS1',
-    name: 'Kwik Fix',
-    description: 'First mission. Unfortunately you are going to be fighting Superman',
-    location: {
-      x: 1,
-      y: 1
-    },
-    obstacles: [STORYOBSTACLES[0].id],
-    rewards: {
-      gold: 100
-    }
+export const STORYQUESTS: Array<QuestModel> = [{
+  id: 'STORYQUESTS1',
+  name: 'Kwik Fix',
+  description: `The Guild is hurting for money and we need some starting cash. Hit the Kwik Fix Store and grab some cash. Our intel shows least 1 Level 1 Magic Hero and Level 1 CCTV.`,
+  isAvailable: true,
+  location: {
+    x: 1,
+    y: 1
   },
-]
+  obstacles: [STORYOBSTACLES[0].id],
+  rewards: {
+    gold: 100
+  }
+}]

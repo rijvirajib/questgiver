@@ -28,7 +28,7 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
   CCTV_SPLICE: {
     id: 'CCTV_SPLICE',
     name: 'CCTV Splice',
-    description: 'Disables CCTVs up to level 2',
+    description: 'Disables CCTVs up to level 1.',
     class: ITEM_CLASS.Consumable,
     equipClass: EQUIP_CLASS.Trinket,
     antiObstacles: [OBSTACLE_TYPE.CCTV],

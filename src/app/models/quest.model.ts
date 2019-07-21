@@ -3,8 +3,9 @@ export class QuestModel {
   name: string
   description: string
 
-  isNew?: boolean // keeps track of NEW when viewing
+  isAvailable?: boolean
   isVisible?: boolean
+  isNew?: boolean // keeps track of NEW when viewing
 
   availableTime?: number
   acceptedTime?: number

@@ -4,8 +4,8 @@ import { RouterExtensions } from 'nativescript-angular/router'
 import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nativescript-ui-sidedrawer'
 import { Store } from '@ngxs/store'
 import { filter } from 'rxjs/operators'
-import { Start } from './states/game.actions'
 import * as app from 'tns-core-modules/application'
+import { Start, LoadQuests } from './states'
 
 @Component({
   moduleId: module.id,
@@ -28,11 +28,12 @@ export class AppComponent implements OnInit {
     this._activatedUrl = '/home'
     this._sideDrawerTransition = new SlideInOnTopTransition()
 
-    this.router.events
-    .pipe(filter((event: any) => event instanceof NavigationEnd))
-    .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects)
+    // this.router.events
+    // .pipe(filter(e => e instanceof NavigationEnd))
+    // .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects)
 
     this.store.dispatch(Start)
+    this.store.dispatch(LoadQuests)
   }
 
   get sideDrawerTransition(): DrawerTransitionBase {
