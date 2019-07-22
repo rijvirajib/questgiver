@@ -1,4 +1,4 @@
-# QuestGiver
+# MissionGiver
 
 I thought more about the tavern idea and I think it'd be more unique to GIVE out quests.. so what if you're a clerk of the Hero's Guild. Your job is to find the appropriate heroes in the most efficient way given your department's budget. Completing quests gives you rewards in the form of money and items. You select your heroes, outfit your heroes, and (maybe) select the potential location [which changes how long a misison will take].
 The game would give you a queue of quests to selecft from. As your successful quests rack up, you gain promotions which unlocks higher difficulty quests and more unique gear and heroes.
@@ -20,7 +20,7 @@ const gameState = {
     rank: number,
   },
   inventory: [...Item],
-  quests: [...Quest],
+  quests: [...Mission],
   heroes: [...Hero],
   locations: { // location position stored as key for easy filtering
     posXposY: Location
@@ -29,7 +29,7 @@ const gameState = {
 ```
 
 ```typescript
-class Quest() {
+class Mission() {
   name: string
   description: string
   location: Location
@@ -53,7 +53,7 @@ class Quest() {
     gold?: number
     items?: [...Item]
     heros?: [...Hero]
-    quests?: [...Quest] // Follow up quests!
+    quests?: [...Mission] // Follow up quests!
   }
 
   status: {

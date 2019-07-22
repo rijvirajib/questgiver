@@ -8,7 +8,7 @@
       "version": "5.4.2"
     }
   },
-  "description": "Quest Giver",
+  "description": "Mission Giver",
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "scripts": {
@@ -45,5 +45,5 @@
     "tslint": "~5.11.0"
   },
   "gitHead": "8c1a4866a66daab09bf5ef8e5a96472687192373",
-  "readme": "Quest Giver"
+  "readme": "Mission Giver"
 }

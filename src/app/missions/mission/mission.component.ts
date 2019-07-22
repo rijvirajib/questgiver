@@ -1,10 +1,11 @@
 import * as app from 'tns-core-modules/application'
+import { ActivatedRoute } from '@angular/router'
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core'
 import { GameState } from '../../states/game.state'
 import { Observable } from 'rxjs'
-import { QuestModel } from '../../models/quest.model'
-import { QuestStateModel } from '../../states/quests/quests.model'
-import { QuestsState } from '../../states/quests/quests.state'
+import { MissionModel } from '../../models/quest.model'
+import { MissionStateModel } from '../../states/quests/quests.model'
+import { MissionsState } from '../../states/quests/quests.state'
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer'
 import { RouterExtensions } from 'nativescript-angular/router'
 import { Store, Select } from '@ngxs/store'
@@ -18,15 +19,20 @@ export class MissionComponent {
   @Select(GameState.currentTime)
   currentTime$: Observable<number>
 
-  @Select(QuestsState.availableQuests)
-  availableQuests$: Observable<QuestStateModel>
+  @Select(MissionsState.availableMissions)
+  availableMissions$: Observable<MissionStateModel>
+
+  activeMission: MissionModel['id']
 
   constructor(
     private store: Store,
-    private routerExtensions: RouterExtensions
-  ) {}
+    private routerExtensions: RouterExtensions,
+    private route: ActivatedRoute
+  ) {
+    this.activeMission = this.route.snapshot.paramMap.get('missionId')
+  }
 
-  onTapQuest(quest: QuestModel) {
+  onTapMission(quest: MissionModel) {
     console.log('we tapping')
     this.routerExtensions.navigate(['/missions/', quest.id], {
       animated: true,

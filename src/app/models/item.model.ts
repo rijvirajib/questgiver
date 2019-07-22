@@ -25,7 +25,7 @@ export enum EQUIP_CLASS {
   Chest,
   Helm,
   Legs,
-  Quest,
+  Mission,
   Trinket,
   OH = 'One Hand',
   TH = 'Two Hand'

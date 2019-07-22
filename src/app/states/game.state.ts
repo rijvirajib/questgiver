@@ -13,7 +13,7 @@ import { GameStateModel } from './game.model'
     rank: number,
   },
   inventory: [...Item],
-  quests: [...Quest],
+  quests: [...Mission],
   heroes: [...Hero],
   locations: { // location position stored as key for easy filtering
     posXposY: Location

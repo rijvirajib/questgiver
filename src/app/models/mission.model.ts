@@ -1,6 +1,6 @@
 import { ObstacleModel } from './obstacle.model'
 
-export class QuestModel {
+export class MissionModel {
   id: string
   name: string
   description: string
@@ -28,6 +28,6 @@ export class QuestModel {
     gold?: number
     // items?: [...Item]
     // heros?: [...Hero]
-    // quests?: [...Quest] // Follow up quests!
+    // quests?: [...Mission] // Follow up quests!
   }
 }

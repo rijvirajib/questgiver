@@ -113,7 +113,7 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
 // Size Changer: A villain who can alter his/her size; e.g., the Atom (shrinking only), Colossal Boy, Apache Chief (growth only), Hank Pym, The Ultramen, The Wasp.
 // Slasher: A villain whose main power is some form of hand-to-hand cutting weapon—either devices, such as knives or swords (Elektra, Blade, Katana) or natural, such as claws (Wolverine). Those able to form psionic blades such as Psylocke can be placed in this category.
 // Speedster: A villain possessing superhuman speed and reflexes; e.g., The Flash, Quicksilver, Northstar, Velocity (comics), and Dash Parr
-// Genius: A villain possessing superhuman/superior intelligence or intellect; e.g., Batman, Iron Man, Professor X, The Question, L, Brainiac 5,Mister Fantastic, John Constantine.
+// Genius: A villain possessing superhuman/superior intelligence or intellect; e.g., Batman, Iron Man, Professor X, The Missionion, L, Brainiac 5,Mister Fantastic, John Constantine.
 // Teleporter: A villain who is able to teleport; some teleport due to their own body chemistry (Nightcrawler), others via telekinetic energy (Blink and Mysterio II), others via unknown means (Vanisher).
 // Time Manipulator: A villain possessing either a natural, magical, or science-based control of time. This could be either time travel like The Doctor or Waverider, the ability to make time stop like Tempo or both, like Hiro Nakamura (who can also teleport), or The Brown Bottle.
 // Yeller: A blaster who can emit powerful sonic blasts through yelling; e.g., Black Bolt, Banshee, Paul Atreides or Black Canary

@@ -5,7 +5,7 @@ import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nat
 import { Store } from '@ngxs/store'
 import { filter } from 'rxjs/operators'
 import * as app from 'tns-core-modules/application'
-import { Start, LoadQuests } from './states'
+import { Start, LoadMissions } from './states'
 
 @Component({
   moduleId: module.id,
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
     // .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects)
 
     this.store.dispatch(Start)
-    this.store.dispatch(LoadQuests)
+    this.store.dispatch(LoadMissions)
   }
 
   get sideDrawerTransition(): DrawerTransitionBase {

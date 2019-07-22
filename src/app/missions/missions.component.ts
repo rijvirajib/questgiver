@@ -3,11 +3,11 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core'
 import { RouterExtensions } from 'nativescript-angular/router'
 import { GameState } from '../states/game.state'
 import { Observable } from 'rxjs'
-import { QuestStateModel } from '../states/quests/quests.model'
-import { QuestsState } from '../states/quests/quests.state'
+import { MissionStateModel } from '../states/quests/quests.model'
+import { MissionsState } from '../states/quests/quests.state'
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer'
 import { Store, Select } from '@ngxs/store'
-import { QuestModel } from '../models/quest.model'
+import { MissionModel } from '../models/quest.model'
 
 @Component({
   selector: 'ns-missions',
@@ -18,15 +18,15 @@ export class MissionsComponent {
   @Select(GameState.currentTime)
   currentTime$: Observable<number>
 
-  @Select(QuestsState.availableQuests)
-  availableQuests$: Observable<QuestStateModel>
+  @Select(MissionsState.availableMissions)
+  availableMissions$: Observable<MissionStateModel>
 
   constructor(
     private store: Store,
     private routerExtensions: RouterExtensions
   ) {}
 
-  onTapQuest(quest: QuestModel) {
+  onTapMission(quest: MissionModel) {
     console.log('we tapping')
     this.routerExtensions.navigate(['/missions/', quest.id], {
       animated: true,
@@ -43,7 +43,7 @@ export class MissionsComponent {
     sideDrawer.showDrawer()
   }
 
-  onViewQuest() {
+  onViewMission() {
     this.routerExtensions.navigate(['/detail'], {
       animated: true,
       transition: {

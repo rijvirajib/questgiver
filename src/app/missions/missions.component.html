@@ -17,7 +17,7 @@
     </FlexboxLayout>
     <ScrollView backgroundColor="#e8e7e7">
       <FlexboxLayout flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
-        <StackLayout *ngFor="let quest of availableQuests$ | async; let i = index" id="item{{i}}" orientation="vertical" class="mission-list-item" width="100%" (tap)="onTapQuest(quest)">
+        <StackLayout *ngFor="let quest of availableMissions$ | async; let i = index" id="item{{i}}" orientation="vertical" class="mission-list-item" width="100%" (tap)="onTapMission(quest)">
           <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-main-info" verticalAlignment="top">
             <Image row="0" col="0" [src]="quest.icon" class="mission-category-icon"></Image>
             <StackLayout row="0" col="1" orientation="vertical" class="mission-info-container">
@@ -42,7 +42,7 @@
         </StackLayout>
       </FlexboxLayout>
     </ScrollView>
-    <!-- <ListView [items]="availableQuests$ | async" minHeight="100" rowHeight="50">
+    <!-- <ListView [items]="availableMissions$ | async" minHeight="100" rowHeight="50">
       <ng-template let-quest="item" let-i="index">
         <StackLayout (tap)="onTap(quest)">
           <Label textWrap="true">

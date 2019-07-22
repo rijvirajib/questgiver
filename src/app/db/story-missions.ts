@@ -1,4 +1,4 @@
-import { QuestModel } from '../models/quest.model'
+import { MissionModel } from '../models/mission.model'
 import { ObstacleModel, OBSTACLE_TYPE } from '../models/obstacle.model'
 import { TargetModifier, TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/target-modifier.model'
 import { NPCModel, NPC_BASE_STATS } from '../models/npc.model'
@@ -95,8 +95,8 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   npcId: 'STORYNPC2'
 }]
 
-export const STORYQUESTS: Array<QuestModel> = [{
-  id: 'STORYQUESTS1',
+export const STORYMISSIONS: Array<MissionModel> = [{
+  id: 'STORYMISSIONS1',
   name: 'Kwik Fix',
   description: `The Guild is hurting for money and we need some starting cash. Hit the Kwik Fix Store and grab some loot.
 Intel: Level 1 CCTV, Level 1 Magic Hero, Level 1 Keypad, and 1 Unknown Obstacle. `,
