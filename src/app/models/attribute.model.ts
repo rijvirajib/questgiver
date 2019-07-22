@@ -8,10 +8,10 @@ export class AttributeModel {
   class: ATTRIBUTE_CLASS
   baseStat?: NPC_BASE_STATS // Affiliated with what the base high stat will be
   description: string
+  icon: string
   damageType?: ATTRIBUTE_CLASS.DAMAGE_TYPE
 
   rank?: number
-  isDisabled?: boolean
 
   classConflicts?: Array<ATTRIBUTE_CLASS>
   conflicts?: Array<AttributeModel['id']>
@@ -20,7 +20,8 @@ export class AttributeModel {
 
   modifiers?: Array<TargetModifier>
 
-  // Usually only used with NPCs
+  canDisable?: boolean
+  isDisabled?: boolean
   weaknesses?: {
     items?: Weakness
     attributes?: Weakness

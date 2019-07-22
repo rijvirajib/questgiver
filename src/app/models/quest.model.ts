@@ -1,7 +1,10 @@
+import { ObstacleModel } from './obstacle.model'
+
 export class QuestModel {
   id: string
   name: string
   description: string
+  icon?: string
 
   isAvailable?: boolean
   isVisible?: boolean
@@ -18,7 +21,7 @@ export class QuestModel {
   }
 
   goons?: number // Usually always 0, if > 0, generate or retrieve NPCs before combat (these are random)
-  obstacles: Array<string> // ObstacleModel.id
+  obstacles: Array<ObstacleModel> // Store in reverse order for UI reasons...
 
   rewards: {
     experience?: number

@@ -15,7 +15,8 @@ export const ITEM_ATTRIBUTES: { [id: string]: AttributeModel } = {
     class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
     conflicts: [],
     classConflicts: [ATTRIBUTE_CLASS.CHARACTER_CLASS],
-    description: 'Items with Nth Metal disable Magic.'
+    description: 'Items with Nth Metal disable Magic.',
+    icon: '~/images/icons/nth.png'
   }
 }
 
@@ -26,6 +27,8 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
     baseStat: NPC_BASE_STATS.DEX,
     class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
     description: 'A villain whose skills rely on their incredible aerobic and gymnastic abilities.',
+    icon: '~/images/icons/acrobat.png',
+    canDisable: true,
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
       targetKey: 'DEX',
@@ -39,6 +42,8 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
     baseStat: NPC_BASE_STATS.DEX,
     class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
     description: 'A villain who is trained in the use of magic.',
+    icon: '~/images/icons/mage.png',
+    canDisable: true,
     weaknesses: {
       attributes: {
         NTH: [{
@@ -51,6 +56,34 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
       targetType: TARGET_TYPE.NPC,
       targetKey: 'INT',
       targetChange: .5, // Increase INT by 50%
+      targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
+    }]
+  },
+  CHAMELEON: {
+    id: 'CHAMELEON',
+    name: 'Chameleon',
+    baseStat: NPC_BASE_STATS.DEX,
+    class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
+    icon: '~/images/icons/chameleon.png',
+    description: 'A villain who is can shape shift. They are harder to hit and their unique skin reduces damage taken.',
+    canDisable: true,
+    weaknesses: {
+      attributes: {
+        PSYCHIC: [{
+          targetType: TARGET_TYPE.ATTRIBUTE,
+          willDisable: true
+        }]
+      }
+    },
+    modifiers: [{
+      targetType: TARGET_TYPE.NPC,
+      targetKey: 'chanceToDodge',
+      targetChange: .2, // Increase dodge chance by 20%
+      targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
+    }, {
+      targetType: TARGET_TYPE.NPC,
+      targetKey: 'armor',
+      targetChange: .2, // Increase dodge chance by 20%
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
     }]
   }

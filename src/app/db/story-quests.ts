@@ -4,14 +4,17 @@ import { TargetModifier, TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/tar
 import { NPCModel, NPC_BASE_STATS } from '../models/npc.model'
 import { NPC_ATTRIBUTES } from './attributes'
 
-export const STORYMODIFIERS: Array<TargetModifier> = [
-  {
-    targetType: TARGET_TYPE.QUEST,
-    targetKey: 'goons',
-    targetChange: 1,
-    targetChangeSymbol: TARGET_CHANGE_SYMBOL['+']
-  },
-]
+export const STORYMODIFIERS: Array<TargetModifier> = [{
+  targetType: TARGET_TYPE.QUEST,
+  targetKey: 'goons',
+  targetChange: 1,
+  targetChangeSymbol: TARGET_CHANGE_SYMBOL['+']
+}, {
+  targetType: TARGET_TYPE.QUEST,
+  targetKey: 'rewards.gold',
+  targetChange: -.5, // lose 50% of the gold
+  targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
+}]
 
 export const STORYNPCS: { [id: string]: NPCModel } = {
   STORYNPC1: {
@@ -28,13 +31,29 @@ export const STORYNPCS: { [id: string]: NPCModel } = {
     attributes: [
       NPC_ATTRIBUTES.MAGE.id, // just mage
     ]
+  },
+  STORYNPC2: {
+    id: 'STORYNPC2',
+    name: 'Kwik Fix Chameleon',
+    description: 'Can be anyone or anything. Hard to hit and can take a hard hit.',
+    level: 1,
+    baseStat: NPC_BASE_STATS.INT,
+    BASE: {
+      STR: 10,
+      DEX: 10,
+      INT: 10
+    },
+    attributes: [
+      NPC_ATTRIBUTES.CHAMELEON.id, // just a chameleon
+    ]
   }
 }
 
 export const STORYOBSTACLES: Array<ObstacleModel> = [{
-  id: 'STORYOBSTACLES1',
+  id: 'STORYOBSTACLES0',
   name: 'CCTV',
-  description: 'The Kwik Fix has some cameras. Address them to avoid more goons.',
+  description: 'Simple cameras. A tool should suffice.',
+  icon: '~/images/icons/cctv.png',
   type: [OBSTACLE_TYPE.CCTV],
   results: {
     .4: {
@@ -45,24 +64,56 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
     }
   }
 }, {
-  id: 'STORYOBSACLES2',
-  name: 'Magic NPC',
-  description: 'A Magic NPC is guarding the Kwik Fix Store. Weaken them before combat.',
+  id: 'STORYOBSACLES1',
+  name: 'Mage Trait',
+  description: 'There are many tools to disable a mage.',
+  icon: '~/images/icons/mage.png',
   type: [OBSTACLE_TYPE.NPC],
   npcId: 'STORYNPC1'
+}, {
+  id: 'STORYOBSTACLES2',
+  name: 'Keypad',
+  description: 'A keypad to gain entrance into loot area.',
+  icon: '~/images/icons/keypad.png',
+  type: [OBSTACLE_TYPE.KEYPAD],
+  results: {
+    .5: {
+      chance: 1,
+      modifiers: [
+        STORYMODIFIERS[1],
+      ]
+    }
+  }
+}, {
+  id: 'STORYOBSTACLES3',
+  name: 'Chameleon Trait',
+  description: 'Chameleons can easily be seen by more than eyes.',
+  isHidden: true,
+  discoverTime: 5, // 5 seconds
+  icon: '~/images/icons/chameleon.png',
+  type: [OBSTACLE_TYPE.NPC],
+  npcId: 'STORYNPC2'
 }]
 
 export const STORYQUESTS: Array<QuestModel> = [{
   id: 'STORYQUESTS1',
   name: 'Kwik Fix',
-  description: `The Guild is hurting for money and we need some starting cash. Hit the Kwik Fix Store and grab some cash. Our intel shows least 1 Level 1 Magic Hero and Level 1 CCTV.`,
+  description: `The Guild is hurting for money and we need some starting cash. Hit the Kwik Fix Store and grab some loot.
+Intel: Level 1 CCTV, Level 1 Magic Hero, Level 1 Keypad, and 1 Unknown Obstacle. `,
+  icon: '~/images/icons/convenience-store.png',
   isAvailable: true,
   location: {
     x: 1,
     y: 1
   },
-  obstacles: [STORYOBSTACLES[0].id],
+  obstacles: [
+    STORYOBSTACLES[3],
+    STORYOBSTACLES[2],
+    STORYOBSTACLES[1],
+    STORYOBSTACLES[0],
+  ],
   rewards: {
+    experience: 100,
     gold: 100
   }
 }]

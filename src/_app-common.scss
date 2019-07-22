@@ -2,36 +2,36 @@
 // This is where the vast majority of your CSS code goes.
 // Font icon class
 .fa {
-    font-family: "FontAwesome";
+  font-family: "FontAwesome";
 }
 // Common page class
 .page-content {
-    .page-placeholder {
-        color: $page-icon-color;
-        font-size: $page-content-placeholder-font-size;
-        vertical-align: center;
-        horizontal-align: center;
-    }
+  .page-placeholder {
+    color: $page-icon-color;
+    font-size: $page-content-placeholder-font-size;
+    vertical-align: center;
+    horizontal-align: center;
+  }
 
-    .page-icon {
-        font-size: 72;
-        vertical-align: top;
-        horizontal-align: center;
-        color: $page-icon-color;
-        margin-top: 20%;
-    }
+  .page-icon {
+    font-size: 72;
+    vertical-align: top;
+    horizontal-align: center;
+    color: $page-icon-color;
+    margin-top: 20%;
+  }
 
-    .control-buttons {
-        margin: 10;
-    }
+  .control-buttons {
+    margin: 10;
+  }
 }
 
 //Action bar
 ActionBar .action-bar-title {
-    horizontal-align: center;
+  horizontal-align: center;
 }
 
- // Drawer navigation custom styles
+// Drawer navigation custom styles
 $sidedrawer-header-image-size: 60;
 $sidedrawer-header-image-offset-top: 20;
 $sidedrawer-header-image-offset-bottom: 5;
@@ -40,55 +40,211 @@ $sidedrawer-list-icon-offset: 10;
 $sidedrawer-list-icon-size: 20;
 
 .sidedrawer {
-    &.sidedrawer-left {
-        background-color: $ab-background;
+  &.sidedrawer-left {
+    background-color: $ab-background;
 
-        .sidedrawer-header-image {
-            color: $background-dark;
-            height: $sidedrawer-header-image-size;
-            width: $sidedrawer-header-image-size;
-            font-size: $sidedrawer-header-image-size;
-            padding: 0;
-            margin-bottom: $sidedrawer-header-image-offset-bottom;
-            margin-top: $sidedrawer-header-image-offset-top;
-        }
-
-        .footnote {
-            color: rgba($ab-color, 0.5);
-        }
+    .sidedrawer-header-image {
+      color: $background-dark;
+      height: $sidedrawer-header-image-size;
+      width: $sidedrawer-header-image-size;
+      font-size: $sidedrawer-header-image-size;
+      padding: 0;
+      margin-bottom: $sidedrawer-header-image-offset-bottom;
+      margin-top: $sidedrawer-header-image-offset-top;
     }
 
-    .sidedrawer-header {
-        background-color: $ab-background;
+    .footnote {
+      color: rgba($ab-color, 0.5);
+    }
+  }
 
-        .sidedrawer-header-brand {
-            color: $ab-color;
+  .sidedrawer-header {
+    background-color: $ab-background;
+
+    .sidedrawer-header-brand {
+      color: $ab-color;
+    }
+  }
+
+  .sidedrawer-content {
+    background-color: $side-drawer-background;
+
+    $sidedrawer-list-item-offset-left: 15;
+    $sidedrawer-list-icon-offset: 10;
+    $sidedrawer-list-icon-size: 20;
+
+    .sidedrawer-list-item {
+      padding-left: $sidedrawer-list-item-offset-left;
+      Label {
+        vertical-align: center;
+        color: $blue-dark;
+      }
+      .fa {
+        width: $sidedrawer-list-icon-size;
+        margin-right: $sidedrawer-list-icon-offset;
+      }
+      &.selected {
+        background-color: $item-active-background;
+        Label {
+          color: $item-active-color;
         }
+      }
+    }
+  }
+}
+.mission-dashboard {
+  padding: 0 10;
+  margin-top: -35;
+
+  &-item {
+    background: #fff;
+    padding: 10 10 15;
+    margin: 0 6;
+    border-width: 1;
+    border-color: #fff;
+    border-radius: 3;
+
+    &.active {
+      border-color: #bf97df;
+    }
+  }
+}
+
+.dashboard {
+  &__indicator {
+    width: 10;
+    margin-right: 2;
+  }
+
+  &-title {
+
+    &__text {
+      font-size: 14;
+    }
+  }
+
+  &-value {
+    font-weight: bold;
+    margin-top: 10;
+    font-size: 14;
+
+    &.total {
+      color: #8f91de;
     }
 
-    .sidedrawer-content {
-        background-color: $side-drawer-background;
-
-        $sidedrawer-list-item-offset-left: 15;
-        $sidedrawer-list-icon-offset: 10;
-        $sidedrawer-list-icon-size: 20;
-
-        .sidedrawer-list-item {
-            padding-left: $sidedrawer-list-item-offset-left;
-            Label {
-                vertical-align: center;
-                color: $blue-dark;
-            }
-            .fa {
-                width: $sidedrawer-list-icon-size;
-                margin-right: $sidedrawer-list-icon-offset;
-            }
-            &.selected {
-                background-color: $item-active-background;
-                Label {
-                    color: $item-active-color;
-                }
-            }
-        }
+    &.owe {
+      color: #f67979;
     }
+
+    &.owed {
+      color: #78d49a;
+    }
+  }
+}
+
+.mission-list {
+  margin: 0 15 15;
+  &-item {
+    background-color: #fff;
+  }
+
+  &-filter {
+    margin: 25 15 15;
+
+    &-item {
+      margin-left: 25;
+    }
+
+    &__icon {
+      width: 14;
+      height: 14;
+      margin-right: 10;
+    }
+
+    &__text {
+      font-size: 15;
+    }
+  }
+}
+
+.mission-main-info {
+  padding: 10 15;
+}
+
+.mission-category-icon {
+  width: 45;
+  height: 45;
+  margin-right: 15;
+}
+
+.mission-info-container {
+  color: #acacac;
+  font-size: 13;
+}
+
+.mission-title {
+  font-weight: 600;
+  margin-bottom: 5;
+  color: #000;
+  font-size: 15;
+}
+
+.lender-name,
+.debtor-name {
+  font-weight: 600;
+  color: #8f91de;
+}
+
+.mission-amount {
+  font-weight: 600;
+  color: #f67979;
+}
+
+.owed-ammount {
+  color: #78d49a;
+  font-weight: 600;
+}
+
+.pay-amount {
+  color: #8f91de;
+  font-size: 15;
+}
+
+.mission-secondary-info {
+  padding: 5 15;
+  color: #acacac;
+  font-size: 14;
+  border-top-width: 1;
+  border-top-color: #e9e9e9;
+}
+
+.time-information {
+  margin-top: -2;
+}
+
+.debtor-list {
+  margin-left: 5;
+  margin-right: 10;
+}
+
+.debtor-list-item {
+  margin-right: -10;
+}
+
+.debtor-list-item-image {
+  width: 30;
+  border-radius: 50%;
+  background-color: #fff;
+  border-width: 2;
+  border-color: #fff;
+}
+
+.settle-up-icon {
+  width: 12;
+  margin-left: 2;
+}
+
+.divider {
+  height: 15;
+  background-color: #e8e7e7;
 }

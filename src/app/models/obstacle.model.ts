@@ -7,6 +7,9 @@ export class ObstacleModel {
   id: string
   name: string
   description: string
+  icon?: string
+  isHidden?: boolean // false
+  discoverTime?: number
   isDisabled?: boolean // false
 
   requiredObstacles?: Array<ObstacleModel['id']>
@@ -26,7 +29,8 @@ export class ObstacleModel {
 
 export enum OBSTACLE_TYPE {
   'CCTV',
-  'NPC'
+  'NPC',
+  KEYPAD
 }
 class Result {
   chance: number
