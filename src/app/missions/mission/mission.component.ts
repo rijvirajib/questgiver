@@ -1,20 +1,20 @@
 import * as app from 'tns-core-modules/application'
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core'
-import { RouterExtensions } from 'nativescript-angular/router'
-import { GameState } from '../states/game.state'
+import { GameState } from '../../states/game.state'
 import { Observable } from 'rxjs'
-import { QuestStateModel } from '../states/quests/quests.model'
-import { QuestsState } from '../states/quests/quests.state'
+import { QuestModel } from '../../models/quest.model'
+import { QuestStateModel } from '../../states/quests/quests.model'
+import { QuestsState } from '../../states/quests/quests.state'
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer'
+import { RouterExtensions } from 'nativescript-angular/router'
 import { Store, Select } from '@ngxs/store'
-import { QuestModel } from '../models/quest.model'
 
 @Component({
-  selector: 'ns-missions',
-  templateUrl: './missions.component.html',
-  styleUrls: ['./missions.component.css']
+  selector: 'ns-mission',
+  templateUrl: './mission.component.html',
+  styleUrls: ['./mission.component.css']
 })
-export class MissionsComponent {
+export class MissionComponent {
   @Select(GameState.currentTime)
   currentTime$: Observable<number>
 
@@ -41,16 +41,5 @@ export class MissionsComponent {
   onDrawerButtonTap(): void {
     const sideDrawer = <RadSideDrawer>app.getRootView()
     sideDrawer.showDrawer()
-  }
-
-  onViewQuest() {
-    this.routerExtensions.navigate(['/detail'], {
-      animated: true,
-      transition: {
-        name: 'slideLeft',
-        duration: 200,
-        curve: 'easeIn'
-      }
-    })
   }
 }
