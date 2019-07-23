@@ -5,6 +5,7 @@
   <Button text="Reject" (tap)="onReject()" class="btn btn-secondary"></Button>
   <Button text="Start Casing ({{ activeMission.caseCost }})" (tap)="onAccept()" class="btn btn-primary"></Button>>
 </FlexboxLayout>
+<TextView *ngIf="activeMission.log?.length > 0" [text]="intelLog()" editable="false" class="input input-border"></TextView>
 <Label text="Intel" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
 <ScrollView backgroundColor="#e8e7e7">
   <FlexboxLayout flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">

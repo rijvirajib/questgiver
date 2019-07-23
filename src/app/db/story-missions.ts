@@ -53,10 +53,10 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   id: 'STORYOBSTACLES0',
   name: 'CCTV',
   description: 'Simple cameras. A tool should suffice.',
-  caseTime: 2,
+  caseTime: 4,
   casedTime: 0,
   icon: '~/images/icons/cctv.png',
-  type: [OBSTACLE_TYPE.CCTV],
+  type: OBSTACLE_TYPE.CCTV,
   results: {
     .4: {
       chance: .5,
@@ -69,19 +69,19 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   id: 'STORYOBSACLES1',
   name: 'Mage',
   description: 'There are many tools to disable a mage.',
-  caseTime: 2,
+  caseTime: 4,
   casedTime: 0,
   icon: '~/images/icons/mage.png',
-  type: [OBSTACLE_TYPE.NPC],
+  type: OBSTACLE_TYPE.NPC,
   npcId: 'STORYNPC1'
 }, {
   id: 'STORYOBSTACLES2',
   name: 'Keypad',
   description: 'A keypad to gain entrance into loot area.',
-  caseTime: 2,
+  caseTime: 4,
   casedTime: 0,
   icon: '~/images/icons/keypad.png',
-  type: [OBSTACLE_TYPE.KEYPAD],
+  type: OBSTACLE_TYPE.KEYPAD,
   results: {
     .5: {
       chance: 1,
@@ -95,10 +95,10 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   name: 'Chameleon',
   description: 'Chameleons can easily be seen by more than eyes.',
   isHidden: true,
-  caseTime: 5,
+  caseTime: 10,
   casedTime: 0,
   icon: '~/images/icons/chameleon.png',
-  type: [OBSTACLE_TYPE.NPC],
+  type: OBSTACLE_TYPE.NPC,
   npcId: 'STORYNPC2'
 }]
 

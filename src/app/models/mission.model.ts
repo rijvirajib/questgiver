@@ -1,3 +1,4 @@
+import { EventModel } from './event.model'
 import { ObstacleModel } from './obstacle.model'
 
 export class TimesModel {
@@ -39,6 +40,8 @@ export class MissionModel {
     // heros?: [...Hero]
     // quests?: [...Mission] // Follow up quests!
   }
+
+  log?: Array<EventModel>
 }
 
 // In order

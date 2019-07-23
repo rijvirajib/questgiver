@@ -15,7 +15,7 @@ export const CASEMESSAGES = {
       `Eating some pizza, we're hungry.`,
     ],
     casingClose: (type: OBSTACLE_TYPE) => {
-      return `It looks like a type of ${OBSTACLE_TYPE}. Not sure...`
+      return `It looks like a type of ${type}. Not sure...`
     },
     cased: (type: OBSTACLE_TYPE, obstacle: ObstacleModel) => {
       return CASEMESSAGES[type].cased[Math.floor(Math.random() * CASEMESSAGES[type].cased.length)]

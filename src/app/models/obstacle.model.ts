@@ -16,7 +16,7 @@ export class ObstacleModel {
 
   requiredObstacles?: Array<ObstacleModel['id']>
 
-  type: Array<OBSTACLE_TYPE>
+  type: OBSTACLE_TYPE
   npcId?: NPCModel['id']
 
   attributes?: Array<AttributeModel>
@@ -26,6 +26,12 @@ export class ObstacleModel {
   score?: number
   results?: {
     [threshold: number]: Result
+  }
+
+  constructor(params) {
+    if (!params.isCased) {
+      this.isCased = false
+    }
   }
 }
 
