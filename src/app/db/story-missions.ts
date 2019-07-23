@@ -116,6 +116,7 @@ export const STORYMISSIONS: Array<MissionModel> = [{
     x: 1,
     y: 1
   },
+  caseCost: 1230,
   obstacles: [
     STORYOBSTACLES[3],
     STORYOBSTACLES[2],

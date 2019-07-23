@@ -20,6 +20,7 @@ export class MissionModel {
 
   times: TimesModel
 
+  caseCost: number // obstacle.caseCost = caseCost / obstacle.caseTime
   totalCaseTime?: number
   totalCasedTime: number
 
