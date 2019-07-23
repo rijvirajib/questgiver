@@ -1,7 +1,7 @@
 
 <Label text="Details" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
 <Label text="{{ activeMission.description }}" textWrap="true" class="m-15 h4 text-left" color="gray"></Label>
-<FlexboxLayout orientation="horizontal" justifyContent="space-between">
+<FlexboxLayout *ngIf="activeMission.step === missionStep.Unaccepted" orientation="horizontal" justifyContent="space-between">
   <Button text="Reject" (tap)="onReject()" class="btn btn-secondary"></Button>
   <Button text="Start Casing" (tap)="onAccept()" class="btn btn-primary"></Button>>
 </FlexboxLayout>

@@ -1,6 +1,6 @@
 import { AcceptMission, RejectMission } from '~/app/states'
 import { Component, OnInit, Input } from '@angular/core'
-import { MissionModel } from '~/app/models/mission.model'
+import { MissionModel, MISSION_STEP } from '~/app/models/mission.model'
 import { Store } from '@ngxs/store'
 @Component({
     selector: 'tab-intel',
@@ -10,6 +10,7 @@ import { Store } from '@ngxs/store'
 })
 export class MissionTabIntelComponent {
   @Input() activeMission: MissionModel
+  missionStep =  MISSION_STEP
 
   constructor(private store: Store) {}
 
