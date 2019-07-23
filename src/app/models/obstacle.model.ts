@@ -11,6 +11,7 @@ export class ObstacleModel {
   isHidden?: boolean // false
   caseTime: number // DEFAULT: 1
   casedTime: number
+  isCased?: boolean
   isDisabled?: boolean // false
 
   requiredObstacles?: Array<ObstacleModel['id']>

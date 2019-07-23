@@ -1,8 +1,8 @@
-import { MissionModel, MISSION_STEP } from '../models/mission.model'
-import { ObstacleModel, OBSTACLE_TYPE } from '../models/obstacle.model'
-import { TargetModifier, TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/target-modifier.model'
+import { MissionModel, MISSION_STEP, TimesModel } from '../models/mission.model'
 import { NPCModel, NPC_BASE_STATS } from '../models/npc.model'
 import { NPC_ATTRIBUTES } from './attributes'
+import { ObstacleModel, OBSTACLE_TYPE } from '../models/obstacle.model'
+import { TargetModifier, TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/target-modifier.model'
 
 export const STORYMODIFIERS: Array<TargetModifier> = [{
   targetType: TARGET_TYPE.QUEST,
@@ -53,7 +53,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   id: 'STORYOBSTACLES0',
   name: 'CCTV',
   description: 'Simple cameras. A tool should suffice.',
-  caseTime: 1,
+  caseTime: 2,
   casedTime: 0,
   icon: '~/images/icons/cctv.png',
   type: [OBSTACLE_TYPE.CCTV],
@@ -69,7 +69,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   id: 'STORYOBSACLES1',
   name: 'Mage',
   description: 'There are many tools to disable a mage.',
-  caseTime: 1,
+  caseTime: 2,
   casedTime: 0,
   icon: '~/images/icons/mage.png',
   type: [OBSTACLE_TYPE.NPC],
@@ -78,7 +78,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   id: 'STORYOBSTACLES2',
   name: 'Keypad',
   description: 'A keypad to gain entrance into loot area.',
-  caseTime: 1,
+  caseTime: 2,
   casedTime: 0,
   icon: '~/images/icons/keypad.png',
   type: [OBSTACLE_TYPE.KEYPAD],
@@ -95,7 +95,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   name: 'Chameleon',
   description: 'Chameleons can easily be seen by more than eyes.',
   isHidden: true,
-  caseTime: 4, // 3 seconds on top of the 1 default
+  caseTime: 5,
   casedTime: 0,
   icon: '~/images/icons/chameleon.png',
   type: [OBSTACLE_TYPE.NPC],
@@ -111,6 +111,7 @@ export const STORYMISSIONS: Array<MissionModel> = [{
   isNew: true,
   step: MISSION_STEP.Unaccepted,
   totalCasedTime: 0,
+  times: new TimesModel(),
   location: {
     x: 1,
     y: 1

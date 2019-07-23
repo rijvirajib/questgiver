@@ -27,12 +27,10 @@ import { TickHandler } from './states/tick.handler'
   declarations: [
     AppComponent,
   ],
-  providers: [
-    {
-      provide: STORAGE_ENGINE,
-      useClass: AppStorageEngine
-    },
-  ],
+  providers: [{
+    provide: STORAGE_ENGINE,
+    useClass: AppStorageEngine
+  }],
   schemas: [
     NO_ERRORS_SCHEMA,
   ]

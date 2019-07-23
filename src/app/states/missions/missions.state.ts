@@ -74,7 +74,7 @@ export class MissionsState {
     { mission }: RejectMission
   ) {
     setState((state: MissionStateModel) => {
-      state.missions[mission.id].rejectedTime = this.store.selectSnapshot(GameState.currentTime)
+      state.missions[mission.id].times.rejected = this.store.selectSnapshot(GameState.currentTime)
       // state.missions[mission.id].isVisible = false
 
       return state
@@ -94,7 +94,7 @@ export class MissionsState {
         totalCaseTime += obstacle.caseTime
       })
       state.missions[mission.id].step = MISSION_STEP.Intel
-      state.missions[mission.id].acceptedTime = currentTime
+      state.missions[mission.id].times.accepted = currentTime
       state.missions[mission.id].totalCaseTime = totalCaseTime
 
       return state
@@ -107,25 +107,34 @@ export class MissionsState {
     { setState }: StateContext<MissionStateModel>
   ) {
     setState((state: MissionStateModel) => {
-      let totalCasedTime = 0
-      Object.keys(state.missions).forEach(key => {
+      for (const key of Object.keys(state.missions)) {
         if (state.missions[key].step === MISSION_STEP.Intel) {
-          state.missions[key].totalCasedTime += 1
-          state.missions[key].obstacles.forEach((obstacle, i) => {
-            state.missions[key].obstacles[i].casedTime += 1
-            totalCasedTime += obstacle.casedTime
-
-            if (obstacle.casedTime === obstacle.caseTime) {
-              state.missions[key].obstacles[i].isHidden = false
-              state.missions[key].obstacles[i].casedTime = this.store.selectSnapshot(GameState.currentTime)
-            }
-          })
-          if (state.missions[key].totalCaseTime === state.missions[key].totalCasedTime) {
-            state.missions[key].casedTime = this.store.selectSnapshot(GameState.currentTime)
+          // If the mission is ready
+          if (state.missions[key].totalCasedTime >= state.missions[key].totalCaseTime) {
+            state.missions[key].times.cased = this.store.selectSnapshot(GameState.currentTime)
             state.missions[key].step = MISSION_STEP.Ready
+            break
+          }
+          // Go through ONE obstacle and increment time spent
+          for (let i = 0; i <= state.missions[key].obstacles.length; i++) {
+            const obstacle = state.missions[key].obstacles[i]
+            // Already cased, go to the next obstacle
+            if (obstacle.isCased === true) {
+              continue
+            }
+            state.missions[key].obstacles[i].casedTime += 1
+            state.missions[key].totalCasedTime += 1
+            if (obstacle.casedTime >= obstacle.caseTime) {
+              // This obstacle is now 'cased'
+              state.missions[key].obstacles[i].isHidden = false
+              state.missions[key].obstacles[i].isCased = true
+            }
+
+            // Only do one at a time
+            break
           }
         }
-      })
+      }
 
       return state
     })

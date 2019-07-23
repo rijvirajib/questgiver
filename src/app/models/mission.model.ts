@@ -1,5 +1,12 @@
 import { ObstacleModel } from './obstacle.model'
 
+export class TimesModel {
+  available?: number
+  rejected?: number
+  accepted?: number
+  cased?: number // When it was cased
+  completed?: number
+}
 export class MissionModel {
   id: string
   name: string
@@ -11,11 +18,7 @@ export class MissionModel {
   isNew?: boolean // keeps track of NEW when viewing
   step: MISSION_STEP
 
-  availableTime?: number
-  rejectedTime?: number
-  acceptedTime?: number
-  casedTime?: number
-  completedTime?: number
+  times: TimesModel
 
   totalCaseTime?: number
   totalCasedTime: number

@@ -9,17 +9,12 @@
     NavigationButton as a side-drawer button in iOS is not possible,
     because its function is to always navigate back in the application.
   -->
-  <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
-  ios.position="left">
-</ActionItem>
-<Label class="action-bar-title" text="Home"></Label>
+  <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left"></ActionItem>
+  <Label class="action-bar-title" text="Home"></Label>
 </ActionBar>
 
 <StackLayout class="page page-content">
   <Label class="page-placeholder" text="{{ currentTime$ | async }} seconds"></Label>
-  <StackLayout orientation="horizontal" width="100%" class="page page-content">
-    <Button class="fa control-buttons" id="pause" text="&#xf04c;" (tap)="onPause($event)"></Button>
-    <Button class="fa control-buttons" id="start" text="&#xf04b;" (tap)="onPlay($event)"></Button>
-    <Button class="fa control-buttons" id="speed" text="&#xf04e;" (tap)="onSpeed($event)"></Button>
-  </StackLayout>
+  <speed-controls></speed-controls>
+  <Button id="speed" text="RESET" (tap)="onReset($event)"></Button>
 </StackLayout>
