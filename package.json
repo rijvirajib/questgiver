@@ -1,6 +1,6 @@
 {
   "nativescript": {
-    "id": "org.zombielabs.questgiver",
+    "id": "org.zombielabs.villainsforhire",
     "tns-android": {
       "version": "5.4.0"
     },
@@ -8,7 +8,7 @@
       "version": "5.4.2"
     }
   },
-  "description": "Mission Giver",
+  "description": "Villains for Hire",
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "scripts": {
@@ -30,6 +30,7 @@
     "nativescript-localstorage": "^2.0.0",
     "nativescript-theme-core": "~1.0.4",
     "nativescript-ui-sidedrawer": "~6.0.0",
+    "ngxs-reset-plugin": "^1.1.0",
     "reflect-metadata": "~0.1.12",
     "rxjs": "~6.5.0",
     "tns-core-modules": "~5.4.0",
@@ -40,7 +41,7 @@
     "@ngtools/webpack": "~8.0.0",
     "codelyzer": "~4.5.0",
     "nativescript-dev-sass": "~1.7.0",
-    "nativescript-dev-typescript": "~0.10.0",
+    "nativescript-dev-typescript": "^0.10.0",
     "nativescript-dev-webpack": "~0.24.0",
     "tslint": "~5.11.0"
   },

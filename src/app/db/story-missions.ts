@@ -65,7 +65,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   }
 }, {
   id: 'STORYOBSACLES1',
-  name: 'Mage Trait',
+  name: 'Mage',
   description: 'There are many tools to disable a mage.',
   icon: '~/images/icons/mage.png',
   type: [OBSTACLE_TYPE.NPC],
@@ -86,7 +86,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   }
 }, {
   id: 'STORYOBSTACLES3',
-  name: 'Chameleon Trait',
+  name: 'Chameleon',
   description: 'Chameleons can easily be seen by more than eyes.',
   isHidden: true,
   discoverTime: 5, // 5 seconds
@@ -98,8 +98,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
 export const STORYMISSIONS: Array<MissionModel> = [{
   id: 'STORYMISSIONS1',
   name: 'Kwik Fix',
-  description: `The Guild is hurting for money and we need some starting cash. Hit the Kwik Fix Store and grab some loot.
-Intel: Level 1 CCTV, Level 1 Magic Hero, Level 1 Keypad, and 1 Unknown Obstacle. `,
+  description: `The Guild is hurting for money and we need some starting cash. Hit the Kwik Fix Store and grab some loot.`,
   icon: '~/images/icons/convenience-store.png',
   isAvailable: true,
   location: {

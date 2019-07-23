@@ -17,14 +17,14 @@
     </FlexboxLayout>
     <ScrollView backgroundColor="#e8e7e7">
       <FlexboxLayout flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
-        <StackLayout *ngFor="let quest of availableMissions$ | async; let i = index" id="item{{i}}" orientation="vertical" class="mission-list-item" width="100%" (tap)="onTapMission(quest)">
+        <StackLayout *ngFor="let mission of availableMissions$ | async; let i = index" id="item{{i}}" orientation="vertical" class="mission-list-item" width="100%" (tap)="onTapMission(mission)">
           <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-main-info" verticalAlignment="top">
-            <Image row="0" col="0" [src]="quest.icon" class="mission-category-icon"></Image>
+            <Image row="0" col="0" [src]="mission.icon" class="mission-category-icon"></Image>
             <StackLayout row="0" col="1" orientation="vertical" class="mission-info-container">
-              <Label class="mission-title" [text]="quest.name"></Label>
-              <Label [text]="quest.description" textWrap="true"></Label>
+              <Label class="mission-title" [text]="mission.name"></Label>
+              <Label [text]="mission.description" textWrap="true"></Label>
             </StackLayout>
-            <Label verticalAlignment="top" row="0" col="2" text="{{ quest.rewards.experience }} XP" class="pay-amount"></Label>
+            <Label verticalAlignment="top" row="0" col="2" text="{{ mission.rewards.experience }} XP" class="pay-amount"></Label>
           </GridLayout>
           <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-secondary-info">
             <Label row="0" col="0" text="Yesterday" class="time-information"></Label>
@@ -32,7 +32,7 @@
               <Label row="0" col="0" text="" class="lender-name"></Label>
               <Label row="0" col="1" text=""></Label>
               <GridLayout row="0" col="2" columns="auto,auto,auto,auto" rows="auto" width="100%" class="debtor-list">
-                <StackLayout *ngFor="let obstacle of quest.obstacles; let j = index" row="0" col="{{j}}" orientation="vertical" class="debtor-list-item">
+                <StackLayout *ngFor="let obstacle of mission.obstacles; let j = index" row="0" col="{{j}}" orientation="vertical" class="debtor-list-item">
                   <Image [src]="!obstacle.isHidden ? obstacle.icon : '~/images/icons/unknown-obstacle.png'" class="debtor-list-item-image"></Image>
                 </StackLayout>
               </GridLayout>
@@ -42,21 +42,5 @@
         </StackLayout>
       </FlexboxLayout>
     </ScrollView>
-    <!-- <ListView [items]="availableMissions$ | async" minHeight="100" rowHeight="50">
-      <ng-template let-quest="item" let-i="index">
-        <StackLayout (tap)="onTap(quest)">
-          <Label textWrap="true">
-            <FormattedString>
-              <Span [text]="quest.name" fontAttributes="Bold"></Span>
-            </FormattedString>
-          </Label>
-          <Label textWrap="true">
-            <FormattedString>
-              <Span [text]="quest.description" fontSize="14"></Span>
-            </FormattedString>
-          </Label>
-        </StackLayout>
-      </ng-template>
-    </ListView> -->
   </StackLayout>
 </AbsoluteLayout>

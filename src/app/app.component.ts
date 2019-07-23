@@ -1,11 +1,12 @@
+import * as app from 'tns-core-modules/application'
 import { Component, OnInit } from '@angular/core'
+import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nativescript-ui-sidedrawer'
 import { NavigationEnd, Router } from '@angular/router'
 import { RouterExtensions } from 'nativescript-angular/router'
-import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nativescript-ui-sidedrawer'
+import { Start, LoadMissions } from './states'
+import { StateClear, StateResetAll } from 'ngxs-reset-plugin'
 import { Store } from '@ngxs/store'
 import { filter } from 'rxjs/operators'
-import * as app from 'tns-core-modules/application'
-import { Start, LoadMissions } from './states'
 
 @Component({
   moduleId: module.id,
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit {
     // .pipe(filter(e => e instanceof NavigationEnd))
     // .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects)
 
+    this.store.dispatch(new StateResetAll())
     this.store.dispatch(Start)
     this.store.dispatch(LoadMissions)
   }

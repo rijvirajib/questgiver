@@ -2,7 +2,7 @@ import { AddMission, LoadMissions } from './missions.actions'
 import { MissionModel } from '~/app/models/mission.model'
 import { MissionStateModel } from './missions.model'
 import { STORYMISSIONS } from '~/app/db/story-missions'
-import { State, Action, StateContext, Selector } from '@ngxs/store'
+import { State, Action, StateContext, Selector, createSelector } from '@ngxs/store'
 
 @State<MissionStateModel>({
   name: 'missions',
@@ -32,6 +32,13 @@ export class MissionsState {
     })
   }
 
+  @Selector()
+  static missionById(state: MissionStateModel) {
+    return (id: string) => {
+      return state.missions[id]
+    }
+  }
+
   // Loads the story missions
   @Action(LoadMissions)
   loadMissions({ getState, patchState, dispatch }: StateContext<MissionStateModel>) {
@@ -51,8 +58,8 @@ export class MissionsState {
   ) {
     const state = getState()
     patchState({
-      missions: { ...state.missions, [payload.quest.id]: payload.quest },
-      missionIds: [...state.missionIds, payload.quest.id]
+      missions: { ...state.missions, [payload.mission.id]: payload.mission },
+      missionIds: [...state.missionIds, payload.mission.id]
     })
   }
 }

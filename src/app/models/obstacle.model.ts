@@ -28,9 +28,10 @@ export class ObstacleModel {
 }
 
 export enum OBSTACLE_TYPE {
-  'CCTV',
-  'NPC',
-  KEYPAD
+  UNKNOWN = 'Unknown',
+  CCTV = 'CCTV',
+  NPC = 'Hero',
+  KEYPAD = 'Keypad'
 }
 class Result {
   chance: number

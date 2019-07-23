@@ -2,24 +2,6 @@ import { State, Action, StateContext, Selector } from '@ngxs/store'
 import { Start, Tick, ChangeSpeed, Pause } from './game.actions'
 import { GameStateModel } from './game.model'
 
-/* const gameState = {
-  time: number,
-  gold: number,
-  player: {
-    position: {
-      x: 0,
-      y: 0
-    },
-    rank: number,
-  },
-  inventory: [...Item],
-  quests: [...Mission],
-  heroes: [...Hero],
-  locations: { // location position stored as key for easy filtering
-    posXposY: Location
-  }
-}
-*/
 const TICKSPEED = 1
 
 @State<GameStateModel>({

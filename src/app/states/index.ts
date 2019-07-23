@@ -1,7 +1,7 @@
 import { GameState } from './game.state'
-import { MissionsState } from './quests/quests.state'
+import { MissionsState } from './missions/missions.state'
 
 export const GAMESTATES = [GameState, MissionsState]
 
 export * from './game.actions'
-export * from './quests/quests.actions'
+export * from './missions/missions.actions'
