@@ -6,7 +6,6 @@ import { RouterExtensions } from 'nativescript-angular/router'
 import { Start, LoadMissions } from './states'
 import { StateClear, StateResetAll } from 'ngxs-reset-plugin'
 import { Store } from '@ngxs/store'
-import { filter } from 'rxjs/operators'
 
 @Component({
   moduleId: module.id,
@@ -33,7 +32,7 @@ export class AppComponent implements OnInit {
     // .pipe(filter(e => e instanceof NavigationEnd))
     // .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects)
 
-    this.store.dispatch(new StateResetAll())
+    // this.store.dispatch(new StateResetAll())
     this.store.dispatch(Start)
     this.store.dispatch(LoadMissions)
   }

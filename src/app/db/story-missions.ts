@@ -1,4 +1,4 @@
-import { MissionModel } from '../models/mission.model'
+import { MissionModel, MISSION_STEP } from '../models/mission.model'
 import { ObstacleModel, OBSTACLE_TYPE } from '../models/obstacle.model'
 import { TargetModifier, TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/target-modifier.model'
 import { NPCModel, NPC_BASE_STATS } from '../models/npc.model'
@@ -53,6 +53,8 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   id: 'STORYOBSTACLES0',
   name: 'CCTV',
   description: 'Simple cameras. A tool should suffice.',
+  caseTime: 1,
+  casedTime: 0,
   icon: '~/images/icons/cctv.png',
   type: [OBSTACLE_TYPE.CCTV],
   results: {
@@ -67,6 +69,8 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   id: 'STORYOBSACLES1',
   name: 'Mage',
   description: 'There are many tools to disable a mage.',
+  caseTime: 1,
+  casedTime: 0,
   icon: '~/images/icons/mage.png',
   type: [OBSTACLE_TYPE.NPC],
   npcId: 'STORYNPC1'
@@ -74,6 +78,8 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   id: 'STORYOBSTACLES2',
   name: 'Keypad',
   description: 'A keypad to gain entrance into loot area.',
+  caseTime: 1,
+  casedTime: 0,
   icon: '~/images/icons/keypad.png',
   type: [OBSTACLE_TYPE.KEYPAD],
   results: {
@@ -89,7 +95,8 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   name: 'Chameleon',
   description: 'Chameleons can easily be seen by more than eyes.',
   isHidden: true,
-  discoverTime: 5, // 5 seconds
+  caseTime: 4, // 3 seconds on top of the 1 default
+  casedTime: 0,
   icon: '~/images/icons/chameleon.png',
   type: [OBSTACLE_TYPE.NPC],
   npcId: 'STORYNPC2'
@@ -101,6 +108,9 @@ export const STORYMISSIONS: Array<MissionModel> = [{
   description: `The Guild is hurting for money and we need some starting cash. Hit the Kwik Fix Store and grab some loot.`,
   icon: '~/images/icons/convenience-store.png',
   isAvailable: true,
+  isNew: true,
+  step: MISSION_STEP.Unaccepted,
+  totalCasedTime: 0,
   location: {
     x: 1,
     y: 1

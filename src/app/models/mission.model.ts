@@ -9,11 +9,16 @@ export class MissionModel {
   isAvailable?: boolean
   isVisible?: boolean
   isNew?: boolean // keeps track of NEW when viewing
+  step: MISSION_STEP
 
   availableTime?: number
-  acceptedTime?: number
   rejectedTime?: number
+  acceptedTime?: number
+  casedTime?: number
   completedTime?: number
+
+  totalCaseTime?: number
+  totalCasedTime: number
 
   location: {
     x: number
@@ -30,4 +35,16 @@ export class MissionModel {
     // heros?: [...Hero]
     // quests?: [...Mission] // Follow up quests!
   }
+}
+
+// In order
+export enum MISSION_STEP {
+  Unaccepted = 'Unaccepted',
+  Intel = 'Intel',
+  Ready = 'Ready',
+  Deploy = 'Deploy',
+  Combat = 'Combat',
+  Escape = 'Escape',
+  Rejected = 'Rejected',
+  Compelted = 'Compelted'
 }

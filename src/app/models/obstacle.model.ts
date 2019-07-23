@@ -9,7 +9,8 @@ export class ObstacleModel {
   description: string
   icon?: string
   isHidden?: boolean // false
-  discoverTime?: number
+  caseTime: number // DEFAULT: 1
+  casedTime: number
   isDisabled?: boolean // false
 
   requiredObstacles?: Array<ObstacleModel['id']>

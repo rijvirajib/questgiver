@@ -2,14 +2,15 @@ import * as app from 'tns-core-modules/application'
 import { ActivatedRoute } from '@angular/router'
 import { Component, Input, ChangeDetectionStrategy, OnInit } from '@angular/core'
 import { GameState } from '../../states/game.state'
-import { Observable } from 'rxjs'
 import { MissionModel } from '../../models/mission.model'
 import { MissionStateModel } from '../../states/missions/missions.model'
 import { MissionsState } from '../../states/missions/missions.state'
+import { Observable } from 'rxjs'
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer'
 import { RouterExtensions } from 'nativescript-angular/router'
-import { Store, Select } from '@ngxs/store'
+import { Store, Select, Actions, ofActionDispatched } from '@ngxs/store'
 import { map, mergeMap } from 'rxjs/operators'
+import { Tick } from '~/app/states'
 
 @Component({
   selector: 'ns-mission',
@@ -24,6 +25,7 @@ export class MissionComponent implements OnInit {
   availableMissions$: Observable<MissionStateModel>
 
   activeMission: MissionModel
+  totalCaseTime = 0
 
   constructor(
     private store: Store,

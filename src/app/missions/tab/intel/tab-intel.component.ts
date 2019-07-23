@@ -1,5 +1,7 @@
+import { AcceptMission, RejectMission } from '~/app/states'
 import { Component, OnInit, Input } from '@angular/core'
 import { MissionModel } from '~/app/models/mission.model'
+import { Store } from '@ngxs/store'
 @Component({
     selector: 'tab-intel',
     moduleId: module.id,
@@ -9,15 +11,17 @@ import { MissionModel } from '~/app/models/mission.model'
 export class MissionTabIntelComponent {
   @Input() activeMission: MissionModel
 
+  constructor(private store: Store) {}
+
   onTapObstacle(obstacle: any) {
     // do nothing
   }
 
   onReject() {
-    // a
+    this.store.dispatch(RejectMission)
   }
 
   onAccept() {
-    // a
+    this.store.dispatch(new AcceptMission(this.activeMission))
   }
 }

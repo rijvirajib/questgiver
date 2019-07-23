@@ -2,8 +2,8 @@
 <Label text="Details" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
 <Label text="{{ activeMission.description }}" textWrap="true" class="m-15 h4 text-left" color="gray"></Label>
 <FlexboxLayout orientation="horizontal" justifyContent="space-between">
-  <Button text="Reject" tap="onReject" class="btn btn-secondary"></Button>
-  <Button text="Start Casing" tap="onAccept" class="btn btn-primary"></Button>>
+  <Button text="Reject" (tap)="onReject()" class="btn btn-secondary"></Button>
+  <Button text="Start Casing" (tap)="onAccept()" class="btn btn-primary"></Button>>
 </FlexboxLayout>
 <Label text="Intel" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
 <ScrollView backgroundColor="#e8e7e7">
@@ -35,7 +35,7 @@
             <Label class="mission-title" text="Unknown"></Label>
             <Label text="Need more research." textWrap="true"></Label>
           </StackLayout>
-          <Label verticalAlignment="top" row="0" col="2" text="Level {{ obstacle.level ? obstacle.level : 1}}" class="pay-amount"></Label>
+          <Label verticalAlignment="top" row="0" col="2" text="Level {{ obstacle.level ? obstacle.level : 1}} | {{ obstacle.casedTime }}" class="pay-amount"></Label>
         </GridLayout>
         <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-secondary-info">
           <Label row="0" col="0" text="Unknown" class="time-information"></Label>
