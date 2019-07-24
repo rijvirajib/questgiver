@@ -7,6 +7,7 @@ export class NPCModel {
   id: string
   name: string
   description: string
+  isVillain?: boolean
   baseStat: NPC_BASE_STAT
   level: number
   nowXP?: number
@@ -41,6 +42,7 @@ export class NPCModel {
     this.id = stats.id || uuid()
     this.name = stats.name || ''
     this.description = stats.description || ''
+    this.isVillain = stats.isVillain || false
     this.baseStat = stats.baseStat || NPC_BASE_STAT.STR
     this.level = stats.level || 1
     this.nowHP = stats.nowHP || this.maxHP
@@ -119,11 +121,13 @@ export class NPCModel {
   }
 
   runNPCModifier(modifiers: Array<TargetModifier>) {
-    modifiers.forEach(modifier => {
-      if (modifier.targetType === TARGET_TYPE.NPC) {
-        this[modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](this[modifier.targetKey], modifier.targetChange)
-      }
-    })
+    if (modifiers) {
+      modifiers.forEach(modifier => {
+        if (modifier.targetType === TARGET_TYPE.NPC) {
+          this[modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](this[modifier.targetKey], modifier.targetChange)
+        }
+      })
+    }
   }
 
   get nextLevelXP(): number {

@@ -16,29 +16,6 @@ export const STORYMODIFIERS: Array<TargetModifier> = [{
   targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
 }]
 
-export const STORYNPCS: { [id: string]: NPCModel } = {
-  STORYNPC1: new NPCModel({
-    id: 'STORYNPC1',
-    name: 'Kwik Fix Magician',
-    description: 'Just a simple magician working for the Kwik Fix store.',
-    level: 1,
-    baseStat: NPC_BASE_STAT.NRG,
-    attributes: [
-      NPC_ATTRIBUTES.MAGE, // just mage
-    ]
-  }),
-  STORYNPC2: new NPCModel({
-    id: 'STORYNPC2',
-    name: 'Kwik Fix Chameleon',
-    description: 'Can be anyone or anything. Hard to hit and can take a hard hit.',
-    level: 1,
-    baseStat: NPC_BASE_STAT.NRG,
-    attributes: [
-      NPC_ATTRIBUTES.CHAMELEON, // just a chameleon
-    ]
-  })
-}
-
 export const STORYOBSTACLES: Array<ObstacleModel> = [{
   id: 'STORYOBSTACLES0',
   name: 'CCTV',
