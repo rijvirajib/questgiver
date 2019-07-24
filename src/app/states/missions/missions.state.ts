@@ -3,10 +3,11 @@ import { CASEMESSAGES } from '~/app/db/case-messages'
 import { EVENT_TYPES } from '~/app/models/event.model'
 import { GameState } from '../game.state'
 import { INVENTORY_ITEMS } from '~/app/db/inventory-items'
+import { ITEM_ATTRIBUTES, NPC_ATTRIBUTES } from '~/app/db/attributes'
 import { ImmutableContext, ImmutableSelector } from '@ngxs-labs/immer-adapter'
 import { MissionModel, MISSION_STEP } from '~/app/models/mission.model'
 import { MissionStateModel } from './missions.model'
-import { NPC } from '~/app/db/npcs';
+import { NPC } from '~/app/db/npcs'
 import { OBSTACLE_TYPE } from '~/app/models/obstacle.model'
 import { STORYMISSIONS } from '~/app/db/story-missions'
 import { State, Action, StateContext, Selector, Store } from '@ngxs/store'
@@ -18,7 +19,9 @@ import { State, Action, StateContext, Selector, Store } from '@ngxs/store'
     inventory: {},
     inventoryIds: [],
     npcs: {},
-    npcIds: []
+    npcIds: [],
+    attributes: {},
+    attributeIds: []
   }
 })
 
@@ -34,11 +37,24 @@ export class MissionsState {
   }
 
   @Selector()
+  static availableVillains(state: MissionStateModel) {
+    return Object.keys(state.npcs).map(id => {
+      if (state.npcs[id].isAvailable === true && state.npcs[id].isVillain === true) {
+        return state.npcs[id]
+      }
+    }).filter((el) => {
+      return el != null
+    })
+  }
+
+  @Selector()
   static availableMissions(state: MissionStateModel): Array<MissionModel> {
     return Object.keys(state.missions).map(id => {
-      if (state.missions[id].isAvailable && state.missions[id].isAvailable === true) {
+      if (state.missions[id].isAvailable === true) {
         return state.missions[id]
       }
+    }).filter((el) => {
+      return el != null
     })
   }
 
@@ -61,10 +77,22 @@ export class MissionsState {
 
       Object.keys(NPC).forEach(key => {
         state.npcs[key] = NPC[key]
+        state.npcIds.push(key)
       })
 
       Object.keys(INVENTORY_ITEMS).forEach(key => {
-        state.npcs[key] = NPC[key]
+        state.inventory[key] = INVENTORY_ITEMS[key]
+        state.inventoryIds.push(key)
+      })
+
+      Object.keys(ITEM_ATTRIBUTES).forEach(key => {
+        state.attributes[key] = ITEM_ATTRIBUTES[key]
+        state.attributeIds.push(key)
+      })
+
+      Object.keys(NPC_ATTRIBUTES).forEach(key => {
+        state.attributes[key] = NPC_ATTRIBUTES[key]
+        state.attributeIds.push(key)
       })
 
       return state

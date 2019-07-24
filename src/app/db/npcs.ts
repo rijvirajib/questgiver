@@ -9,7 +9,7 @@ export const NPC: { [id: string]: NPCModel } = {
     id: 'Hawkperson',
     name: 'Hawkperson',
     description: 'Hawkperson carries a special Nth metal axe.',
-    isVillan: true,
+    isVillain: true,
     level: 1,
     baseStat: NPC_BASE_STAT.DEX,
 

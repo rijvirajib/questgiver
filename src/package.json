@@ -2,5 +2,8 @@
   "main": "main.js",
   "android": {
     "v8Flags": "--expose_gc"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.136"
   }
 }

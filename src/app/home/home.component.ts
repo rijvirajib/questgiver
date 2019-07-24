@@ -1,9 +1,10 @@
 import * as app from 'tns-core-modules/application'
 import { Component, OnInit } from '@angular/core'
 import { GameState } from '../states/game.state'
+import { LoadMissions } from '../states'
 import { Observable } from 'rxjs'
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer'
-import { Start, Pause, ChangeSpeed } from '../states/game.actions'
+import { Start } from '../states/game.actions'
 import { StateClear, StateResetAll } from 'ngxs-reset-plugin'
 import { Store, Select } from '@ngxs/store'
 
@@ -32,5 +33,7 @@ export class HomeComponent implements OnInit {
   onReset(event: Event) {
     this.store.dispatch(new StateClear())
     this.store.dispatch(new StateResetAll())
+    this.store.dispatch(Start)
+    this.store.dispatch(LoadMissions)
   }
 }

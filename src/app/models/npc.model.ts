@@ -8,17 +8,22 @@ export class NPCModel {
   name: string
   description: string
   isVillain?: boolean
+  isAvailable?: boolean
+
+  isInjured?: boolean
+  injuredTimeLeft?: boolean
+
   baseStat: NPC_BASE_STAT
   level: number
   nowXP?: number
 
-  STR?: number
-  DEX?: number
-  NRG?: number
-
   nowHP?: number
   nowNRG?: number
   morale?: number
+
+  STR?: number
+  DEX?: number
+  NRG?: number
 
   criticalChance?: number
   criticalDamage?: number
@@ -43,6 +48,8 @@ export class NPCModel {
     this.name = stats.name || ''
     this.description = stats.description || ''
     this.isVillain = stats.isVillain || false
+    this.isAvailable = stats.isAvailable || true
+    this.isInjured = stats.isInjured || false
     this.baseStat = stats.baseStat || NPC_BASE_STAT.STR
     this.level = stats.level || 1
     this.nowHP = stats.nowHP || this.maxHP
@@ -67,7 +74,7 @@ export class NPCModel {
     this.maxTrinkets = stats.maxTrinkets || NPCBASESTATS.BASE.maxTrinkets
 
     this.criticalChance = .2
-    this.criticalDamage = (Math.floor((Math.random() * 100) + 90) / 100)
+    this.criticalDamage = (Math.floor((Math.random() * 100) + 10) / 1000)
 
     this.evasion =
       (Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) / 100
