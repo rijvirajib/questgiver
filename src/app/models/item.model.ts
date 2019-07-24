@@ -9,6 +9,7 @@ export class ItemModel {
   cost?: number
   class: ITEM_CLASS
   equipClass: EQUIP_CLASS
+  isTwoHanded?: boolean
 
   attributes?: Array<AttributeModel>
   antiObstacles?: Array<OBSTACLE_TYPE>
@@ -23,13 +24,13 @@ export class ItemModel {
 }
 
 export enum EQUIP_CLASS {
-  Chest,
+  Weapon,
+  Offhand,
   Helm,
-  Legs,
   Mission,
-  Trinket,
-  OH = 'One Hand',
-  TH = 'Two Hand'
+  Chest,
+  Legs,
+  Trinket
 }
 
 export enum ITEM_CLASS {

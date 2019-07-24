@@ -1,6 +1,7 @@
-import { NPCModel, NPC_BASE_STAT } from '../models/npc.model'
 import { ATTRIBUTES, NPC_ATTRIBUTES } from './attributes'
+import { EQUIP_CLASS } from '../models/item.model'
 import { INVENTORY_ITEMS } from './inventory-items'
+import { NPCModel, NPC_BASE_STAT } from '../models/npc.model'
 
 export const VILLAINS: { [id: string]: NPCModel } = {
   Hawkperson: new NPCModel({
@@ -17,6 +18,8 @@ export const VILLAINS: { [id: string]: NPCModel } = {
     attributes: [
       NPC_ATTRIBUTES.Flying,
     ],
-    rightHand: INVENTORY_ITEMS.HawkPersonAxe.id
+    gear: {
+      [EQUIP_CLASS.Weapon]: INVENTORY_ITEMS.HawkPersonAxe
+    }
   })
 }

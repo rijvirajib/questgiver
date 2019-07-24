@@ -10,8 +10,8 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
     name: `HawkPerson's Nth Metal Axe`,
     description: `HawkPerson's legendary axe made of Nth metal. Strong against magic.`,
     class: ITEM_CLASS.Axe,
-    equipClass: EQUIP_CLASS.OH,
-    attributes: [ITEM_ATTRIBUTES.NTH.id],
+    equipClass: EQUIP_CLASS.Weapon,
+    attributes: [ITEM_ATTRIBUTES.NTH],
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
       targetKey: 'STR',

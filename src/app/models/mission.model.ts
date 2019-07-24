@@ -1,4 +1,5 @@
 import { EventModel } from './event.model'
+import { NPCModel } from './npc.model'
 import { ObstacleModel } from './obstacle.model'
 
 export class TimesModel {
@@ -32,6 +33,7 @@ export class MissionModel {
 
   goons?: number // Usually always 0, if > 0, generate or retrieve NPCs before combat (these are random)
   obstacles: Array<ObstacleModel> // Store in reverse order for UI reasons...
+  crew?: {[id: string]: NPCModel }
 
   rewards: {
     experience?: number

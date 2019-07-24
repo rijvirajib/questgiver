@@ -1,5 +1,5 @@
 import { AttributeModel } from './attribute.model'
-import { ItemModel } from './item.model'
+import { ItemModel, EQUIP_CLASS } from './item.model'
 import { TARGET_TYPE, TargetModifier, TARGET_MODIFIER_RUNNER } from './target-modifier.model'
 import { v4 as uuid } from 'uuid'
 
@@ -28,11 +28,11 @@ export class NPCModel {
   attributes?: Array<AttributeModel>
 
   gear: {
-    rightHand?: ItemModel
-    leftHand?: ItemModel
-    helm?: ItemModel
-    chest?: ItemModel
-    pants?: ItemModel
+    [EQUIP_CLASS.Weapon]?: ItemModel
+    [EQUIP_CLASS.Offhand]?: ItemModel
+    [EQUIP_CLASS.Helm]?: ItemModel
+    [EQUIP_CLASS.Chest]?: ItemModel
+    [EQUIP_CLASS.Legs]?: ItemModel
   }
   trinkets?: Array<ItemModel>
   maxTrinkets?: number
@@ -63,9 +63,11 @@ export class NPCModel {
     this.accuracy =
       (Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) /  100
 
+    this.morale = stats.morale
+
     // Equip Items
-    Object.keys(this.gear).forEach(slot => {
-      this.onEquip(this.gear[slot])
+    Object.keys(stats.gear).forEach(slot => {
+      this.onEquip(stats.gear[slot])
     })
 
     for (const trinket of this.trinkets) {
@@ -78,8 +80,9 @@ export class NPCModel {
     }
   }
 
-  onEquip?(item: ItemModel) {
+  onEquip(item: ItemModel) {
     // Attributes First
+    this.gear[item.equipClass] = item
     for (const attribute of item.attributes) {
       this.runNPCModifier(attribute.modifiers)
     }
@@ -88,9 +91,8 @@ export class NPCModel {
     this.runNPCModifier(item.modifiers)
   }
 
-  addXP?(xp: number) {
+  addXP(xp: number) {
     this.nowXP += xp
-
   }
 
   levelUp() {

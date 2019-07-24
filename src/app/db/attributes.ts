@@ -1,6 +1,6 @@
 import { AttributeModel, ATTRIBUTE_CLASS } from '../models/attribute.model'
 import { TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/target-modifier.model'
-import { NPC_BASE_STATS } from '../models/npc.model'
+import { NPC_BASE_STAT } from '../models/npc.model'
 
 // These items are cloned for re-use
 export const ATTRIBUTES: { [id: string]: AttributeModel } = {
@@ -11,7 +11,7 @@ export const ITEM_ATTRIBUTES: { [id: string]: AttributeModel } = {
   NTH: {
     id: 'NTH',
     name: 'Nth Metal',
-    baseStat: NPC_BASE_STATS.DEX,
+    baseStat: NPC_BASE_STAT.DEX,
     class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
     conflicts: [],
     classConflicts: [ATTRIBUTE_CLASS.CHARACTER_CLASS],
@@ -24,7 +24,7 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
   ACROBAT: {
     id: 'ACROBAT',
     name: 'Acrobat',
-    baseStat: NPC_BASE_STATS.DEX,
+    baseStat: NPC_BASE_STAT.DEX,
     class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
     description: 'A villain whose skills rely on their incredible aerobic and gymnastic abilities.',
     icon: '~/images/icons/acrobat.png',
@@ -39,7 +39,7 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
   MAGE: {
     id: 'MAGE',
     name: 'Acrobat',
-    baseStat: NPC_BASE_STATS.DEX,
+    baseStat: NPC_BASE_STAT.DEX,
     class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
     description: 'A villain who is trained in the use of magic.',
     icon: '~/images/icons/mage.png',
@@ -62,7 +62,7 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
   CHAMELEON: {
     id: 'CHAMELEON',
     name: 'Chameleon',
-    baseStat: NPC_BASE_STATS.DEX,
+    baseStat: NPC_BASE_STAT.DEX,
     class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
     icon: '~/images/icons/chameleon.png',
     description: 'A villain who is can shape shift. They are harder to hit and their unique skin reduces damage taken.',

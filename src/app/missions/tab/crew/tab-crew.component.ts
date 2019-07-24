@@ -14,24 +14,4 @@ export class MissionTabCrewComponent {
   missionStep =  MISSION_STEP
 
   constructor(private store: Store) {}
-
-  onTapObstacle(obstacle: any) {
-    // do nothing
-  }
-
-  onReject() {
-    this.store.dispatch(RejectMission)
-  }
-
-  onAccept() {
-    this.store.dispatch(new AcceptMission(this.activeMission))
-  }
-
-  intelLog() {
-    return this.activeMission.log.map(event => {
-      if (event.type === EVENT_TYPES.INTEL) {
-        return event.message
-      }
-    }).join('\n')
-  }
 }
