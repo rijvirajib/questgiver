@@ -47,6 +47,15 @@ export class NPCModel {
     this.nowNRG = stats.nowNRG || this.nowNRG
     this.addXP(stats.nowXP || 0)
 
+    // Initialize gear system
+    this.gear = {
+      [EQUIP_CLASS.Weapon]: undefined,
+      [EQUIP_CLASS.Offhand]: undefined,
+      [EQUIP_CLASS.Helm]: undefined,
+      [EQUIP_CLASS.Chest]: undefined,
+      [EQUIP_CLASS.Legs]: undefined
+    }
+
     this.attributes = this.attributes || []
 
     this.STR = stats.STR
@@ -66,12 +75,16 @@ export class NPCModel {
     this.morale = stats.morale
 
     // Equip Items
-    Object.keys(stats.gear).forEach(slot => {
-      this.onEquip(stats.gear[slot])
-    })
+    if (stats.gear) {
+      Object.keys(stats.gear).forEach(slot => {
+        this.onEquip(stats.gear[slot])
+      })
+    }
 
-    for (const trinket of this.trinkets) {
-      this.onEquip(trinket)
+    if (stats.trinkets && stats.trinkets.length > 0) {
+      for (const trinket of stats.trinkets) {
+        this.onEquip(trinket)
+      }
     }
 
     // Process attributes
@@ -83,9 +96,9 @@ export class NPCModel {
   onEquip(item: ItemModel) {
     // Attributes First
     this.gear[item.equipClass] = item
-    for (const attribute of item.attributes) {
+    item.attributes.forEach(attribute => {
       this.runNPCModifier(attribute.modifiers)
-    }
+    })
 
     // Run through item modifiers
     this.runNPCModifier(item.modifiers)
@@ -106,11 +119,11 @@ export class NPCModel {
   }
 
   runNPCModifier(modifiers: Array<TargetModifier>) {
-    for (const modifier of modifiers) {
+    modifiers.forEach(modifier => {
       if (modifier.targetType === TARGET_TYPE.NPC) {
         this[modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](this[modifier.targetKey], modifier.targetChange)
       }
-    }
+    })
   }
 
   get nextLevelXP(): number {
@@ -154,9 +167,9 @@ export class NPCModel {
     + NPCBASESTATS[this.baseStat].nrgMod * this.NRG
   }
 
-  get damage() {
-    return Math.floor((Math.random() * this.maxDamage) + this.minDamage)
-  }
+  // get damage() {
+  //   return Math.floor((Math.random() * this.maxDamage) + this.minDamage)
+  // }
 }
 
 export enum NPC_BASE_STAT {

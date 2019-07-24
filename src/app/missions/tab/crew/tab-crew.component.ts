@@ -11,7 +11,6 @@ import { Store } from '@ngxs/store'
 })
 export class MissionTabCrewComponent {
   @Input() activeMission: MissionModel
-  missionStep =  MISSION_STEP
 
   constructor(private store: Store) {}
 }

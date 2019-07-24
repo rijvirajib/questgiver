@@ -10,9 +10,7 @@
         <tab-intel [activeMission]="activeMission"></tab-intel>
       </StackLayout>
       <StackLayout *tabItem="{title: 'Crew'}">
-        <StackLayout>
-          <Label text="Crew" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
-        </StackLayout>
+        <tab-crew [activeMission]="activeMission"></tab-crew>
       </StackLayout>
       <StackLayout *tabItem="{title: 'Escape'}">
         <StackLayout>
