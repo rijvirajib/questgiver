@@ -1,0 +1,32 @@
+.bottom-tabs, .header, .see-all {
+  padding: 0 18;
+}
+
+.tabs {
+  font-size: 13pt;
+  font-weight: bold;
+  padding: 0 9;
+}
+
+.tabs Label {
+  border-bottom-color: #686871;
+  border-bottom-width: 1;
+  color: #979797;
+  padding-bottom: 12;
+  text-align: center;
+}
+
+.tabs Label.active {
+  border-bottom-color: #ED2567;
+  border-bottom-width: 1;
+  color: #ED2567;
+}
+
+.content {
+  padding: 32 0 0 0;
+}
+
+.content .h1, .content .h2 {
+  padding-left: 18;
+}
+
