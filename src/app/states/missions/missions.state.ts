@@ -121,6 +121,7 @@ export class MissionsState {
       for (const key of Object.keys(state.missions)) {
         if (state.missions[key].step === MISSION_STEP.Intel) {
           // Go through ONE obstacle and increment time spent
+          let isComplete = true
           // tslint:disable-next-line:prefer-for-of
           for (let obstacleIndex = 0; obstacleIndex < state.missions[key].obstacles.length; obstacleIndex++) {
             const obstacle = state.missions[key].obstacles[obstacleIndex]
@@ -129,6 +130,7 @@ export class MissionsState {
             if (state.missions[key].obstacles[obstacleIndex].isCased) {
               continue
             }
+            isComplete = false
             let message: string
             // First second of casing the obstacle
             if (obstacle.casedTime === 0) {
@@ -167,8 +169,9 @@ export class MissionsState {
             }
             break
           }
+
           // If the mission is ready
-          if (state.missions[key].totalCasedTime > state.missions[key].totalCaseTime) {
+          if (isComplete) {
             state.missions[key].times.cased = this.store.selectSnapshot(GameState.currentTime)
             state.missions[key].step = MISSION_STEP.Ready
             break
