@@ -19,13 +19,25 @@ export enum TARGET_TYPE {
   QUEST,
   OBSTACLE,
   ATTRIBUTE,
+  ITEM,
   NPC,
-  ITEM
+  ENEMY
 }
 
 export enum TARGET_CHANGE_SYMBOL {
   '+',
   '*',
-  '=',
-  'bool'
+  '='
+}
+
+export const TARGET_MODIFIER_RUNNER = {
+  [TARGET_CHANGE_SYMBOL['+']] : (x: number, y: any) => {
+    return x + y
+  },
+  [TARGET_CHANGE_SYMBOL['*']] : (x: number, y: any) => {
+      return x * y
+  },
+  [TARGET_CHANGE_SYMBOL['=']] : (x: any) => {
+    return x
+  }
 }

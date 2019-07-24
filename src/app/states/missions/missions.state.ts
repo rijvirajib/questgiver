@@ -12,7 +12,9 @@ import { State, Action, StateContext, Selector, Store } from '@ngxs/store'
   name: 'missions',
   defaults: {
     missions: {},
-    missionIds: []
+    missionIds: [],
+    inventory: {},
+    inventoryIds: []
   }
 })
 

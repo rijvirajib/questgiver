@@ -1,17 +1,17 @@
 import { ItemModel, ITEM_CLASS, EQUIP_CLASS } from '../models/item.model'
 import { TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/target-modifier.model'
-import { NPC_ATTRIBUTES } from './attributes'
+import { NPC_ATTRIBUTES, ITEM_ATTRIBUTES } from './attributes'
 import { OBSTACLE_TYPE } from '../models/obstacle.model'
 
 // These cannot be duplicated
 export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
-  NTH_AXE: {
-    id: 'NTH_AXE',
-    name: 'Nth Axe',
-    description: 'An axe made of Nth metal. Strong against magic.',
+  HawkPersonAxe: {
+    id: 'HawkPersonAxe',
+    name: `HawkPerson's Nth Metal Axe`,
+    description: `HawkPerson's legendary axe made of Nth metal. Strong against magic.`,
     class: ITEM_CLASS.Axe,
     equipClass: EQUIP_CLASS.OH,
-    attributes: [NPC_ATTRIBUTES.NTH.id],
+    attributes: [ITEM_ATTRIBUTES.NTH.id],
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
       targetKey: 'STR',

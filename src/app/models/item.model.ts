@@ -10,9 +10,10 @@ export class ItemModel {
   class: ITEM_CLASS
   equipClass: EQUIP_CLASS
 
-  attributes?: Array<AttributeModel['id']>
+  attributes?: Array<AttributeModel>
   antiObstacles?: Array<OBSTACLE_TYPE>
 
+  isSignature?: boolean
   modifiers?: Array<TargetModifier>
   quality?: number // [0, 1]: 0 = destroyed
 
