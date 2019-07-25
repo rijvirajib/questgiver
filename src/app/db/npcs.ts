@@ -24,6 +24,22 @@ export const NPC: { [id: string]: NPCModel } = {
       [EQUIP_CLASS.Weapon]: INVENTORY_ITEMS.HawkPersonAxe
     }
   }),
+  Batmanuel: new NPCModel({
+    id: 'Batmanuel',
+    name: 'Batmanuel',
+    description: 'Batmanuel has resurfaced after the new Tick showed up.',
+    isVillain: true,
+    level: 1,
+    baseStat: NPC_BASE_STAT.STR,
+
+    NRG: 20,
+    STR: 20,
+    DEX: 20,
+
+    attributes: [
+      NPC_ATTRIBUTES.ACROBAT ,
+    ]
+  }),
   STORYNPC1: new NPCModel({
     id: 'STORYNPC1',
     name: 'Kwik Fix Magician',
