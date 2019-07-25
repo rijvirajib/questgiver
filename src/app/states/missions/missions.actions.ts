@@ -1,4 +1,5 @@
 import { MissionModel } from '../../models/mission.model'
+import { NPCModel } from '~/app/models/npc.model'
 
 export class LoadMissions {
   static readonly type = '[Mission] LoadMissions'
@@ -26,4 +27,14 @@ export class CaseMissions {
 export class CompleteMission {
   static readonly type = '[Mission] Complete Mission'
   constructor(public mission: MissionModel) {}
+}
+
+export class HireCrew {
+  static readonly type = '[Mission] Hire Crew'
+  constructor(public mission: MissionModel, public npc: NPCModel) {}
+}
+
+export class FireCrew {
+  static readonly type = '[Mission] Fire Crew'
+  constructor(public mission: MissionModel, public npc: NPCModel) {}
 }

@@ -1,4 +1,4 @@
-import { AddMission, LoadMissions, AcceptMission, RejectMission, CaseMissions } from './missions.actions'
+import { AddMission, LoadMissions, AcceptMission, RejectMission, CaseMissions, HireCrew, FireCrew } from './missions.actions'
 import { CASEMESSAGES } from '~/app/db/case-messages'
 import { EVENT_TYPES } from '~/app/models/event.model'
 import { GameState } from '../game.state'
@@ -11,7 +11,7 @@ import { NPC } from '~/app/db/npcs'
 import { NPCModel } from '~/app/models/npc.model'
 import { OBSTACLE_TYPE } from '~/app/models/obstacle.model'
 import { STORYMISSIONS } from '~/app/db/story-missions'
-import { State, Action, StateContext, Selector, Store } from '@ngxs/store'
+import { State, Action, StateContext, Selector, Store, createSelector } from '@ngxs/store'
 @State<MissionStateModel>({
   name: 'missions',
   defaults: {
@@ -51,6 +51,20 @@ export class MissionsState {
   static missionById(state: MissionStateModel) {
     return (id: string) => {
       return state.missions[id]
+    }
+  }
+
+  @Selector()
+  static crewById(id: string) {
+    return createSelector([MissionsState], (state: MissionStateModel) => {
+      return Object.values(state.missions[id].crew)
+    })
+  }
+
+  @Selector()
+  static crewByMissionId(state: MissionStateModel) {
+    return (id: string) => {
+      return Object.values(state.missions[id].crew).map(v => v)
     }
   }
 
@@ -209,6 +223,42 @@ export class MissionsState {
           }
         }
       }
+
+      return state
+    })
+  }
+
+  @Action(HireCrew)
+  @ImmutableContext()
+  HireCrew(
+    { setState }: StateContext<MissionStateModel>,
+    { mission, npc }: HireCrew
+  ) {
+    setState((state: MissionStateModel) => {
+      state.npcs[npc.id].isAvailable = false
+
+      // TODO: Handle Inventory
+
+      // Attach NPC
+      state.missions[mission.id].crew[npc.id] = state.npcs[npc.id]
+
+      return state
+    })
+  }
+
+  @Action(FireCrew)
+  @ImmutableContext()
+  FireCrew(
+    { setState }: StateContext<MissionStateModel>,
+    { mission, npc }: FireCrew
+  ) {
+    setState((state: MissionStateModel) => {
+      state.npcs[npc.id].isAvailable = true
+
+      // TODO: Handle Inventory
+
+      // Remove NPC
+      delete state.missions[mission.id].crew[npc.id]
 
       return state
     })

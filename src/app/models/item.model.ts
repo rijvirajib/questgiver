@@ -24,13 +24,13 @@ export class ItemModel {
 }
 
 export enum EQUIP_CLASS {
-  Weapon,
-  Offhand,
-  Helm,
-  Mission,
-  Chest,
-  Legs,
-  Trinket
+  Weapon = 'weapon',
+  Offhand = 'offhand',
+  Helm = 'helm',
+  Chest = 'chest',
+  Legs = 'legs',
+  Trinket = 'trinket',
+  Mission = 'mission'
 }
 
 export enum ITEM_CLASS {

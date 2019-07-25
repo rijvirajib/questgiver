@@ -68,8 +68,8 @@ export class NPCModel {
     this.addXP(stats.nowXP || 0)
     this.icon = stats.icon || '~/images/icons/unknown-obstacle.png'
 
-    this.minDamage = stats.minDamage || Math.floor((Math.random() * 1) + 50)
-    this.maxDamage = stats.maxDamage || Math.floor((Math.random() * 1) + 100)
+    this.minDamage = stats.minDamage || Math.floor((Math.random() * 1) + 100)
+    this.maxDamage = stats.maxDamage || Math.floor((Math.random() * 50) + 100)
 
     // Initialize gear system
     this.gear = {
@@ -116,6 +116,7 @@ export class NPCModel {
     })
     this.recalculateStats()
     this.heal(true)
+    this.nrgize(true)
   }
 
   recalculateStats(levelUp = false) {
@@ -169,6 +170,14 @@ export class NPCModel {
     }
   }
 
+  nrgize(full = false, nrg?: number) {
+    if (full) {
+      this.nowNRG = this.nowNRG
+    } else {
+      this.nowNRG += nrg
+    }
+  }
+
   addXP(xp: number) {
     this.nowXP += xp
   }
@@ -182,6 +191,7 @@ export class NPCModel {
         this.levelUp()
       } else {
         this.heal(true)
+        this.nrgize(true)
       }
     }
   }
