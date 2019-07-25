@@ -1,4 +1,4 @@
-import { AddMission, LoadMissions, AcceptMission, RejectMission, CaseMissions, HireCrew, FireCrew } from './missions.actions'
+import { AddMission, LoadMissions, AcceptMission, RejectMission, CaseMissions, HireCrew, FireCrew, EquipNPC } from './missions.actions'
 import { CASEMESSAGES } from '~/app/db/case-messages'
 import { EVENT_TYPES } from '~/app/models/event.model'
 import { GameState } from '../game.state'
@@ -75,28 +75,37 @@ export class MissionsState {
   @ImmutableContext()
   loadMissions({ setState }: StateContext<MissionStateModel>) {
     setState((state: MissionStateModel) => {
-      state.missions = Object.assign({}, ...STORYMISSIONS.map(s => ({[s.id]: s})))
-      state.missionIds = [STORYMISSIONS[0].id]
 
-      Object.keys(NPC).forEach(key => {
-        state.npcs[key] = NPC[key]
-        state.npcIds.push(key)
-      })
+      if (state.inventoryIds.length === 0) {
+        Object.keys(INVENTORY_ITEMS).forEach(key => {
+          state.inventory[key] = INVENTORY_ITEMS[key]
+          state.inventoryIds.push(key)
+        })
+      }
 
-      Object.keys(INVENTORY_ITEMS).forEach(key => {
-        state.inventory[key] = INVENTORY_ITEMS[key]
-        state.inventoryIds.push(key)
-      })
+      if (state.attributeIds.length === 0) {
+        Object.keys(ITEM_ATTRIBUTES).forEach(key => {
+          state.attributes[key] = ITEM_ATTRIBUTES[key]
+          state.attributeIds.push(key)
+        })
 
-      Object.keys(ITEM_ATTRIBUTES).forEach(key => {
-        state.attributes[key] = ITEM_ATTRIBUTES[key]
-        state.attributeIds.push(key)
-      })
+        Object.keys(NPC_ATTRIBUTES).forEach(key => {
+          state.attributes[key] = NPC_ATTRIBUTES[key]
+          state.attributeIds.push(key)
+        })
+      }
 
-      Object.keys(NPC_ATTRIBUTES).forEach(key => {
-        state.attributes[key] = NPC_ATTRIBUTES[key]
-        state.attributeIds.push(key)
-      })
+      if (state.npcIds.length === 0) {
+        Object.keys(NPC).forEach(key => {
+          state.npcs[key] = NPC[key]
+          state.npcIds.push(key)
+        })
+      }
+
+      if (state.missionIds.length === 0) {
+        state.missions = Object.assign({}, ...STORYMISSIONS.map(s => ({[s.id]: s})))
+        state.missionIds = [STORYMISSIONS[0].id]
+      }
 
       return state
     })
@@ -159,7 +168,7 @@ export class MissionsState {
 
   @Action(CaseMissions)
   @ImmutableContext()
-  CaseMissions(
+  caseMissions(
     { setState }: StateContext<MissionStateModel>
   ) {
     setState((state: MissionStateModel) => {
@@ -230,7 +239,7 @@ export class MissionsState {
 
   @Action(HireCrew)
   @ImmutableContext()
-  HireCrew(
+  hireCrew(
     { setState }: StateContext<MissionStateModel>,
     { mission, npc }: HireCrew
   ) {
@@ -246,9 +255,26 @@ export class MissionsState {
     })
   }
 
+  @Action(EquipNPC)
+  @ImmutableContext()
+  equipNPC(
+    { setState, dispatch }: StateContext<MissionStateModel>,
+    { mission, npc, item }: EquipNPC
+  ) {
+    setState((state: MissionStateModel) => {
+      item.isAvailable = false
+      state.inventory[item.id] = item
+
+      // Attach Item
+      state.missions[mission.id].crew[npc.id].onEquip(state.inventory[item.id])
+
+      return state
+    })
+  }
+
   @Action(FireCrew)
   @ImmutableContext()
-  FireCrew(
+  fireCrew(
     { setState }: StateContext<MissionStateModel>,
     { mission, npc }: FireCrew
   ) {

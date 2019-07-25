@@ -28,6 +28,9 @@ export class MissionTabCrewComponent implements OnInit {
 
   ngOnInit() {
     this.hiredVillains$ = this.store.select(MissionsState.crewByMissionId).pipe(map(filterFn => filterFn(this.activeMission.id)))
+    this.hiredVillains$.subscribe(data => {
+      console.log(data)
+    })
   }
 
   fire(villain: NPCModel) {
@@ -38,5 +41,13 @@ export class MissionTabCrewComponent implements OnInit {
   hire(villain: NPCModel) {
     this.store.dispatch(
       new HireCrew(this.activeMission, villain))
+  }
+
+  onTapEquip(equipClass: string) {
+    console.log('Opening Inventory for ', equipClass)
+  }
+
+  isSlotAvailable(villain: NPCModel, equipClass: string) {
+    return !villain.gear[equipClass] || (villain.gear && !villain.gear[equipClass].isSignature)
   }
 }

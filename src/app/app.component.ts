@@ -6,6 +6,7 @@ import { RouterExtensions } from 'nativescript-angular/router'
 import { Start, LoadMissions } from './states'
 import { StateClear, StateResetAll } from 'ngxs-reset-plugin'
 import { Store } from '@ngxs/store'
+import { filter } from 'rxjs/operators'
 
 @Component({
   moduleId: module.id,
@@ -30,11 +31,9 @@ export class AppComponent implements OnInit {
     this._activatedUrl = '/home'
     this._sideDrawerTransition = new SlideInOnTopTransition()
 
-    // this.router.events
-    // .pipe(filter(e => e instanceof NavigationEnd))
-    // .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects)
-
-    // this.store.dispatch(new StateResetAll())
+    this.router.events
+    .pipe(filter(e => e instanceof NavigationEnd))
+    .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects)
   }
 
   get sideDrawerTransition(): DrawerTransitionBase {

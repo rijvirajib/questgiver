@@ -1,5 +1,6 @@
 import { ATTRIBUTES, NPC_ATTRIBUTES } from './attributes'
-import { EQUIP_CLASS } from '../models/item.model'
+import { AttributeModel } from '../models/attribute.model'
+import { EQUIP_CLASS, ItemModel } from '../models/item.model'
 import { INVENTORY_ITEMS } from './inventory-items'
 import { NPCModel, NPC_BASE_STAT } from '../models/npc.model'
 
@@ -21,7 +22,7 @@ export const NPC: { [id: string]: NPCModel } = {
       NPC_ATTRIBUTES.FLYING,
     ],
     gear: {
-      [EQUIP_CLASS.Weapon]: INVENTORY_ITEMS.HawkPersonAxe
+      [EQUIP_CLASS.Weapon]: new ItemModel(INVENTORY_ITEMS.HawkPersonAxe)
     }
   }),
   Batmanuel: new NPCModel({
@@ -37,7 +38,7 @@ export const NPC: { [id: string]: NPCModel } = {
     DEX: 20,
 
     attributes: [
-      NPC_ATTRIBUTES.ACROBAT ,
+      NPC_ATTRIBUTES.ACROBAT,
     ]
   }),
   STORYNPC1: new NPCModel({

@@ -1,3 +1,4 @@
+import { ItemModel } from '~/app/models/item.model'
 import { MissionModel } from '../../models/mission.model'
 import { NPCModel } from '~/app/models/npc.model'
 
@@ -32,6 +33,11 @@ export class CompleteMission {
 export class HireCrew {
   static readonly type = '[Mission] Hire Crew'
   constructor(public mission: MissionModel, public npc: NPCModel) {}
+}
+
+export class EquipNPC {
+  static readonly type = '[Mission] Equip NPC'
+  constructor(public mission: MissionModel, public npc: NPCModel, public item: ItemModel) {}
 }
 
 export class FireCrew {

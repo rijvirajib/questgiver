@@ -1,10 +1,9 @@
 <Label text="Crew" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
-<Label text="Test2" textWrap="true" class="m-15 h4 text-left" color="gray"></Label>
 <FlexboxLayout flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
-  <StackLayout *ngFor="let villain of this.hiredVillains$ | async;" id="villain{{key}}" orientation="vertical" class="mission-list-item" width="100%">
+  <StackLayout *ngFor="let villain of this.hiredVillains$ | async; index as i" id="villain{{i}}" orientation="vertical" class="mission-list-item" width="100%">
     <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-main-info" verticalAlignment="top">
       <Image row="0" col="0" src="{{ villain.icon }}" class="mission-category-icon"></Image>
-      <StackLayout row="0" col="1" orientation="vertical" class="mission-info-container">
+      <StackLayout row="1" col="1" orientation="vertical" class="mission-info-container">
         <Label class="mission-title" text="{{ villain.name }} | L{{ villain.level }}"></Label>
         <Label text="{{ villain.description }}" textWrap="true"></Label>
         <Label text="HP: {{ villain.nowHP }}" textWrap="true"></Label>
@@ -20,13 +19,22 @@
       </StackLayout>
       <Button verticalAlignment="top" row="0" col="2" text="Fire" class="pay-amount" (tap)="fire(villain)"></Button>
     </GridLayout>
+    <FlexboxLayout flexDirection="row" justifyContent="space-between" class="mission-info-container">
+      <Button (tap)="onTapEquip('weapon')" text="Weapon" [isEnabled]="isSlotAvailable(villain, 'weapon')"></Button>
+      <Button (tap)="onTapEquip('offhand')" text="Offhand" [isEnabled]="isSlotAvailable(villain, 'offhand')"></Button>
+      <Button (tap)="onTapEquip('helm')" text="Helm" [isEnabled]="isSlotAvailable(villain, 'helm')"></Button>
+      <Button (tap)="onTapEquip('chest')" text="Chest" [isEnabled]="isSlotAvailable(villain, 'chest')"></Button>
+      <Button (tap)="onTapEquip('leg')" text="Pants" [isEnabled]="isSlotAvailable(villain, 'pants')"></Button>
+    </FlexboxLayout>
     <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-secondary-info">
       <Label row="0" col="0" text="{{ villain.baseStat }}" class="time-information"></Label>
       <GridLayout row="0" col="2" columns="auto, auto, auto" rows="auto">
         <Label row="0" col="0" text="" class="lender-name"></Label>
         <Label row="0" col="1" text=""></Label>
         <GridLayout row="0" col="2" columns="auto,auto,auto,auto" rows="auto" width="100%" class="debtor-list">
-          <Label text="{{ villain.attributes.join(',') }}"></Label>
+          <ng-container *ngFor="let attribute of villain.attributes;">
+            <Label text="{{ attribute.name }}"></Label>
+          </ng-container>
         </GridLayout>
       </GridLayout>
     </GridLayout>
@@ -36,12 +44,14 @@
 <Label text="Villain Directory" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
 <ScrollView backgroundColor="#e8e7e7">
   <FlexboxLayout flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
-    <StackLayout *ngFor="let villain of availableVillains$ | async; index as i" id="item{{i}}" orientation="vertical" class="mission-list-item" width="100%">
+    <StackLayout *ngFor="let villain of availableVillains$ | async; index as i" id="availableVillains{{i}}" orientation="vertical" class="mission-list-item" width="100%">
       <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-main-info" verticalAlignment="top">
         <Image row="0" col="0" src="{{ villain.icon }}" class="mission-category-icon"></Image>
         <StackLayout row="0" col="1" orientation="vertical" class="mission-info-container">
           <Label class="mission-title" text="{{ villain.name }} | L{{ villain.level }}"></Label>
           <Label text="{{ villain.description }}" textWrap="true"></Label>
+          <Label text="Available: {{ villain.isAvailable ? 'Y': 'N' }}" textWrap="true"></Label>
+          <Label text="Visible: {{ villain.isVisible ? 'Y': 'N' }}" textWrap="true"></Label>
           <Label text="HP: {{ villain.nowHP }}" textWrap="true"></Label>
           <Label text="Energy: {{ villain.nowNRG }}" textWrap="true"></Label>
           <Label text="Damage: {{ villain.minDamage }} - {{ villain.maxDamage }}" textWrap="true"></Label>
@@ -53,7 +63,7 @@
           <Label text="{{ villain.gear.leg.name }}" *ngIf="villain.gear.leg"></Label>
           <Label *ngFor="let trinket of villain.trinkets" text="{{ trinket.name }}"></Label>
         </StackLayout>
-        <Button verticalAlignment="top" row="0" col="2" text="Hire" class="pay-amount" (tap)="hire(villain)"></Button>
+        <Button verticalAlignment="top" row="0" col="2" text="Hire (${{ villain.cost }})" class="pay-amount" (tap)="hire(villain)"></Button>
       </GridLayout>
       <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-secondary-info">
         <Label row="0" col="0" text="{{ villain.baseStat }}" class="time-information"></Label>
@@ -61,7 +71,9 @@
           <Label row="0" col="0" text="" class="lender-name"></Label>
           <Label row="0" col="1" text=""></Label>
           <GridLayout row="0" col="2" columns="auto,auto,auto,auto" rows="auto" width="100%" class="debtor-list">
-            <Label text="{{ villain.attributes.join(',') }}"></Label>
+            <ng-container *ngFor="let attribute of villain.attributes;">
+              <Label text="{{ attribute.name }}"></Label>
+            </ng-container>
           </GridLayout>
         </GridLayout>
       </GridLayout>
