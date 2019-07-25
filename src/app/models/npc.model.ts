@@ -100,6 +100,8 @@ export class NPCModel {
 
     // Process attributes
     this.attributes.forEach(attribute => {
+      // Just in case you come back.. about attribute.modifiers
+      // The attribute id might not exist if that error is hard to debug
       this.runNPCModifier(attribute.modifiers)
     })
   }
