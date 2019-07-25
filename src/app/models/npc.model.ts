@@ -122,7 +122,15 @@ export class NPCModel {
     })
 
     // Run through item modifiers
-    // this.runNPCModifier(item.modifiers)
+    this.runNPCModifier(item.modifiers)
+  }
+
+  heal(hp: number, full = false) {
+    if (full) {
+      this.nowHP = this.maxHP
+    } else {
+      this.nowHP += hp
+    }
   }
 
   addXP(xp: number) {
