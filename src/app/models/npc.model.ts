@@ -82,9 +82,9 @@ export class NPCModel {
 
     this.attributes = stats.attributes || []
 
-    this.STR = stats.STR
-    this.DEX = stats.DEX
-    this.NRG = stats.NRG
+    this.STR = stats.STR || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
+    this.DEX = stats.DEX || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
+    this.NRG = stats.NRG || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
 
     this.maxTrinkets = stats.maxTrinkets || NPCBASESTATS.BASE.maxTrinkets
 
@@ -115,6 +115,7 @@ export class NPCModel {
       this.runNPCModifier(attribute.modifiers)
     })
     this.recalculateStats()
+    this.heal(true)
   }
 
   recalculateStats(levelUp = false) {
@@ -160,7 +161,7 @@ export class NPCModel {
     this.runNPCModifier(item.modifiers)
   }
 
-  heal(hp: number, full = false) {
+  heal(full = false, hp?: number) {
     if (full) {
       this.nowHP = this.maxHP
     } else {
@@ -175,9 +176,12 @@ export class NPCModel {
   levelUp() {
     if (this.nowXP >= this.nextLevelXP) {
       this.level += 1
+      // Recalculate per level
       this.recalculateStats(true)
-      if (this.nowXP > this.nextLevelXP) {
+      if (this.nowXP >= this.nextLevelXP) {
         this.levelUp()
+      } else {
+        this.heal(true)
       }
     }
   }

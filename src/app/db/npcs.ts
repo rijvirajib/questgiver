@@ -15,7 +15,7 @@ export const NPC: { [id: string]: NPCModel } = {
     icon: '~/images/icons/npcs/hawkperson.png',
     NRG: 10,
     STR: 10,
-    DEX: 10,
+    DEX: 20,
 
     attributes: [
       NPC_ATTRIBUTES.FLYING,
@@ -30,7 +30,7 @@ export const NPC: { [id: string]: NPCModel } = {
     description: 'Batmanuel has resurfaced after the new Tick showed up.',
     isVillain: true,
     level: 1,
-    baseStat: NPC_BASE_STAT.STR,
+    baseStat: NPC_BASE_STAT.DEX,
     icon: '~/images/icons/npcs/batmanuel.png',
     NRG: 10,
     STR: 10,

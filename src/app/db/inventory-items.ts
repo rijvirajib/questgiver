@@ -15,12 +15,12 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
       targetKey: 'STR',
-      targetChange: .2,
+      targetChange: 1.2,
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
     }, {
       targetType: TARGET_TYPE.NPC,
       targetKey: 'DEX',
-      targetChange: -.05, // reduce dexterity by 5%, heavier to swing, bro
+      targetChange: .9, // reduce dexterity by 1, heavier to swing, bro
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
     }],
     quality: 1

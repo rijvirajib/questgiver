@@ -9,8 +9,10 @@
         <StackLayout row="0" col="1" orientation="vertical" class="mission-info-container">
           <Label class="mission-title" text="{{ villain.name }}"></Label>
           <Label text="{{ villain.description }}" textWrap="true"></Label>
-          <Label text="HP: {{ villain.maxHP }}" textWrap="true"></Label>
+          <Label text="HP: {{ villain.nowHP }}" textWrap="true"></Label>
+          <Label text="NRG: {{ villain.nowNRG }}" textWrap="true"></Label>
           <Label text="Damage: {{ villain.minDamage }} - {{ villain.maxDamage }}" textWrap="true"></Label>
+          <Label text="STR: {{ villain.STR }} | DEX: {{ villain.DEX }} | NRG: {{ villain.NRG }}" textWrap="true"></Label>
         </StackLayout>
         <Label verticalAlignment="top" row="0" col="2" text="Level {{ villain.level }}" class="pay-amount"></Label>
       </GridLayout>
