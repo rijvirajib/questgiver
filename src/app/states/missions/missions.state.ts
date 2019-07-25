@@ -8,6 +8,7 @@ import { ImmutableContext, ImmutableSelector } from '@ngxs-labs/immer-adapter'
 import { MissionModel, MISSION_STEP } from '~/app/models/mission.model'
 import { MissionStateModel } from './missions.model'
 import { NPC } from '~/app/db/npcs'
+import { NPCModel } from '~/app/models/npc.model'
 import { OBSTACLE_TYPE } from '~/app/models/obstacle.model'
 import { STORYMISSIONS } from '~/app/db/story-missions'
 import { State, Action, StateContext, Selector, Store } from '@ngxs/store'
@@ -37,12 +38,13 @@ export class MissionsState {
   }
 
   @Selector()
-  static availableVillains(state: MissionStateModel) {
+  static availableVillains(state: MissionStateModel): Array<NPCModel> {
     return Object.keys(state.npcs).map(id => {
       if (state.npcs[id].isAvailable === true && state.npcs[id].isVillain === true) {
         return state.npcs[id]
       }
     }).filter((el) => {
+      // remove empty ones :/
       return el != null
     })
   }

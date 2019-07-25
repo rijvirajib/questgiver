@@ -7,6 +7,9 @@ export class NPCModel {
   id: string
   name: string
   description: string
+  icon?: string
+  _cost?: number
+
   isVillain?: boolean
   isAvailable?: boolean
 
@@ -47,6 +50,7 @@ export class NPCModel {
     this.id = stats.id || uuid()
     this.name = stats.name || ''
     this.description = stats.description || ''
+    this._cost = stats.cost || (Math.floor((Math.random() * 100) + 300) / 1000) * 1000
     this.isVillain = stats.isVillain || false
     this.isAvailable = stats.isAvailable || true
     this.isInjured = stats.isInjured || false
@@ -55,6 +59,7 @@ export class NPCModel {
     this.nowHP = stats.nowHP || this.maxHP
     this.nowNRG = stats.nowNRG || this.nowNRG
     this.addXP(stats.nowXP || 0)
+    this.icon = stats.icon || '~/images/icons/unknown-obstacle.png'
 
     // Initialize gear system
     this.gear = {
@@ -76,10 +81,7 @@ export class NPCModel {
     this.criticalChance = .2
     this.criticalDamage = (Math.floor((Math.random() * 100) + 10) / 1000)
 
-    this.evasion =
-      (Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) / 100
-    this.accuracy =
-      (Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) /  100
+    this.recalculateStats()
 
     this.morale = stats.morale
 
@@ -102,6 +104,14 @@ export class NPCModel {
     }
   }
 
+  recalculateStats() {
+    this._cost = Math.round(this._cost + (this.level * (this.level + 1)) / 2)
+    this.evasion =
+      (Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) / 100
+    this.accuracy =
+      (Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) /  100
+  }
+
   onEquip(item: ItemModel) {
     // Attributes First
     this.gear[item.equipClass] = item
@@ -120,7 +130,7 @@ export class NPCModel {
   levelUp() {
     if (this.nowXP >= this.nextLevelXP) {
       this.level += 1
-      // Increase Base Stats
+      // TODO: Increase Base Stats
       if (this.nowXP > this.nextLevelXP) {
         this.levelUp()
       }
@@ -135,6 +145,10 @@ export class NPCModel {
         }
       })
     }
+  }
+
+  get cost(): number {
+    return this._cost
   }
 
   get nextLevelXP(): number {
