@@ -18,7 +18,9 @@
           <Label row="0" col="0" text="" class="lender-name"></Label>
           <Label row="0" col="1" text=""></Label>
           <GridLayout row="0" col="2" columns="auto,auto,auto,auto" rows="auto" width="100%" class="debtor-list">
-            <Label verticalAlignment="top" row="0" col="2" text="Cost {{ villain.cost }}" class="pay-amount"></Label>
+            <StackLayout *ngFor="let obstacle of villain.attributes; let j = index" row="0" col="{{j}}" orientation="vertical" class="debtor-list-item">
+              <Image src="~/images/icons/unknown-obstacle.png" class="debtor-list-item-image"></Image>
+            </StackLayout>
           </GridLayout>
         </GridLayout>
       </GridLayout>

@@ -39,25 +39,12 @@ export class MissionsState {
 
   @Selector()
   static availableVillains(state: MissionStateModel): Array<NPCModel> {
-    return Object.keys(state.npcs).map(id => {
-      if (state.npcs[id].isAvailable === true && state.npcs[id].isVillain === true) {
-        return state.npcs[id]
-      }
-    }).filter((el) => {
-      // remove empty ones :/
-      return el != null
-    })
+    return Object.values(state.npcs).filter(x => x.isAvailable && x.isVillain)
   }
 
   @Selector()
   static availableMissions(state: MissionStateModel): Array<MissionModel> {
-    return Object.keys(state.missions).map(id => {
-      if (state.missions[id].isAvailable === true) {
-        return state.missions[id]
-      }
-    }).filter((el) => {
-      return el != null
-    })
+    return Object.values(state.missions).filter(x => x.isAvailable)
   }
 
   @Selector()

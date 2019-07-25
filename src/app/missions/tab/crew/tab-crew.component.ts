@@ -23,8 +23,6 @@ export class MissionTabCrewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.availableVillains$.subscribe((res: any) => {
-      console.log(res.length)
-    })
+    // Do nothing
   }
 }

@@ -70,7 +70,7 @@ export class NPCModel {
       [EQUIP_CLASS.Legs]: undefined
     }
 
-    this.attributes = this.attributes || []
+    this.attributes = stats.attributes || []
 
     this.STR = stats.STR
     this.DEX = stats.DEX
@@ -99,9 +99,9 @@ export class NPCModel {
     }
 
     // Process attributes
-    for (const attribute of this.attributes) {
+    this.attributes.forEach(attribute => {
       this.runNPCModifier(attribute.modifiers)
-    }
+    })
   }
 
   recalculateStats() {
@@ -120,7 +120,7 @@ export class NPCModel {
     })
 
     // Run through item modifiers
-    this.runNPCModifier(item.modifiers)
+    // this.runNPCModifier(item.modifiers)
   }
 
   addXP(xp: number) {

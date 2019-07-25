@@ -18,7 +18,7 @@ export const NPC: { [id: string]: NPCModel } = {
     DEX: 20,
 
     attributes: [
-      NPC_ATTRIBUTES.Flying,
+      NPC_ATTRIBUTES.FLYING,
     ],
     gear: {
       [EQUIP_CLASS.Weapon]: INVENTORY_ITEMS.HawkPersonAxe

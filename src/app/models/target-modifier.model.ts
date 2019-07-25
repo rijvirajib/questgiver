@@ -10,6 +10,15 @@ export class TargetModifier {
     dotTick: number
     dotMaxTicks?: number
   }
+
+  constructor(params: any) {
+    this.targetType = params.targetType
+    this.targetID = params.targetID
+    this.targetKey = params.targetKey
+    this.willDisable = params.willDisable || false
+    this.targetChange = params.targetChange || 0
+    this.targetChangeSymbol = params.targetChangeSymbol || TARGET_CHANGE_SYMBOL['*']
+  }
 }
 
 // Ordered by tick priority

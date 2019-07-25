@@ -1,5 +1,5 @@
 import { AttributeModel, ATTRIBUTE_CLASS } from '../models/attribute.model'
-import { TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/target-modifier.model'
+import { TARGET_TYPE, TARGET_CHANGE_SYMBOL, TargetModifier } from '../models/target-modifier.model'
 import { NPC_BASE_STAT } from '../models/npc.model'
 
 // These items are cloned for re-use
@@ -8,7 +8,7 @@ export const ATTRIBUTES: { [id: string]: AttributeModel } = {
 }
 
 export const ITEM_ATTRIBUTES: { [id: string]: AttributeModel } = {
-  NTH: {
+  NTH: new AttributeModel({
     id: 'NTH',
     name: 'Nth Metal',
     baseStat: NPC_BASE_STAT.DEX,
@@ -17,11 +17,11 @@ export const ITEM_ATTRIBUTES: { [id: string]: AttributeModel } = {
     classConflicts: [ATTRIBUTE_CLASS.CHARACTER_CLASS],
     description: 'Items with Nth Metal disable Magic.',
     icon: '~/images/icons/nth.png'
-  }
+  })
 }
 
 export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
-  ACROBAT: {
+  ACROBAT: new AttributeModel({
     id: 'ACROBAT',
     name: 'Acrobat',
     baseStat: NPC_BASE_STAT.DEX,
@@ -29,14 +29,29 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
     description: 'A villain whose skills rely on their incredible aerobic and gymnastic abilities.',
     icon: '~/images/icons/acrobat.png',
     canDisable: true,
-    modifiers: [{
+    modifiers: [new TargetModifier({
       targetType: TARGET_TYPE.NPC,
       targetKey: 'DEX',
       targetChange: .5, // Increase DEX by 50%
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
-    }]
-  },
-  MAGE: {
+    })]
+  }),
+  FLYING: new AttributeModel({
+    id: 'FLYING',
+    name: 'Flying',
+    baseStat: NPC_BASE_STAT.DEX,
+    class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
+    description: 'Can fly, whether by rockets, levetation, or wings',
+    icon: '~/images/icons/acrobat.png',
+    canDisable: true,
+    modifiers: [new TargetModifier({
+      targetType: TARGET_TYPE.NPC,
+      targetKey: 'DEX',
+      targetChange: .5, // Increase DEX by 50%
+      targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
+    })]
+  }),
+  MAGE: new AttributeModel({
     id: 'MAGE',
     name: 'Acrobat',
     baseStat: NPC_BASE_STAT.DEX,
@@ -52,14 +67,14 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
         }]
       }
     },
-    modifiers: [{
+    modifiers: [new TargetModifier({
       targetType: TARGET_TYPE.NPC,
       targetKey: 'INT',
       targetChange: .5, // Increase INT by 50%
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
-    }]
-  },
-  CHAMELEON: {
+    })]
+  }),
+  CHAMELEON: new AttributeModel({
     id: 'CHAMELEON',
     name: 'Chameleon',
     baseStat: NPC_BASE_STAT.DEX,
@@ -75,18 +90,18 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
         }]
       }
     },
-    modifiers: [{
+    modifiers: [new TargetModifier({
       targetType: TARGET_TYPE.NPC,
       targetKey: 'chanceToDodge',
       targetChange: .2, // Increase dodge chance by 20%
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
-    }, {
+    }), new TargetModifier({
       targetType: TARGET_TYPE.NPC,
       targetKey: 'armor',
       targetChange: .2, // Increase dodge chance by 20%
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
-    }]
-  }
+    })]
+  })
 }
 
 // ATTRIBUTES.CHARACTER_CLASS
