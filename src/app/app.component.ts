@@ -22,6 +22,8 @@ export class AppComponent implements OnInit {
     private store: Store
   ) {
     // Use the component constructor to inject services.
+    this.store.dispatch(Start)
+    this.store.dispatch(LoadMissions)
   }
 
   ngOnInit(): void {
@@ -33,8 +35,6 @@ export class AppComponent implements OnInit {
     // .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects)
 
     // this.store.dispatch(new StateResetAll())
-    this.store.dispatch(Start)
-    this.store.dispatch(LoadMissions)
   }
 
   get sideDrawerTransition(): DrawerTransitionBase {

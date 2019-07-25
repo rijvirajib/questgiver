@@ -8,7 +8,7 @@ export class NPCModel {
   name: string
   description: string
   icon?: string
-  _cost?: number
+  cost?: number
 
   isVillain?: boolean
   isAvailable?: boolean
@@ -20,13 +20,18 @@ export class NPCModel {
   level: number
   nowXP?: number
 
+  maxHP?: number
   nowHP?: number
+  maxNRG?: number
   nowNRG?: number
   morale?: number
 
   STR?: number
   DEX?: number
   NRG?: number
+
+  minDamage?: number
+  maxDamage?: number
 
   criticalChance?: number
   criticalDamage?: number
@@ -50,16 +55,21 @@ export class NPCModel {
     this.id = stats.id || uuid()
     this.name = stats.name || ''
     this.description = stats.description || ''
-    this._cost = stats.cost || (Math.floor((Math.random() * 100) + 300) / 1000) * 1000
+    this.cost = stats.cost || (Math.floor((Math.random() * 100) + 300) / 1000) * 1000
     this.isVillain = stats.isVillain || false
     this.isAvailable = stats.isAvailable || true
     this.isInjured = stats.isInjured || false
     this.baseStat = stats.baseStat || NPC_BASE_STAT.STR
     this.level = stats.level || 1
-    this.nowHP = stats.nowHP || this.maxHP
-    this.nowNRG = stats.nowNRG || this.nowNRG
+    this.maxHP = stats.maxHP || NPCBASESTATS.BASE.maxHP
+    this.nowHP = stats.nowHP || NPCBASESTATS.BASE.maxHP
+    this.maxNRG = stats.maxNRG || NPCBASESTATS.BASE.maxNRG
+    this.nowNRG = stats.nowNRG || NPCBASESTATS.BASE.maxNRG
     this.addXP(stats.nowXP || 0)
     this.icon = stats.icon || '~/images/icons/unknown-obstacle.png'
+
+    this.minDamage = stats.minDamage || Math.floor((Math.random() * 1) + 50)
+    this.maxDamage = stats.maxDamage || Math.floor((Math.random() * 1) + 100)
 
     // Initialize gear system
     this.gear = {
@@ -81,7 +91,7 @@ export class NPCModel {
     this.criticalChance = .2
     this.criticalDamage = (Math.floor((Math.random() * 100) + 10) / 1000)
 
-    this.recalculateStats()
+    this.recalculateDodge()
 
     this.morale = stats.morale
 
@@ -104,14 +114,39 @@ export class NPCModel {
       // The attribute id might not exist if that error is hard to debug
       this.runNPCModifier(attribute.modifiers)
     })
+    this.recalculateStats()
   }
 
-  recalculateStats() {
-    this._cost = Math.round(this._cost + (this.level * (this.level + 1)) / 2)
-    this.evasion =
-      (Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) / 100
-    this.accuracy =
-      (Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) /  100
+  recalculateStats(levelUp = false) {
+    if (levelUp) {
+      this.recalculateCost()
+    }
+    this.recalculateDamage()
+    this.recalculateDodge()
+    this.recalculateHP()
+    this.recalculateNRG()
+  }
+
+  recalculateCost() {
+    this.cost = this.calcCost
+  }
+
+  recalculateDamage() {
+    this.maxDamage = this.calcMaxDamage
+    this.minDamage = this.calcMinDamage
+  }
+
+  recalculateDodge() {
+    this.evasion = this.calcEvasion
+    this.accuracy = this.calcAccuracy
+  }
+
+  recalculateHP() {
+    this.maxHP = this.calcMaxHP
+  }
+
+  recalculateNRG() {
+    this.maxNRG = this.calcMaxNRG
   }
 
   onEquip(item: ItemModel) {
@@ -140,7 +175,7 @@ export class NPCModel {
   levelUp() {
     if (this.nowXP >= this.nextLevelXP) {
       this.level += 1
-      // TODO: Increase Base Stats
+      this.recalculateStats(true)
       if (this.nowXP > this.nextLevelXP) {
         this.levelUp()
       }
@@ -157,8 +192,10 @@ export class NPCModel {
     }
   }
 
-  get cost(): number {
-    return this._cost
+  // TODO: ExpressionChangedAfterItHasBeenCheckedError
+  // Cannot get these views to work properly
+  get calcCost(): number {
+    return this.cost
   }
 
   get nextLevelXP(): number {
@@ -168,43 +205,53 @@ export class NPCModel {
     // return 500 * (this.level ** 2) - (500 * this.level)
   }
 
-  get maxHP() {
-    return this.level * NPCBASESTATS.BASE.maxHP
+  get calcEvasion() {
+    return (Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) / 100
+  }
+
+  get calcAccuracy() {
+    return (Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) /  100
+  }
+
+  get calcMaxNRG() {
+    return Math.round(this.level * this.maxNRG
+        + this.NRG * NPCBASESTATS[this.baseStat].nrgMod
+        + NPCBASESTATS[this.baseStat].nrgMod)
+  }
+
+  get calcMaxHP() {
+    return Math.round(this.level * this.maxHP
         + this.STR * NPCBASESTATS[this.baseStat].strMod
         + this.DEX * NPCBASESTATS[this.baseStat].dexMod
-        + NPCBASESTATS[this.baseStat].dexMod * this.accuracy
+        + NPCBASESTATS[this.baseStat].dexMod * this.accuracy)
   }
 
-  get maxNRG() {
-    return this.level * NPCBASESTATS.BASE.maxNRG
-        + this.NRG * NPCBASESTATS[this.baseStat].nrgMod
-        + NPCBASESTATS[this.baseStat].nrgMod
+  get calcMinDamage() {
+    return Math.round(this.level * this.minDamage
+      + (Math.floor((Math.random() * 10) + 1) / 10)
+      + NPCBASESTATS[this.baseStat].strMod * this.STR
+      + NPCBASESTATS[this.baseStat].dexMod * this.DEX
+      + NPCBASESTATS[this.baseStat].nrgMod * this.NRG)
   }
 
-  get armor() {
-    return this.level * .8
-    + this.DEX * NPCBASESTATS[this.baseStat].dexMod
-    + this.NRG * NPCBASESTATS[this.baseStat].nrgMod
-    + this.STR * NPCBASESTATS[this.baseStat].strMod
-    + .5 * this.evasion
-  }
-  get minDamage() {
-    return this.level * NPCBASESTATS.BASE.minDamage
-    + NPCBASESTATS[this.baseStat].strMod * this.STR
-    + NPCBASESTATS[this.baseStat].dexMod * this.DEX
-    + NPCBASESTATS[this.baseStat].nrgMod * this.NRG
+  get calcMaxDamage() {
+    return Math.round(this.level * this.maxDamage + 3
+      + (Math.floor((Math.random() * 10) + 1) / 10)
+      + NPCBASESTATS[this.baseStat].strMod * this.STR
+      + NPCBASESTATS[this.baseStat].dexMod * this.DEX
+      + NPCBASESTATS[this.baseStat].nrgMod * this.NRG)
   }
 
-  get maxDamage() {
-    return this.level * NPCBASESTATS.BASE.maxDamage
-    + NPCBASESTATS[this.baseStat].strMod * this.STR
-    + NPCBASESTATS[this.baseStat].dexMod * this.DEX
-    + NPCBASESTATS[this.baseStat].nrgMod * this.NRG
+  get calcDamage() {
+    return Math.floor((Math.random() * this.maxDamage) + this.minDamage)
   }
 
-  // get damage() {
-  //   return Math.floor((Math.random() * this.maxDamage) + this.minDamage)
-  // }
+  get calcArmor() {
+    return Math.round(this.level * .8
+      + .5 * this.evasion
+      + NPCBASESTATS[this.baseStat].strMod * this.STR
+      + NPCBASESTATS[this.baseStat].dexMod * this.DEX)
+  }
 }
 
 export enum NPC_BASE_STAT {
@@ -227,10 +274,8 @@ export const NPCBASESTATS = {
     STR: 2,
     DEX: 2,
     NRG: 2,
-    maxHP: 5,
+    maxHP: 100,
     maxNRG: 5,
-    maxDamage: 2,
-    minDamage: 2,
     morale: 100,
     maxTrinkets: 2
   },

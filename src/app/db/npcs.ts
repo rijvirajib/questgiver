@@ -12,10 +12,10 @@ export const NPC: { [id: string]: NPCModel } = {
     isVillain: true,
     level: 1,
     baseStat: NPC_BASE_STAT.DEX,
-
+    icon: '~/images/icons/npcs/hawkperson.png',
     NRG: 10,
     STR: 10,
-    DEX: 20,
+    DEX: 10,
 
     attributes: [
       NPC_ATTRIBUTES.FLYING,
@@ -31,9 +31,9 @@ export const NPC: { [id: string]: NPCModel } = {
     isVillain: true,
     level: 1,
     baseStat: NPC_BASE_STAT.STR,
-
-    NRG: 20,
-    STR: 20,
+    icon: '~/images/icons/npcs/batmanuel.png',
+    NRG: 10,
+    STR: 10,
     DEX: 20,
 
     attributes: [

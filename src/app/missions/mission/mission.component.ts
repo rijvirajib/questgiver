@@ -18,6 +18,7 @@ import { Tick } from '~/app/states'
   styleUrls: ['./mission.component.css']
 })
 export class MissionComponent implements OnInit {
+  tabSelectedIndex = 0
   @Select(GameState.currentTime)
   currentTime$: Observable<number>
 

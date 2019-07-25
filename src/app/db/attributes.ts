@@ -42,7 +42,7 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
     baseStat: NPC_BASE_STAT.DEX,
     class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
     description: 'Can fly, whether by rockets, levetation, or wings',
-    icon: '~/images/icons/acrobat.png',
+    icon: '~/images/icons/flying.png',
     canDisable: true,
     modifiers: [new TargetModifier({
       targetType: TARGET_TYPE.NPC,

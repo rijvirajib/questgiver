@@ -5,7 +5,7 @@
       <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left"></ActionItem>
       <Label class="action-bar-title" text="Prep: {{ activeMission.name }} | {{ activeMission.totalCasedTime }} / {{ activeMission.totalCaseTime }} | {{ activeMission.step }}"></Label>
     </ActionBar>
-    <TabView id="tabViewContainer">
+    <TabView id="tabViewContainer" [selectedIndex]="tabSelectedIndex" (selectedIndexChange)="tabSelectedIndex">
       <StackLayout *tabItem="{title: 'Intel'}">
         <tab-intel [activeMission]="activeMission"></tab-intel>
       </StackLayout>
