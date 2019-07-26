@@ -53,18 +53,20 @@ export class ItemModel implements IItemModel {
     this.cost = params.cost || 100 // number
     this.class = params.class || ITEM_CLASS.Rock // ITEM_CLASS
     this.equipClass = params.equipClass || EQUIP_CLASS.Trinket // EQUIP_CLASS
-    this.isTwoHanded = params.isTwoHanded || false// boolean
+    this.isTwoHanded = !!params.isTwoHanded// boolean
 
     this.attributes = params.attributes || [] // Array<AttributeModel>
     this.antiObstacles = params.antiObstacles || [] // Array<OBSTACLE_TYPE>
 
-    this.isSignature = params.isSignature || false // boolean
+    this.isSignature = !!params.isSignature // boolean
     this.modifiers = params.modifiers || [] // Array<TargetModifier>
     this.quality = params.quality || 1 // number // [0, 1]: 0 = destroyed
 
     // UX
-    this.isVisible = params.isVisible || true // boolean
-    this.isAvailable = params.isAvailable || true // boolean
+    // That gets you a true value except when hasWheels is explicitly false.
+    // (Other falsy values, including null and undefined, will result in true)
+    this.isVisible = params.isVisible !== false // boolean
+    this.isAvailable = params.isAvailable !== false // boolean
   }
 }
 

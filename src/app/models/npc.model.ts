@@ -56,9 +56,9 @@ export class NPCModel {
     this.name = stats.name || ''
     this.description = stats.description || ''
     this.cost = stats.cost || (Math.floor((Math.random() * 100) + 300) / 1000) * 1000
-    this.isVillain = stats.isVillain || false
-    this.isAvailable = stats.isAvailable || true
-    this.isInjured = stats.isInjured || false
+    this.isVillain = !!stats.isVillain
+    this.isAvailable = stats.isAvailable !== false
+    this.isInjured = !!stats.isInjured
     this.baseStat = stats.baseStat || NPC_BASE_STAT.STR
     this.level = stats.level || 1
     this.maxHP = stats.maxHP || NPCBASESTATS.BASE.maxHP

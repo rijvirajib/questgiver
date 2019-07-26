@@ -40,8 +40,8 @@ export class AttributeModel {
     this.classConflicts = params.classConflicts || []
     this.conflicts = params.conflicts || []
     this.modifiers = params.modifers || []
-    this.canDisable = params.canDisable || false
-    this.isDisabled = params.isDisabled || false
+    this.canDisable = !!params.canDisable
+    this.isDisabled = !!params.isDisabled
     this.weaknesses = params.weakness || { items: {}, attribtues: {}}
 
   }

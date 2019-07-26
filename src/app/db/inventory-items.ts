@@ -33,8 +33,6 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
     class: ITEM_CLASS.Axe,
     equipClass: EQUIP_CLASS.Weapon,
     attributes: [ITEM_ATTRIBUTES.NTH],
-    isAvailable: false,
-    isSignature: true,
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
       targetKey: 'STR',
