@@ -6,6 +6,7 @@ import { MissionStateModel } from '~/app/states/missions/missions.model'
 import { MissionsState } from '~/app/states/missions/missions.state'
 import { NPCModel } from '~/app/models/npc.model'
 import { Observable } from 'rxjs'
+import { RouterExtensions } from 'nativescript-angular/router'
 import { Store, Select } from '@ngxs/store'
 import { map } from 'rxjs/operators'
 @Component({
@@ -23,14 +24,12 @@ export class MissionTabCrewComponent implements OnInit {
   hiredVillains$: Observable<Array<NPCModel>>
 
   constructor(
-    private store: Store
+    private store: Store,
+    private routerExtensions: RouterExtensions
   ) {}
 
   ngOnInit() {
     this.hiredVillains$ = this.store.select(MissionsState.crewByMissionId).pipe(map(filterFn => filterFn(this.activeMission.id)))
-    this.hiredVillains$.subscribe(data => {
-      console.log(data)
-    })
   }
 
   fire(villain: NPCModel) {
@@ -44,7 +43,12 @@ export class MissionTabCrewComponent implements OnInit {
   }
 
   onTapEquip(equipClass: string) {
-    console.log('Opening Inventory for ', equipClass)
+    this.routerExtensions.navigate(['/inventory'], {
+      queryParams: { equipClass },
+      transition: {
+        name: 'slideTop'
+      }
+    })
   }
 
   isSlotAvailable(villain: NPCModel, equipClass: string) {

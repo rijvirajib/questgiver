@@ -55,16 +55,16 @@ export class MissionsState {
   }
 
   @Selector()
-  static crewById(id: string) {
-    return createSelector([MissionsState], (state: MissionStateModel) => {
-      return Object.values(state.missions[id].crew)
-    })
-  }
-
-  @Selector()
   static crewByMissionId(state: MissionStateModel) {
     return (id: string) => {
       return Object.values(state.missions[id].crew).map(v => v)
+    }
+  }
+
+  @Selector()
+  static inventoryItems(state: MissionStateModel) {
+    return (equipClass: string) => {
+      return Object.values(state.inventory).map(v => v)
     }
   }
 

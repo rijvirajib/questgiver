@@ -1,0 +1,10 @@
+<ActionBar class="action-bar">
+  <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
+  <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left"></ActionItem>
+  <Label class="action-bar-title" text="Inventory"></Label>
+  <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onBack()"></ActionItem>
+</ActionBar>
+<AbsoluteLayout width="100%" height="100%" backgroundColor="#e8e7e7">
+  <Label text="Vault of Villainy" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
+
+</AbsoluteLayout>
