@@ -56,6 +56,7 @@ export class MissionTabCrewComponent implements OnInit {
   }
 
   isSlotAvailable(villain: NPCModel, equipClass: string) {
-    return !villain.gear[equipClass] || (villain.gear && !villain.gear[equipClass].isSignature)
+    return true
+    // return !villain.gear[equipClass] || (villain.gear && !villain.gear[equipClass].isSignature)
   }
 }

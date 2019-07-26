@@ -19,7 +19,7 @@ import { map } from 'rxjs/internal/operators/map'
 
 export class InventoryComponent implements OnInit {
   activeMission: MissionModel
-  activeNPC: NPCModel
+  activeNPC$: Observable<NPCModel>
 
   inventoryItems$: Observable<Array<ItemModel>>
 
@@ -37,7 +37,6 @@ export class InventoryComponent implements OnInit {
       const missionId = params.missionId
       const npcId = params.npcId
       const equipClass = params.equipClass
-      console.log(missionId, npcId, equipClass)
       this.inventoryItems$ = this.store.select(MissionsState.inventoryItems).pipe(map(filterFn => filterFn(equipClass)))
       if (missionId) {
         this.store.select(MissionsState.missionById).subscribe(fn => {
@@ -45,9 +44,7 @@ export class InventoryComponent implements OnInit {
         })
       }
       if (npcId) {
-        this.store.select(MissionsState.npcById).subscribe(fn => {
-          this.activeNPC = fn(npcId)
-        })
+        this.activeNPC$ = this.store.select(MissionsState.crewById).pipe(map(filterFn => filterFn(missionId, npcId)))
       }
     })
   }

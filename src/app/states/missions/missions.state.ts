@@ -62,6 +62,13 @@ export class MissionsState {
   }
 
   @Selector()
+  static crewById(state: MissionStateModel) {
+    return (missionId: string, npcId: string) => {
+      return state.missions[missionId].crew[npcId]
+    }
+  }
+
+  @Selector()
   static npcById(state: MissionStateModel) {
     return (id: string) => {
       return state.npcs[id]

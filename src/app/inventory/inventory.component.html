@@ -5,6 +5,16 @@
       <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left"></ActionItem>
       <Label class="action-bar-title" text="Inventory"></Label>
     </ActionBar>
+    <ng-container *ngIf="activeNPC$ | async as npc">
+        <Label text="Equipped Items" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
+        <Label text="Weapon: {{ npc.gear.weapon.name }}" *ngIf="npc.gear.weapon" textWrap="true" class="m-15 h4 text-left"></Label>
+        <Label text="IsTwoHanded: {{ npc.gear.offhand.name }}" *ngIf="npc.gear.offhand" textWrap="true" class="m-15 h4 text-left"></Label>
+        <Label text="Offhand: {{ npc.gear.offhand.name }}" *ngIf="npc.gear.offhand" textWrap="true" class="m-15 h4 text-left"></Label>
+        <Label text="Helm: {{ npc.gear.helm.name }}" *ngIf="npc.gear.helm" textWrap="true" class="m-15 h4 text-left"></Label>
+        <Label text="Chest: {{ npc.gear.chest.name }}" *ngIf="npc.gear.chest" textWrap="true" class="m-15 h4 text-left"></Label>
+        <Label text="Leg: {{ npc.gear.leg.name }}" *ngIf="npc.gear.leg" textWrap="true" class="m-15 h4 text-left"></Label>
+        <Label *ngFor="let trinket of npc.trinkets" text="Trinket: {{ trinket.name }}" textWrap="true" class="m-15 h4 text-left"></Label>
+    </ng-container>
     <Label text="Vault of Villainy" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
     <ScrollView backgroundColor="#e8e7e7">
       <FlexboxLayout flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
@@ -14,6 +24,7 @@
             <StackLayout row="0" col="1" orientation="vertical" class="mission-info-container">
               <Label class="mission-title" [text]="item.name"></Label>
               <Label [text]="item.description" textWrap="true"></Label>
+              <Label text="Is 2-Handed: {{ item.isTwoHanded }}" textWrap="true"></Label>
             </StackLayout>
             <Label verticalAlignment="top" row="0" col="2" text="A" class="pay-amount"></Label>
           </GridLayout>
