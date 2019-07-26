@@ -1,10 +1,35 @@
-<ActionBar class="action-bar">
-  <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
-  <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left"></ActionItem>
-  <Label class="action-bar-title" text="Inventory"></Label>
-  <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onBack()"></ActionItem>
-</ActionBar>
 <AbsoluteLayout width="100%" height="100%" backgroundColor="#e8e7e7">
-  <Label text="Vault of Villainy" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
+  <StackLayout top="0" left="0" width="100%" height="100%">
+    <ActionBar class="action-bar">
+      <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
+      <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left"></ActionItem>
+      <Label class="action-bar-title" text="Inventory"></Label>
+    </ActionBar>
+    <Label text="Vault of Villainy" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
+    <ScrollView backgroundColor="#e8e7e7">
+      <FlexboxLayout flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
+        <StackLayout *ngFor="let item of inventoryItems$ | async; let i = index" id="inventoryItems{{i}}" orientation="vertical" class="mission-list-item" width="100%" (tap)="onTapItem(item)">
+          <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-main-info" verticalAlignment="top">
+            <Image row="0" col="0" [src]="item.icon" class="mission-category-icon"></Image>
+            <StackLayout row="0" col="1" orientation="vertical" class="mission-info-container">
+              <Label class="mission-title" [text]="item.name"></Label>
+              <Label [text]="item.description" textWrap="true"></Label>
+            </StackLayout>
+            <Label verticalAlignment="top" row="0" col="2" text="A" class="pay-amount"></Label>
+          </GridLayout>
+          <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-secondary-info">
+            <Label row="0" col="0" text="{{ item.isAvailable ? 'Available' : 'Unavailable' }}" class="time-information"></Label>
+            <GridLayout row="0" col="2" columns="auto, auto, auto" rows="auto">
+              <Label row="0" col="0" text="" class="lender-name"></Label>
+              <Label row="0" col="1" text=""></Label>
+              <GridLayout row="0" col="2" columns="auto,auto,auto,auto" rows="auto" width="100%" class="debtor-list">
 
+              </GridLayout>
+            </GridLayout>
+          </GridLayout>
+          <Label class="divider" text=""></Label>
+        </StackLayout>
+      </FlexboxLayout>
+    </ScrollView>
+  </StackLayout>
 </AbsoluteLayout>

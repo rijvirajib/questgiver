@@ -12,6 +12,7 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
     class: ITEM_CLASS.Axe,
     equipClass: EQUIP_CLASS.Weapon,
     attributes: [ITEM_ATTRIBUTES.NTH],
+    isAvailable: false,
     isSignature: true,
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
@@ -22,6 +23,27 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
       targetType: TARGET_TYPE.NPC,
       targetKey: 'DEX',
       targetChange: .9, // reduce dexterity by 1, heavier to swing, bro
+      targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
+    }]
+  }),
+  SwordOfPower: new ItemModel({
+    id: 'SwordOfPower',
+    name: `Sword of Power`,
+    description: `Sword of Power makes the weilder stronger at the cost of energy.`,
+    class: ITEM_CLASS.Axe,
+    equipClass: EQUIP_CLASS.Weapon,
+    attributes: [ITEM_ATTRIBUTES.NTH],
+    isAvailable: false,
+    isSignature: true,
+    modifiers: [{
+      targetType: TARGET_TYPE.NPC,
+      targetKey: 'STR',
+      targetChange: 2,
+      targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
+    }, {
+      targetType: TARGET_TYPE.NPC,
+      targetKey: 'NRG',
+      targetChange: .5,
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
     }]
   }),

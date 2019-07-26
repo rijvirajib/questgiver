@@ -1,10 +1,15 @@
 import * as app from 'tns-core-modules/application'
+import { ActivatedRoute } from '@angular/router'
 import { Component, OnInit } from '@angular/core'
+import { ItemModel } from '../models/item.model'
+import { MissionModel } from '../models/mission.model'
+import { MissionsState } from '../states/missions/missions.state'
+import { NPCModel } from '../models/npc.model'
+import { Observable } from 'rxjs/internal/Observable'
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer'
 import { RouterExtensions } from 'nativescript-angular/router'
 import { Store } from '@ngxs/store'
-import { isIOS } from "tns-core-modules/platform"
-import { Color } from 'tns-core-modules/color/color'
+import { map } from 'rxjs/internal/operators/map'
 
 @Component({
   selector: 'ns-inventory',
@@ -13,35 +18,38 @@ import { Color } from 'tns-core-modules/color/color'
 })
 
 export class InventoryComponent implements OnInit {
-  items: Array<{ name: string, desc: string, price: string, imageSrc: string }> = [
-    { name: 'Pancakes!', desc: 'Everybody* loves gluten.', price: '$5', imageSrc: 'https://placem.at/things?w=500&txt=0&random=9' },
-    { name: 'Bowl of Crap', desc: 'Probably something in here. But probably not.', price: '$1', imageSrc: 'https://placem.at/things?w=500&txt=0&random=6' },
-    { name: 'Motorcycle', desc: 'It\'ll be worth the argument with your spouse.', price: '$8899', imageSrc: 'https://placem.at/things?w=500&txt=0&random=1' },
-    { name: 'Air Plant', desc: 'It looked cool in the store.', price: '$9', imageSrc: 'https://placem.at/things?w=500&txt=0&random=2' },
-    { name: 'Cuff Links', desc: 'You\'ll need them once in the next ten years.', price: '$59', imageSrc: 'https://placem.at/things?w=500&txt=0&random=4' },
-    { name: 'Skateboard', desc: 'Too bad you are too old to use it.', price: '$129', imageSrc: 'https://placem.at/things?w=500&txt=0&random=7' },
-    { name: 'Off-Brand Soda', desc: 'Desperate times we live in.', price: '$2', imageSrc: 'https://placem.at/things?w=500&txt=0&random=8' },
-    { name: 'Beer? Liquor?', desc: 'Mmmmm drinky.', price: '$7', imageSrc: 'https://placem.at/things?w=500&txt=0&random=10' },
-    { name: 'Pie!', desc: 'Also good.', price: '$15', imageSrc: 'https://placem.at/things?w=500&txt=0&random=11' },
-  ]
+  activeMission: MissionModel
+  activeNPC: NPCModel
+
+  inventoryItems$: Observable<Array<ItemModel>>
+
   constructor(
     private store: Store,
+    private route: ActivatedRoute,
     private routerExtensions: RouterExtensions
   ) {
     // Use the component constructor to inject providers.
   }
 
-  onItemLoading(args) {
-    // hack to get around issue with RadListView ios background colors: https://github.com/telerik/nativescript-ui-feedback/issues/196
-    if (isIOS) {
-      const newcolor = new Color('#e6e6e6')
-      args.ios.backgroundView.backgroundColor = newcolor.ios
-    }
-  }
-
-
   ngOnInit(): void {
     // We have query params to filter, otherwise all inventory items
+    this.route.queryParams.subscribe(params => {
+      const missionId = params.missionId
+      const npcId = params.npcId
+      const equipClass = params.equipClass
+      console.log(missionId, npcId, equipClass)
+      this.inventoryItems$ = this.store.select(MissionsState.inventoryItems).pipe(map(filterFn => filterFn(equipClass)))
+      if (missionId) {
+        this.store.select(MissionsState.missionById).subscribe(fn => {
+          this.activeMission = fn(missionId)
+        })
+      }
+      if (npcId) {
+        this.store.select(MissionsState.npcById).subscribe(fn => {
+          this.activeNPC = fn(npcId)
+        })
+      }
+    })
   }
 
   onDrawerButtonTap() {
@@ -53,5 +61,9 @@ export class InventoryComponent implements OnInit {
   onBack() {
     // TODO: Go back is breaking...
     // this.routerExtensions.backToPreviousPage()
+  }
+
+  onTapItem(item: ItemModel) {
+    // TODO: Add to NPC
   }
 }

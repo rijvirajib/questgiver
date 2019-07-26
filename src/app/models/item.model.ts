@@ -7,6 +7,7 @@ export interface IItemModel {
   id: string
   name: string
   description: string
+  icon?: string
   cost?: number
   class: ITEM_CLASS
   equipClass: EQUIP_CLASS
@@ -27,6 +28,7 @@ export class ItemModel implements IItemModel {
   id: string
   name: string
   description: string
+  icon?: string
   cost?: number
   class: ITEM_CLASS
   equipClass: EQUIP_CLASS
@@ -47,6 +49,7 @@ export class ItemModel implements IItemModel {
     this.id = params.id || uuid()// string
     this.name = params.name || 'Random Item' // string
     this.description = params.description  || 'Random Description' // string
+    this.icon = params.icon || '~/images/icons/unknown.png'
     this.cost = params.cost || 100 // number
     this.class = params.class || ITEM_CLASS.Rock // ITEM_CLASS
     this.equipClass = params.equipClass || EQUIP_CLASS.Trinket // EQUIP_CLASS

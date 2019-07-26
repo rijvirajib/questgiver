@@ -42,9 +42,13 @@ export class MissionTabCrewComponent implements OnInit {
       new HireCrew(this.activeMission, villain))
   }
 
-  onTapEquip(equipClass: string) {
+  onTapEquip(villain: NPCModel, equipClass: string) {
     this.routerExtensions.navigate(['/inventory'], {
-      queryParams: { equipClass },
+      queryParams: {
+        missionId: this.activeMission.id,
+        npcId: villain.id,
+        equipClass
+      },
       transition: {
         name: 'slideTop'
       }

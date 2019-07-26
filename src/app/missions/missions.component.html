@@ -33,7 +33,7 @@
               <Label row="0" col="1" text=""></Label>
               <GridLayout row="0" col="2" columns="auto,auto,auto,auto" rows="auto" width="100%" class="debtor-list">
                 <StackLayout *ngFor="let obstacle of mission.obstacles; let j = index" row="0" col="{{j}}" orientation="vertical" class="debtor-list-item">
-                  <Image [src]="!obstacle.isHidden ? obstacle.icon : '~/images/icons/unknown-obstacle.png'" class="debtor-list-item-image"></Image>
+                  <Image [src]="!obstacle.isHidden ? obstacle.icon : '~/images/icons/unknown.png'" class="debtor-list-item-image"></Image>
                 </StackLayout>
               </GridLayout>
             </GridLayout>

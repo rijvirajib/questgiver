@@ -66,7 +66,7 @@ export class NPCModel {
     this.maxNRG = stats.maxNRG || NPCBASESTATS.BASE.maxNRG
     this.nowNRG = stats.nowNRG || NPCBASESTATS.BASE.maxNRG
     this.addXP(stats.nowXP || 0)
-    this.icon = stats.icon || '~/images/icons/unknown-obstacle.png'
+    this.icon = stats.icon || '~/images/icons/unknown.png'
 
     this.minDamage = stats.minDamage || Math.floor((Math.random() * 1) + 100)
     this.maxDamage = stats.maxDamage || Math.floor((Math.random() * 50) + 100)

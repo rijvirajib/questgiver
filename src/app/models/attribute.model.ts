@@ -34,7 +34,7 @@ export class AttributeModel {
     this.class = params.class || ATTRIBUTE_CLASS.CHARACTER_CLASS
     this.baseStat = params.baseStat || NPC_BASE_STAT.STR
     this.description = params.description || 'Attribute Description Random101010'
-    this.icon = params.icon || '~/images/icons/unknown-obstacle.png'
+    this.icon = params.icon || '~/images/icons/unknown.png'
     this.damageType = params.damageType || ATTRIBUTE_CLASS.DAMAGE_TYPE
     this.level = params.level || 1
     this.classConflicts = params.classConflicts || []

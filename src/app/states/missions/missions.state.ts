@@ -62,8 +62,19 @@ export class MissionsState {
   }
 
   @Selector()
+  static npcById(state: MissionStateModel) {
+    return (id: string) => {
+      return state.npcs[id]
+    }
+  }
+
+  @Selector()
   static inventoryItems(state: MissionStateModel) {
-    return (equipClass: string) => {
+    return (equipClass?: string) => {
+      if (equipClass) {
+        return Object.values(state.inventory).map(v => v).filter(v => v.equipClass === equipClass)
+      }
+
       return Object.values(state.inventory).map(v => v)
     }
   }
