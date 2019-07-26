@@ -40,6 +40,11 @@ export class EquipNPC {
   constructor(public missionId: string, public npcId: string, public itemId: string) {}
 }
 
+export class UnequipNPC {
+  static readonly type = '[Mission] Unequip NPC'
+  constructor(public missionId: string, public npcId: string, public itemId: string) {}
+}
+
 export class FireCrew {
   static readonly type = '[Mission] Fire Crew'
   constructor(public mission: MissionModel, public npc: NPCModel) {}

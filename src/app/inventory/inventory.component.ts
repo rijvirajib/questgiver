@@ -1,7 +1,7 @@
 import * as app from 'tns-core-modules/application'
 import { ActivatedRoute } from '@angular/router'
 import { Component, OnInit } from '@angular/core'
-import { EquipNPC } from '../states'
+import { EquipNPC, UnequipNPC } from '../states'
 import { ItemModel } from '../models/item.model'
 import { MissionModel } from '../models/mission.model'
 import { MissionsState } from '../states/missions/missions.state'
@@ -63,8 +63,11 @@ export class InventoryComponent implements OnInit {
     // this.routerExtensions.backToPreviousPage()
   }
 
-  onTapItem(item: ItemModel) {
-    // TODO: Add to NPC
-    this.store.dispatch(new EquipNPC(this.missionId, this.npcId, item.id))
+  onTapItem(itemId: string) {
+    this.store.dispatch(new EquipNPC(this.missionId, this.npcId, itemId))
+  }
+
+  onTapUnequip(itemId: string) {
+    this.store.dispatch(new UnequipNPC(this.missionId, this.npcId, itemId))
   }
 }

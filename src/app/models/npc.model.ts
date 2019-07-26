@@ -21,27 +21,27 @@ export class NPCModel {
 
   static unEquipItem(npc: NPCModel, item: ItemModel): NPCModel {
     // Attributes First
-    npc.gear[item.equipClass] = item
-    item.attributes.forEach(attribute => {
-      npc = NPCModel.modifyNPC(npc, attribute.modifiers, true)
-    })
+    // TODO: UNDO LOGIC NEEDS WORK - right now we just recalculate all the stats
+    npc.gear[item.equipClass] = undefined
+    // item.attributes.forEach(attribute => {
+    //   npc = NPCModel.modifyNPC(npc, attribute.modifiers, true)
+    // })
 
     // Run through item modifiers
-    npc = NPCModel.modifyNPC(npc, item.modifiers, true)
-    NPCModel.recalculateStats(npc)
+    // npc = NPCModel.modifyNPC(npc, item.modifiers, true)
+    NPCModel.recalculateStats(npc, false, true)
 
     return npc
   }
 
   static modifyNPC(npc: NPCModel, modifiers: Array<TargetModifier>, undo = false) {
     if (modifiers) {
+      if (undo) {
+        modifiers = modifiers.reverse()
+      }
       modifiers.forEach(modifier => {
         if (modifier.targetType === TARGET_TYPE.NPC) {
-          if (!undo) {
-            npc[modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](npc[modifier.targetKey], modifier.targetChange)
-          } else {
-            npc[modifier.targetKey] = TARGET_MODIFIER_RUNNER[`!${modifier.targetChangeSymbol}`](npc[modifier.targetKey], modifier.targetChange)
-          }
+          npc[modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](npc[modifier.targetKey], modifier.targetChange, undo)
         }
       })
     }
@@ -55,14 +55,14 @@ export class NPCModel {
     return npc
   }
 
-  static recalculateStats(npc: NPCModel, levelUp = false) {
+  static recalculateStats(npc: NPCModel, levelUp = false, itemUneqiped = false) {
     if (levelUp) {
       NPCModel.calculateNPCCost(npc)
     }
-    NPCModel.recalculateDamage(npc)
-    NPCModel.recalculateDodge(npc)
-    NPCModel.recalculateHP(npc)
-    NPCModel.recalculateNRG(npc)
+
+    if (itemUneqiped) {
+      NPCModel.setStats(npc, npc.originalStats)
+    }
 
     return npc
   }
@@ -133,6 +133,53 @@ export class NPCModel {
     }
   }
 
+  static setStats(npc: NPCModel, stats: NPCModel | any) {
+    npc.cost = stats.cost || (Math.floor((Math.random() * 100) + 300) / 1000) * 1000
+    npc.maxHP = stats.maxHP || NPCBASESTATS.BASE.maxHP
+    npc.nowHP = stats.nowHP || NPCBASESTATS.BASE.maxHP
+    npc.maxNRG = stats.maxNRG || NPCBASESTATS.BASE.maxNRG
+    npc.nowNRG = stats.nowNRG || NPCBASESTATS.BASE.maxNRG
+    npc.nowXP = stats.nowXP || 0
+    NPCModel.addXP(npc, npc.nowXP)
+
+    npc.minDamage = stats.minDamage || Math.floor((Math.random() * 1) + 100)
+    npc.maxDamage = stats.maxDamage || Math.floor((Math.random() * 50) + 100)
+
+    npc.STR = stats.STR || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
+    npc.DEX = stats.DEX || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
+    npc.NRG = stats.NRG || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
+
+    npc.criticalChance = .2
+    npc.criticalDamage = (Math.floor((Math.random() * 100) + 10) / 1000)
+
+    NPCModel.recalculateDodge(npc)
+
+    npc.morale = stats.morale
+
+    // Equip Items
+    if (stats.gear) {
+      Object.keys(stats.gear).forEach(slot => {
+        NPCModel.equipItem(npc, stats.gear[slot])
+      })
+    }
+
+    if (stats.trinkets && stats.trinkets.length > 0) {
+      for (const trinket of stats.trinkets) {
+        NPCModel.equipItem(npc, trinket)
+      }
+    }
+
+    // Process attributes
+    npc.attributes.forEach(attribute => {
+      // Just in case you come back.. about attribute.modifiers
+      // The attribute id might not exist if that error is hard to debug
+      NPCModel.modifyNPC(npc, attribute.modifiers)
+    })
+    NPCModel.recalculateStats(npc)
+
+    return npc
+  }
+
   id: string
   name: string
   description: string
@@ -180,28 +227,21 @@ export class NPCModel {
   trinkets?: Array<ItemModel>
   maxTrinkets?: number
 
+  originalStats: any
+
   constructor(stats: any) {
     this.id = stats.id || uuid()
     this.name = stats.name || ''
     this.description = stats.description || ''
-    this.cost = stats.cost || (Math.floor((Math.random() * 100) + 300) / 1000) * 1000
     this.isVillain = !!stats.isVillain
     this.isAvailable = stats.isAvailable !== false
     this.isInjured = !!stats.isInjured
     this.baseStat = stats.baseStat || NPC_BASE_STAT.STR
     this.level = stats.level || 1
-    this.maxHP = stats.maxHP || NPCBASESTATS.BASE.maxHP
-    this.nowHP = stats.nowHP || NPCBASESTATS.BASE.maxHP
-    this.maxNRG = stats.maxNRG || NPCBASESTATS.BASE.maxNRG
-    this.nowNRG = stats.nowNRG || NPCBASESTATS.BASE.maxNRG
-    this.nowXP = stats.nowXP || 0
-    NPCModel.addXP(this, this.nowXP)
+
     this.icon = stats.icon || '~/images/icons/unknown.png'
 
-    this.minDamage = stats.minDamage || Math.floor((Math.random() * 1) + 100)
-    this.maxDamage = stats.maxDamage || Math.floor((Math.random() * 50) + 100)
-
-    // Initialize gear system
+    // Initialize systems
     this.gear = {
       [EQUIP_CLASS.Weapon]: undefined,
       [EQUIP_CLASS.Offhand]: undefined,
@@ -209,42 +249,12 @@ export class NPCModel {
       [EQUIP_CLASS.Chest]: undefined,
       [EQUIP_CLASS.Legs]: undefined
     }
-
     this.attributes = stats.attributes || []
-
-    this.STR = stats.STR || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
-    this.DEX = stats.DEX || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
-    this.NRG = stats.NRG || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
-
     this.maxTrinkets = stats.maxTrinkets || NPCBASESTATS.BASE.maxTrinkets
 
-    this.criticalChance = .2
-    this.criticalDamage = (Math.floor((Math.random() * 100) + 10) / 1000)
+    this.originalStats = stats
 
-    NPCModel.recalculateDodge(this)
-
-    this.morale = stats.morale
-
-    // Equip Items
-    if (stats.gear) {
-      Object.keys(stats.gear).forEach(slot => {
-        NPCModel.equipItem(this, stats.gear[slot])
-      })
-    }
-
-    if (stats.trinkets && stats.trinkets.length > 0) {
-      for (const trinket of stats.trinkets) {
-        NPCModel.equipItem(this, trinket)
-      }
-    }
-
-    // Process attributes
-    this.attributes.forEach(attribute => {
-      // Just in case you come back.. about attribute.modifiers
-      // The attribute id might not exist if that error is hard to debug
-      NPCModel.modifyNPC(this, attribute.modifiers)
-    })
-    NPCModel.recalculateStats(this)
+    NPCModel.setStats(this, stats)
     NPCModel.heal(this, true)
     NPCModel.energize(this, true)
   }

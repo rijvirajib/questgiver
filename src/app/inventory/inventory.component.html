@@ -3,22 +3,21 @@
     <ActionBar class="action-bar">
       <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
       <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left"></ActionItem>
-      <Label class="action-bar-title" text="Inventory"></Label>
+      <Label class="action-bar-title" text="{{ equipClass }} Vault"></Label>
     </ActionBar>
     <ng-container *ngIf="activeNPC$ | async as npc">
         <Label text="Currently Equipped" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
-        <Label text="Weapon: {{ npc.gear.weapon.name }}" *ngIf="npc.gear.weapon" textWrap="true" class="m-15 h4 text-left"></Label>
-        <Label text="IsTwoHanded: {{ npc.gear.offhand.name }}" *ngIf="npc.gear.offhand" textWrap="true" class="m-15 h4 text-left"></Label>
-        <Label text="Offhand: {{ npc.gear.offhand.name }}" *ngIf="npc.gear.offhand" textWrap="true" class="m-15 h4 text-left"></Label>
-        <Label text="Helm: {{ npc.gear.helm.name }}" *ngIf="npc.gear.helm" textWrap="true" class="m-15 h4 text-left"></Label>
-        <Label text="Chest: {{ npc.gear.chest.name }}" *ngIf="npc.gear.chest" textWrap="true" class="m-15 h4 text-left"></Label>
-        <Label text="Leg: {{ npc.gear.leg.name }}" *ngIf="npc.gear.leg" textWrap="true" class="m-15 h4 text-left"></Label>
-        <Label *ngFor="let trinket of npc.trinkets" text="Trinket: {{ trinket.name }}" textWrap="true" class="m-15 h4 text-left"></Label>
+        <Button (tap)="onTapUnequip(npc.gear.weapon.id)" text="Uneqip Weapon: {{ npc.gear.weapon.name }}" *ngIf="npc.gear.weapon" [isEnabled]="!npc.gear.weapon.isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
+        <Button (tap)="onTapUnequip(npc.gear.offhand.id)" text="Uneqip IsTwoHanded: {{ npc.gear.offhand.name }}" *ngIf="npc.gear.offhand" [isEnabled]="!npc.gear.weapon.isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
+        <Button (tap)="onTapUnequip(npc.gear.helm.id)" text="Uneqip Helm: {{ npc.gear.helm.name }}" *ngIf="npc.gear.helm" [isEnabled]="!npc.gear.helm.isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
+        <Button (tap)="onTapUnequip(npc.gear.chest.id)" text="Uneqip Chest: {{ npc.gear.chest.name }}" *ngIf="npc.gear.chest" [isEnabled]="!npc.gear.chest.isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
+        <Button (tap)="onTapUnequip(npc.gear.leg.id)" text="Uneqip Leg: {{ npc.gear.leg.name }}" *ngIf="npc.gear.leg" [isEnabled]="!npc.gear.leg.isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
+        <Button (tap)="onTapUnequip(trinket.id)" *ngFor="let trinket of npc.trinkets" text="Trinket: {{ trinket.name }}" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
     </ng-container>
-    <Label text="Vault of Villainy" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
+    <Label text="Vault of Villainy - {{ equipClass }}s" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
     <ScrollView backgroundColor="#e8e7e7">
       <FlexboxLayout flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
-        <StackLayout *ngFor="let item of inventoryItems$ | async; let i = index" id="inventoryItems{{i}}" orientation="vertical" class="mission-list-item" width="100%" (tap)="onTapItem(item)">
+        <StackLayout *ngFor="let item of inventoryItems$ | async; let i = index" id="inventoryItems{{i}}" orientation="vertical" class="mission-list-item" width="100%" (tap)="onTapItem(item.id)">
           <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-main-info" verticalAlignment="top">
             <Image row="0" col="0" [src]="item.icon" class="mission-category-icon"></Image>
             <StackLayout row="0" col="1" orientation="vertical" class="mission-info-container">

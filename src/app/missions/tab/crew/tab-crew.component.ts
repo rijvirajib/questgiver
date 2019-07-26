@@ -13,7 +13,7 @@ import { map } from 'rxjs/operators'
     selector: 'tab-crew',
     moduleId: module.id,
     templateUrl: './tab-crew.component.html',
-    styleUrls: ['./tab-crew.component.css']
+    styleUrls: ['./tab-crew.component.scss']
 })
 export class MissionTabCrewComponent implements OnInit {
   @Input() activeMission: MissionModel
@@ -56,7 +56,6 @@ export class MissionTabCrewComponent implements OnInit {
   }
 
   isSlotAvailable(villain: NPCModel, equipClass: string) {
-    return true
-    // return !villain.gear[equipClass] || (villain.gear && !villain.gear[equipClass].isSignature)
+    return !villain.gear[equipClass] || (villain.gear && !villain.gear[equipClass].isSignature)
   }
 }

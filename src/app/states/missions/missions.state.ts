@@ -1,4 +1,4 @@
-import { AddMission, LoadMissions, AcceptMission, RejectMission, CaseMissions, HireCrew, FireCrew, EquipNPC } from './missions.actions'
+import { AddMission, LoadMissions, AcceptMission, RejectMission, CaseMissions, HireCrew, FireCrew, EquipNPC, UnequipNPC } from './missions.actions'
 import { CASEMESSAGES } from '~/app/db/case-messages'
 import { EVENT_TYPES } from '~/app/models/event.model'
 import { GameState } from '../game.state'
@@ -292,6 +292,23 @@ export class MissionsState {
 
       // Attach Item
       const npc = NPCModel.equipItem(state.missions[missionId].crew[npcId], state.inventory[itemId])
+      state.missions[missionId].crew[npcId] = npc
+
+      return state
+    })
+  }
+
+  @Action(UnequipNPC)
+  @ImmutableContext()
+  unequipNPC(
+    { setState }: StateContext<MissionStateModel>,
+    { missionId, npcId, itemId }: UnequipNPC
+  ) {
+    setState((state: MissionStateModel) => {
+      state.inventory[itemId].isAvailable = true
+
+      // Attach Item
+      const npc = NPCModel.unEquipItem(state.missions[missionId].crew[npcId], state.inventory[itemId])
       state.missions[missionId].crew[npcId] = npc
 
       return state

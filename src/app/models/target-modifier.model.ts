@@ -40,25 +40,22 @@ export enum TARGET_CHANGE_SYMBOL {
 }
 
 export const TARGET_MODIFIER_RUNNER = {
-  [TARGET_CHANGE_SYMBOL['+']] : (x: number, y: any) => {
+  [TARGET_CHANGE_SYMBOL['+']] : (x: number, y: any, undo = false) => {
+    if (undo) {
+      return x - y
+    }
+
     return x + y
   },
-  [TARGET_CHANGE_SYMBOL['*']] : (x: number, y: any) => {
-      return x * y
-  },
-  [TARGET_CHANGE_SYMBOL['=']] : (x: any) => {
-    return x
-  },
-  // The following are undo modifiers.. not sure if they make sense
-  [TARGET_CHANGE_SYMBOL['!+']] : (x: number, y: any) => {
-    return x - y
-  },
-  [TARGET_CHANGE_SYMBOL['!*']] : (x: number, y: any) => {
+  [TARGET_CHANGE_SYMBOL['*']] : (x: number, y: any, undo = false) => {
+    if (undo) {
       return x / y
+    }
+
+    return x * y
   },
-  // TODO: Need to figure out logic to undo an =
-  [TARGET_CHANGE_SYMBOL['=']] : (x: any) => {
-    if (typeof x === 'boolean') {
+  [TARGET_CHANGE_SYMBOL['=']] : (x: any, undo = false) => {
+    if (undo && typeof x === 'boolean') {
       return !x
     }
 
