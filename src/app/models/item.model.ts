@@ -92,5 +92,5 @@ export enum ITEM_CLASS {
   SMG,
   Shotgun,
   LS = 'Long Sword',
-  SS = 'Short Sword',
+  SS = 'Short Sword'
 }

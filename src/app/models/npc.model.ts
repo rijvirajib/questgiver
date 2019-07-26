@@ -4,6 +4,135 @@ import { TARGET_TYPE, TargetModifier, TARGET_MODIFIER_RUNNER } from './target-mo
 import { v4 as uuid } from 'uuid'
 
 export class NPCModel {
+
+  static equipItem(npc: NPCModel, item: ItemModel): NPCModel {
+    // Attributes First
+    npc.gear[item.equipClass] = item
+    item.attributes.forEach(attribute => {
+      npc = NPCModel.modifyNPC(npc, attribute.modifiers)
+    })
+
+    // Run through item modifiers
+    npc = NPCModel.modifyNPC(npc, item.modifiers)
+    NPCModel.recalculateStats(npc)
+
+    return npc
+  }
+
+  static unEquipItem(npc: NPCModel, item: ItemModel): NPCModel {
+    // Attributes First
+    npc.gear[item.equipClass] = item
+    item.attributes.forEach(attribute => {
+      npc = NPCModel.modifyNPC(npc, attribute.modifiers, true)
+    })
+
+    // Run through item modifiers
+    npc = NPCModel.modifyNPC(npc, item.modifiers, true)
+    NPCModel.recalculateStats(npc)
+
+    return npc
+  }
+
+  static modifyNPC(npc: NPCModel, modifiers: Array<TargetModifier>, undo = false) {
+    if (modifiers) {
+      modifiers.forEach(modifier => {
+        if (modifier.targetType === TARGET_TYPE.NPC) {
+          if (!undo) {
+            npc[modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](npc[modifier.targetKey], modifier.targetChange)
+          } else {
+            npc[modifier.targetKey] = TARGET_MODIFIER_RUNNER[`!${modifier.targetChangeSymbol}`](npc[modifier.targetKey], modifier.targetChange)
+          }
+        }
+      })
+    }
+
+    return npc
+  }
+
+  static calculateNPCCost(npc: NPCModel) {
+    npc.cost = npc.calcCost
+
+    return npc
+  }
+
+  static recalculateStats(npc: NPCModel, levelUp = false) {
+    if (levelUp) {
+      NPCModel.calculateNPCCost(npc)
+    }
+    NPCModel.recalculateDamage(npc)
+    NPCModel.recalculateDodge(npc)
+    NPCModel.recalculateHP(npc)
+    NPCModel.recalculateNRG(npc)
+
+    return npc
+  }
+
+  static recalculateDamage(npc: NPCModel) {
+    npc.maxDamage = npc.calcMaxDamage
+    npc.minDamage = npc.calcMinDamage
+
+    return npc
+  }
+
+  static recalculateDodge(npc: NPCModel) {
+    npc.evasion = npc.calcEvasion
+    npc.accuracy = npc.calcAccuracy
+
+    return npc
+  }
+
+  static recalculateHP(npc: NPCModel) {
+    npc.maxHP = npc.calcMaxHP
+
+    return npc
+  }
+
+  static recalculateNRG(npc: NPCModel) {
+    npc.maxNRG = npc.calcMaxNRG
+
+    return npc
+  }
+
+  static heal(npc: NPCModel, full = false, hp?: number) {
+    if (full) {
+      npc.nowHP = npc.maxHP
+    } else {
+      npc.nowHP += hp
+    }
+
+    return npc
+  }
+
+  static energize(npc: NPCModel, full = false, nrg?: number) {
+    if (full) {
+      npc.nowNRG = npc.nowNRG
+    } else {
+      npc.nowNRG += nrg
+    }
+
+    return npc
+  }
+
+  static addXP(npc: NPCModel, xp: number) {
+    npc.nowXP += xp
+
+    return npc
+  }
+
+  static levelUp(npc: NPCModel) {
+    if (npc.nowXP >= npc.nextLevelXP) {
+      npc.level += 1
+      // Recalculate per level
+      NPCModel.recalculateStats(npc, true)
+      if (npc.nowXP >= npc.nextLevelXP) {
+        NPCModel.levelUp(npc)
+      } else {
+        NPCModel.heal(npc, true)
+        NPCModel.energize(npc, true)
+      }
+    }
+  }
+
   id: string
   name: string
   description: string
@@ -65,7 +194,8 @@ export class NPCModel {
     this.nowHP = stats.nowHP || NPCBASESTATS.BASE.maxHP
     this.maxNRG = stats.maxNRG || NPCBASESTATS.BASE.maxNRG
     this.nowNRG = stats.nowNRG || NPCBASESTATS.BASE.maxNRG
-    this.addXP(stats.nowXP || 0)
+    this.nowXP = stats.nowXP || 0
+    NPCModel.addXP(this, this.nowXP)
     this.icon = stats.icon || '~/images/icons/unknown.png'
 
     this.minDamage = stats.minDamage || Math.floor((Math.random() * 1) + 100)
@@ -91,20 +221,20 @@ export class NPCModel {
     this.criticalChance = .2
     this.criticalDamage = (Math.floor((Math.random() * 100) + 10) / 1000)
 
-    this.recalculateDodge()
+    NPCModel.recalculateDodge(this)
 
     this.morale = stats.morale
 
     // Equip Items
     if (stats.gear) {
       Object.keys(stats.gear).forEach(slot => {
-        this.onEquip(stats.gear[slot])
+        NPCModel.equipItem(this, stats.gear[slot])
       })
     }
 
     if (stats.trinkets && stats.trinkets.length > 0) {
       for (const trinket of stats.trinkets) {
-        this.onEquip(trinket)
+        NPCModel.equipItem(this, trinket)
       }
     }
 
@@ -112,108 +242,11 @@ export class NPCModel {
     this.attributes.forEach(attribute => {
       // Just in case you come back.. about attribute.modifiers
       // The attribute id might not exist if that error is hard to debug
-      this.runNPCModifier(attribute.modifiers)
+      NPCModel.modifyNPC(this, attribute.modifiers)
     })
-    this.recalculateStats()
-    this.heal(true)
-    this.nrgize(true)
-  }
-
-  recalculateStats(levelUp = false) {
-    if (levelUp) {
-      this.recalculateCost()
-    }
-    this.recalculateDamage()
-    this.recalculateDodge()
-    this.recalculateHP()
-    this.recalculateNRG()
-  }
-
-  recalculateCost() {
-    this.cost = this.calcCost
-  }
-
-  recalculateDamage() {
-    this.maxDamage = this.calcMaxDamage
-    this.minDamage = this.calcMinDamage
-  }
-
-  recalculateDodge() {
-    this.evasion = this.calcEvasion
-    this.accuracy = this.calcAccuracy
-  }
-
-  recalculateHP() {
-    this.maxHP = this.calcMaxHP
-  }
-
-  recalculateNRG() {
-    this.maxNRG = this.calcMaxNRG
-  }
-
-  onEquip(item: ItemModel) {
-    // Attributes First
-    this.gear[item.equipClass] = item
-    item.attributes.forEach(attribute => {
-      this.runNPCModifier(attribute.modifiers)
-    })
-
-    // Run through item modifiers
-    this.runNPCModifier(item.modifiers)
-  }
-
-  equipItem = (item: ItemModel): void => {
-    this.gear[item.equipClass] = item
-    item.attributes.forEach(attribute => {
-      this.runNPCModifier(attribute.modifiers)
-    })
-
-    // Run through item modifiers
-    this.runNPCModifier(item.modifiers)
-  }
-
-  heal(full = false, hp?: number) {
-    if (full) {
-      this.nowHP = this.maxHP
-    } else {
-      this.nowHP += hp
-    }
-  }
-
-  nrgize(full = false, nrg?: number) {
-    if (full) {
-      this.nowNRG = this.nowNRG
-    } else {
-      this.nowNRG += nrg
-    }
-  }
-
-  addXP(xp: number) {
-    this.nowXP += xp
-  }
-
-  levelUp() {
-    if (this.nowXP >= this.nextLevelXP) {
-      this.level += 1
-      // Recalculate per level
-      this.recalculateStats(true)
-      if (this.nowXP >= this.nextLevelXP) {
-        this.levelUp()
-      } else {
-        this.heal(true)
-        this.nrgize(true)
-      }
-    }
-  }
-
-  runNPCModifier(modifiers: Array<TargetModifier>) {
-    if (modifiers) {
-      modifiers.forEach(modifier => {
-        if (modifier.targetType === TARGET_TYPE.NPC) {
-          this[modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](this[modifier.targetKey], modifier.targetChange)
-        }
-      })
-    }
+    NPCModel.recalculateStats(this)
+    NPCModel.heal(this, true)
+    NPCModel.energize(this, true)
   }
 
   // TODO: ExpressionChangedAfterItHasBeenCheckedError
@@ -304,18 +337,18 @@ export const NPCBASESTATS = {
     maxTrinkets: 2
   },
   [NPC_BASE_STAT.STR]: {
-    strMod: 1.2,
+    strMod: 2,
     dexMod: .8,
     nrgMod: .7
   },
   [NPC_BASE_STAT.DEX]: {
     strMod: .8,
-    dexMod: 1.2,
+    dexMod: 2,
     nrgMod: .8
   },
   [NPC_BASE_STAT.NRG]: {
     strMod: .7,
-    dexMod: .8,
+    dexMod: 2,
     nrgMod: 1.1
   }
 }

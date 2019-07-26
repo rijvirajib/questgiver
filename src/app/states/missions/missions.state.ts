@@ -291,9 +291,8 @@ export class MissionsState {
       state.inventory[itemId].isAvailable = false
 
       // Attach Item
-      console.log('mission', missionId, 'crew', npcId, 'item', itemId)
-      // console.log('NPC', state.missions[missionId].crew[npcId])
-      state.missions[missionId].crew[npcId].equipItem(state.inventory[itemId])
+      const npc = NPCModel.equipItem(state.missions[missionId].crew[npcId], state.inventory[itemId])
+      state.missions[missionId].crew[npcId] = npc
 
       return state
     })

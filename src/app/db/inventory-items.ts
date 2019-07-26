@@ -53,9 +53,9 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
     equipClass: EQUIP_CLASS.Helm,
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
-      targetKey: 'STR',
-      targetChange: 1.2,
-      targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
+      targetKey: 'NRG',
+      targetChange: 2,
+      targetChangeSymbol: TARGET_CHANGE_SYMBOL['+']
     }]
   }),
   CCTV_SPLICE: new ItemModel({
