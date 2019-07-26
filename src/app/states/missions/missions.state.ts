@@ -102,6 +102,18 @@ export class MissionsState {
   loadMissions({ setState }: StateContext<MissionStateModel>) {
     setState((state: MissionStateModel) => {
 
+      // Something broke when loading from database
+      if (!state.inventoryIds || !state.npcIds) {
+        state.missions = {}
+        state.missionIds = []
+        state.inventory = {}
+        state.inventoryIds = []
+        state.npcs = {}
+        state.npcIds = []
+        state.attributes = {}
+        state.attributeIds = []
+      }
+
       if (state.inventoryIds.length === 0) {
         Object.keys(INVENTORY_ITEMS).forEach(key => {
           state.inventory[key] = INVENTORY_ITEMS[key]

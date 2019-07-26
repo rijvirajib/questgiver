@@ -22,9 +22,7 @@ export class AppComponent implements OnInit {
     private routerExtensions: RouterExtensions,
     private store: Store
   ) {
-    // Use the component constructor to inject services.
-    this.store.dispatch(Start)
-    this.store.dispatch(LoadMissions)
+
   }
 
   ngOnInit(): void {
@@ -34,6 +32,12 @@ export class AppComponent implements OnInit {
     this.router.events
     .pipe(filter(e => e instanceof NavigationEnd))
     .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects)
+
+    // Use the component constructor to inject services.
+    setTimeout(() => {
+      this.store.dispatch(Start)
+      this.store.dispatch(LoadMissions)
+    }, 100)
   }
 
   get sideDrawerTransition(): DrawerTransitionBase {

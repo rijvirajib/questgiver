@@ -36,12 +36,12 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
       targetKey: 'STR',
-      targetChange: 2,
+      targetChange: 3,
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
     }, {
       targetType: TARGET_TYPE.NPC,
       targetKey: 'NRG',
-      targetChange: .5,
+      targetChange: .9,
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
     }]
   }),
