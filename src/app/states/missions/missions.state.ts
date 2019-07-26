@@ -79,10 +79,18 @@ export class MissionsState {
   static inventoryItems(state: MissionStateModel) {
     return (equipClass?: string) => {
       if (equipClass) {
-        return Object.values(state.inventory).map(v => v).filter(v => v.equipClass === equipClass)
+        return Object.values(state.inventory).map(v => v).filter(v => {
+          if (v.isAvailable && v.equipClass === equipClass) {
+            return v
+          }
+        })
       }
 
-      return Object.values(state.inventory).map(v => v)
+      return Object.values(state.inventory).map(v => {
+        if (v.isAvailable) {
+          return v
+        }
+      })
     }
   }
 
@@ -276,15 +284,16 @@ export class MissionsState {
   @Action(EquipNPC)
   @ImmutableContext()
   equipNPC(
-    { setState, dispatch }: StateContext<MissionStateModel>,
-    { mission, npc, item }: EquipNPC
+    { setState }: StateContext<MissionStateModel>,
+    { missionId, npcId, itemId }: EquipNPC
   ) {
     setState((state: MissionStateModel) => {
-      item.isAvailable = false
-      state.inventory[item.id] = item
+      state.inventory[itemId].isAvailable = false
 
       // Attach Item
-      state.missions[mission.id].crew[npc.id].onEquip(state.inventory[item.id])
+      console.log('mission', missionId, 'crew', npcId, 'item', itemId)
+      // console.log('NPC', state.missions[missionId].crew[npcId])
+      state.missions[missionId].crew[npcId].equipItem(state.inventory[itemId])
 
       return state
     })

@@ -49,9 +49,8 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
     id: 'HelmofKnowledge',
     name: `Helm of Knowledge`,
     description: `Slightly increases your energy.`,
-    class: ITEM_CLASS.Axe,
-    equipClass: EQUIP_CLASS.Weapon,
-    attributes: [ITEM_ATTRIBUTES.NTH],
+    class: ITEM_CLASS.Helm,
+    equipClass: EQUIP_CLASS.Helm,
     modifiers: [{
       targetType: TARGET_TYPE.NPC,
       targetKey: 'STR',

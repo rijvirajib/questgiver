@@ -162,6 +162,16 @@ export class NPCModel {
     this.runNPCModifier(item.modifiers)
   }
 
+  equipItem = (item: ItemModel): void => {
+    this.gear[item.equipClass] = item
+    item.attributes.forEach(attribute => {
+      this.runNPCModifier(attribute.modifiers)
+    })
+
+    // Run through item modifiers
+    this.runNPCModifier(item.modifiers)
+  }
+
   heal(full = false, hp?: number) {
     if (full) {
       this.nowHP = this.maxHP

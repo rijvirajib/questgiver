@@ -37,7 +37,7 @@ export class HireCrew {
 
 export class EquipNPC {
   static readonly type = '[Mission] Equip NPC'
-  constructor(public mission: MissionModel, public npc: NPCModel, public item: ItemModel) {}
+  constructor(public missionId: string, public npcId: string, public itemId: string) {}
 }
 
 export class FireCrew {

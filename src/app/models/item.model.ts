@@ -82,8 +82,9 @@ export enum EQUIP_CLASS {
 
 export enum ITEM_CLASS {
   Axe,
-  Consumable, // Destroyed after use
+  Consumable,
   Dagger,
+  Helm,
   Melee,
   Pistol,
   Radioactive,
@@ -91,5 +92,5 @@ export enum ITEM_CLASS {
   SMG,
   Shotgun,
   LS = 'Long Sword',
-  SS = 'Short Sword'
+  SS = 'Short Sword',
 }

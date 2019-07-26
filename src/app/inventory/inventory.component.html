@@ -6,7 +6,7 @@
       <Label class="action-bar-title" text="Inventory"></Label>
     </ActionBar>
     <ng-container *ngIf="activeNPC$ | async as npc">
-        <Label text="Equipped Items" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
+        <Label text="Currently Equipped" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
         <Label text="Weapon: {{ npc.gear.weapon.name }}" *ngIf="npc.gear.weapon" textWrap="true" class="m-15 h4 text-left"></Label>
         <Label text="IsTwoHanded: {{ npc.gear.offhand.name }}" *ngIf="npc.gear.offhand" textWrap="true" class="m-15 h4 text-left"></Label>
         <Label text="Offhand: {{ npc.gear.offhand.name }}" *ngIf="npc.gear.offhand" textWrap="true" class="m-15 h4 text-left"></Label>
