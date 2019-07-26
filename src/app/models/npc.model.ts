@@ -12,9 +12,9 @@ export class NPCModel {
 
   isVillain?: boolean
   isAvailable?: boolean
-
   isInjured?: boolean
-  injuredTimeLeft?: boolean
+
+  injuredTimeLeft?: number
 
   baseStat: NPC_BASE_STAT
   level: number

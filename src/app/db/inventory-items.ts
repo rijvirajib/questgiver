@@ -47,6 +47,20 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
       targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
     }]
   }),
+  HelmofKnowledge: new ItemModel({
+    id: 'HelmofKnowledge',
+    name: `Helm of Knowledge`,
+    description: `Slightly increases your energy.`,
+    class: ITEM_CLASS.Axe,
+    equipClass: EQUIP_CLASS.Weapon,
+    attributes: [ITEM_ATTRIBUTES.NTH],
+    modifiers: [{
+      targetType: TARGET_TYPE.NPC,
+      targetKey: 'STR',
+      targetChange: 1.2,
+      targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
+    }]
+  }),
   CCTV_SPLICE: new ItemModel({
     id: 'CCTV_SPLICE',
     name: 'CCTV Splice',
