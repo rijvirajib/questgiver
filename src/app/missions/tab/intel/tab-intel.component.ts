@@ -1,4 +1,4 @@
-import { AcceptMission, RejectMission } from '~/app/states'
+import { AcceptMission, RejectMission, StartCasing } from '~/app/states'
 import { Component, OnInit, Input } from '@angular/core'
 import { EVENT_TYPES } from '~/app/models/event.model'
 import { MissionModel, MISSION_STEP } from '~/app/models/mission.model'
@@ -25,6 +25,10 @@ export class MissionTabIntelComponent {
 
   onAccept() {
     this.store.dispatch(new AcceptMission(this.activeMission))
+  }
+
+  onStartCasing() {
+    this.store.dispatch(new StartCasing(this.activeMission))
   }
 
   intelLog() {

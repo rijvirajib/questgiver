@@ -2,8 +2,11 @@
 <Label text="{{ activeMission.description }}" textWrap="true" class="m-15 h4 text-left" color="gray"></Label>
 <speed-controls></speed-controls>
 <FlexboxLayout *ngIf="activeMission.step === missionStep.Unaccepted" orientation="horizontal" justifyContent="space-between">
-  <Button text="Reject" (tap)="onReject()" class="btn btn-secondary"></Button>
-  <Button text="Start Casing ({{ activeMission.caseCost }})" (tap)="onAccept()" class="btn btn-primary"></Button>>
+  <Button text="Reject" (tap)="onReject()" class="btn btn-outline"></Button>
+  <Button text="Accept" (tap)="onAccept()" class="btn btn-outline"></Button>>
+</FlexboxLayout>
+<FlexboxLayout *ngIf="activeMission.times.accepted && !activeMission.times.casing" orientation="horizontal" justifyContent="space-between">
+  <Button text="Start Casing $({{ activeMission.caseCost }})" (tap)="onStartCasing()" class="btn btn-primary"></Button>>
 </FlexboxLayout>
 <TextView *ngIf="activeMission.log?.length > 0" [text]="intelLog()" editable="false" class="input input-border"></TextView>
 <Label text="Intel" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>

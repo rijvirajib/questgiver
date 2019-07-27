@@ -1,4 +1,4 @@
-import { AddMission, LoadMissions, AcceptMission, RejectMission, CaseMissions, HireCrew, FireCrew, EquipNPC, UnequipNPC } from './missions.actions'
+import { AddMission, LoadMissions, AcceptMission, RejectMission, CaseMissions, HireCrew, FireCrew, EquipNPC, UnequipNPC, StartCasing } from './missions.actions'
 import { CASEMESSAGES } from '~/app/db/case-messages'
 import { EVENT_TYPES } from '~/app/models/event.model'
 import { GameState } from '../game.state'
@@ -184,13 +184,9 @@ export class MissionsState {
   ) {
     setState((state: MissionStateModel) => {
       const currentTime = this.store.selectSnapshot(GameState.currentTime)
-      let totalCaseTime = 0
-      state.missions[mission.id].obstacles.forEach(obstacle => {
-        totalCaseTime += obstacle.caseTime
-      })
-      state.missions[mission.id].step = MISSION_STEP.Intel
+
+      state.missions[mission.id].step = MISSION_STEP.Accepted
       state.missions[mission.id].times.accepted = currentTime
-      state.missions[mission.id].totalCaseTime = totalCaseTime
 
       // Initialize the log
       state.missions[mission.id].log = []
@@ -204,6 +200,34 @@ export class MissionsState {
     })
   }
 
+  @Action(StartCasing)
+  @ImmutableContext()
+  startCasing(
+    { setState }: StateContext<MissionStateModel>,
+    { mission }: StartCasing
+  ) {
+    setState((state: MissionStateModel) => {
+      const currentTime = this.store.selectSnapshot(GameState.currentTime)
+      let totalCaseTime = 0
+      state.missions[mission.id].obstacles.forEach(obstacle => {
+        totalCaseTime += obstacle.caseTime
+      })
+      state.missions[mission.id].step = MISSION_STEP.Intel
+      state.missions[mission.id].times.casing = currentTime
+      state.missions[mission.id].totalCaseTime = totalCaseTime
+
+      // Initialize the log
+      state.missions[mission.id].log = []
+      state.missions[mission.id].log.push({
+        type: EVENT_TYPES.MISSION,
+        time: currentTime,
+        message: `Mission ${mission.id} is being cased.`
+      })
+
+      return state
+    })
+  }
+
   @Action(CaseMissions)
   @ImmutableContext()
   caseMissions(
@@ -211,7 +235,7 @@ export class MissionsState {
   ) {
     setState((state: MissionStateModel) => {
       for (const key of Object.keys(state.missions)) {
-        if (state.missions[key].step === MISSION_STEP.Intel) {
+        if (state.missions[key].times.casing && !state.missions[key].times.cased) {
           // Go through ONE obstacle and increment time spent
           let isComplete = true
           // tslint:disable-next-line:prefer-for-of
@@ -264,8 +288,14 @@ export class MissionsState {
 
           // If the mission is ready
           if (isComplete) {
-            state.missions[key].times.cased = this.store.selectSnapshot(GameState.currentTime)
+            const currentTime = this.store.selectSnapshot(GameState.currentTime)
+            state.missions[key].times.cased = currentTime
             state.missions[key].step = MISSION_STEP.Ready
+            state.missions[key].log.push({
+              type: EVENT_TYPES.MISSION,
+              time: currentTime,
+              message: `Mission ${key} has been cased.`
+            })
             break
           }
         }
@@ -283,9 +313,6 @@ export class MissionsState {
   ) {
     setState((state: MissionStateModel) => {
       state.npcs[npc.id].isAvailable = false
-
-      // TODO: Handle Inventory
-
       // Attach NPC
       state.missions[mission.id].crew[npc.id] = state.npcs[npc.id]
 
@@ -335,8 +362,6 @@ export class MissionsState {
   ) {
     setState((state: MissionStateModel) => {
       state.npcs[npc.id].isAvailable = true
-
-      // TODO: Handle Inventory
 
       // Remove NPC
       delete state.missions[mission.id].crew[npc.id]

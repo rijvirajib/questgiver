@@ -69,7 +69,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   npcId: 'STORYNPC2'
 }]
 
-export const STORYMISSIONS: Array<MissionModel> = [{
+export const STORYMISSIONS: Array<MissionModel> = [new MissionModel({
   id: 'STORYMISSIONS1',
   name: 'Kwik Fix',
   description: `The Guild is hurting for money and we need some starting cash. Hit the Kwik Fix Store and grab some loot.`,
@@ -83,7 +83,7 @@ export const STORYMISSIONS: Array<MissionModel> = [{
     x: 1,
     y: 1
   },
-  caseCost: 1230,
+  caseCost: 120,
   crew: {},
   obstacles: [
     STORYOBSTACLES[3],
@@ -95,4 +95,4 @@ export const STORYMISSIONS: Array<MissionModel> = [{
     experience: 100,
     gold: 100
   }
-}]
+})]

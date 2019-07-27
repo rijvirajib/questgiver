@@ -21,6 +21,11 @@ export class AcceptMission {
   constructor(public mission: MissionModel) {}
 }
 
+export class StartCasing {
+  static readonly type = '[Mission] Start Casing'
+  constructor(public mission: MissionModel) {}
+}
+
 export class CaseMissions {
   static readonly type = '[Mission] Case Missions'
 }

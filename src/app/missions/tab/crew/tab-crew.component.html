@@ -64,7 +64,7 @@
           <Label text="{{ villain.gear.leg.name }}" *ngIf="villain.gear.leg"></Label>
           <Label *ngFor="let trinket of villain.trinkets" text="{{ trinket.name }}"></Label>
         </StackLayout>
-        <Button verticalAlignment="top" row="0" col="2" text="Hire (${{ villain.cost }})" class="btn btn-outline pay-amount" (tap)="hire(villain)"></Button>
+        <Button verticalAlignment="top" row="0" col="2" text="{{ activeMission.times.accepted ? 'Hire - ' : ''}}${{ villain.cost }}" class="btn btn-outline" (tap)="hire(villain)" [isEnabled]="activeMission.times.accepted"></Button>
       </GridLayout>
       <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-secondary-info">
         <Label row="0" col="0" text="{{ villain.baseStat }}" class="time-information"></Label>
