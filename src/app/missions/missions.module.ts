@@ -5,6 +5,7 @@ import { MissionsRoutingModule } from './missions-routing.module'
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core'
 import { SharedModule } from '../shared.module'
 import { MissionTabCrewComponent } from './tab/crew/tab-crew.component'
+import { MissionTabDeployComponent } from './tab/deploy/tab-deploy.component'
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { MissionTabCrewComponent } from './tab/crew/tab-crew.component'
     MissionComponent,
     MissionTabIntelComponent,
     MissionTabCrewComponent,
+    MissionTabDeployComponent,
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

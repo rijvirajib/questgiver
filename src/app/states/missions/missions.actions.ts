@@ -30,6 +30,15 @@ export class CaseMissions {
   static readonly type = '[Mission] Case Missions'
 }
 
+export class DeployMission {
+  static readonly type = '[Mission] Deploy Mission'
+  constructor(public mission: MissionModel) {}
+}
+
+export class CombatMissions {
+  static readonly type = '[Mission] Combat Missions'
+}
+
 export class CompleteMission {
   static readonly type = '[Mission] Complete Mission'
   constructor(public mission: MissionModel) {}

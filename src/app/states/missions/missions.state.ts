@@ -1,4 +1,4 @@
-import { AddMission, LoadMissions, AcceptMission, RejectMission, CaseMissions, HireCrew, FireCrew, EquipNPC, UnequipNPC, StartCasing } from './missions.actions'
+import { AddMission, LoadMissions, AcceptMission, RejectMission, CaseMissions, HireCrew, FireCrew, EquipNPC, UnequipNPC, StartCasing, DeployMission, CombatMissions } from './missions.actions'
 import { CASEMESSAGES } from '~/app/db/case-messages'
 import { EVENT_TYPES } from '~/app/models/event.model'
 import { GameState } from '../game.state'
@@ -228,6 +228,91 @@ export class MissionsState {
     })
   }
 
+  @Action(HireCrew)
+  @ImmutableContext()
+  hireCrew(
+    { setState }: StateContext<MissionStateModel>,
+    { mission, npc }: HireCrew
+  ) {
+    setState((state: MissionStateModel) => {
+      state.npcs[npc.id].isAvailable = false
+      // Attach NPC
+      state.missions[mission.id].crew[npc.id] = state.npcs[npc.id]
+
+      return state
+    })
+  }
+
+  @Action(EquipNPC)
+  @ImmutableContext()
+  equipNPC(
+    { setState }: StateContext<MissionStateModel>,
+    { missionId, npcId, itemId }: EquipNPC
+  ) {
+    setState((state: MissionStateModel) => {
+      state.inventory[itemId].isAvailable = false
+
+      // Attach Item
+      const npc = NPCModel.equipItem(state.missions[missionId].crew[npcId], state.inventory[itemId])
+      state.missions[missionId].crew[npcId] = npc
+
+      return state
+    })
+  }
+
+  @Action(UnequipNPC)
+  @ImmutableContext()
+  unequipNPC(
+    { setState }: StateContext<MissionStateModel>,
+    { missionId, npcId, itemId }: UnequipNPC
+  ) {
+    setState((state: MissionStateModel) => {
+      state.inventory[itemId].isAvailable = true
+
+      // Attach Item
+      const npc = NPCModel.unEquipItem(state.missions[missionId].crew[npcId], state.inventory[itemId])
+      state.missions[missionId].crew[npcId] = npc
+
+      return state
+    })
+  }
+
+  @Action(FireCrew)
+  @ImmutableContext()
+  fireCrew(
+    { setState }: StateContext<MissionStateModel>,
+    { mission, npc }: FireCrew
+  ) {
+    setState((state: MissionStateModel) => {
+      state.npcs[npc.id].isAvailable = true
+
+      // Remove NPC
+      delete state.missions[mission.id].crew[npc.id]
+
+      return state
+    })
+  }
+
+  @Action(DeployMission)
+  @ImmutableContext()
+  DeployMission(
+    { setState }: StateContext<MissionStateModel>,
+    { mission }: DeployMission
+  ) {
+    setState((state: MissionStateModel) => {
+      const currentTime = this.store.selectSnapshot(GameState.currentTime)
+      state.missions[mission.id].times.deployed = currentTime
+      state.missions[mission.id].step = MISSION_STEP.Combat
+      state.missions[mission.id].log.push({
+        type: EVENT_TYPES.MISSION,
+        time: currentTime,
+        message: `Mission ${mission.id} has been deployed.`
+      })
+
+      return state
+    })
+  }
+
   @Action(CaseMissions)
   @ImmutableContext()
   caseMissions(
@@ -305,66 +390,12 @@ export class MissionsState {
     })
   }
 
-  @Action(HireCrew)
+  @Action(CombatMissions)
   @ImmutableContext()
-  hireCrew(
-    { setState }: StateContext<MissionStateModel>,
-    { mission, npc }: HireCrew
+  combatMissions(
+    { setState }: StateContext<MissionStateModel>
   ) {
     setState((state: MissionStateModel) => {
-      state.npcs[npc.id].isAvailable = false
-      // Attach NPC
-      state.missions[mission.id].crew[npc.id] = state.npcs[npc.id]
-
-      return state
-    })
-  }
-
-  @Action(EquipNPC)
-  @ImmutableContext()
-  equipNPC(
-    { setState }: StateContext<MissionStateModel>,
-    { missionId, npcId, itemId }: EquipNPC
-  ) {
-    setState((state: MissionStateModel) => {
-      state.inventory[itemId].isAvailable = false
-
-      // Attach Item
-      const npc = NPCModel.equipItem(state.missions[missionId].crew[npcId], state.inventory[itemId])
-      state.missions[missionId].crew[npcId] = npc
-
-      return state
-    })
-  }
-
-  @Action(UnequipNPC)
-  @ImmutableContext()
-  unequipNPC(
-    { setState }: StateContext<MissionStateModel>,
-    { missionId, npcId, itemId }: UnequipNPC
-  ) {
-    setState((state: MissionStateModel) => {
-      state.inventory[itemId].isAvailable = true
-
-      // Attach Item
-      const npc = NPCModel.unEquipItem(state.missions[missionId].crew[npcId], state.inventory[itemId])
-      state.missions[missionId].crew[npcId] = npc
-
-      return state
-    })
-  }
-
-  @Action(FireCrew)
-  @ImmutableContext()
-  fireCrew(
-    { setState }: StateContext<MissionStateModel>,
-    { mission, npc }: FireCrew
-  ) {
-    setState((state: MissionStateModel) => {
-      state.npcs[npc.id].isAvailable = true
-
-      // Remove NPC
-      delete state.missions[mission.id].crew[npc.id]
 
       return state
     })

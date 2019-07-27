@@ -1,0 +1,5 @@
+<Label text="Deploy" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
+<speed-controls></speed-controls>
+<FlexboxLayout *ngIf="isDeployable()" orientation="horizontal" justifyContent="space-between">
+  <Button text="Deploy!" (tap)="onDeploy()" class="btn btn-outline"></Button>>
+</FlexboxLayout>

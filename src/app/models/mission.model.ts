@@ -10,6 +10,8 @@ export class TimesModel {
   accepted?: number
   casing?: number
   cased?: number // When it was cased
+  deployed?: number
+  debreif?: number
   completed?: number
 }
 
