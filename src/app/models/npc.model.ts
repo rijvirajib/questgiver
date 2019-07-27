@@ -7,7 +7,15 @@ export class NPCModel {
 
   static equipItem(npc: NPCModel, item: ItemModel): NPCModel {
     // Attributes First
-    npc.gear[item.equipClass] = item
+    if (item.equipClass === EQUIP_CLASS.Trinket) {
+      // Already maxed out
+      if (npc.trinkets.length >= npc.maxTrinkets) {
+        return npc
+      }
+      npc.trinkets.push(item)
+    } else {
+      npc.gear[item.equipClass] = item
+    }
     item.attributes.forEach(attribute => {
       npc = NPCModel.modifyNPC(npc, attribute.modifiers)
     })
@@ -22,7 +30,15 @@ export class NPCModel {
   static unEquipItem(npc: NPCModel, item: ItemModel): NPCModel {
     // Attributes First
     // TODO: UNDO LOGIC NEEDS WORK - right now we just recalculate all the stats
-    npc.gear[item.equipClass] = undefined
+    if (item.equipClass === EQUIP_CLASS.Trinket) {
+      const index: number = npc.trinkets.findIndex(x => x.id === item.id)
+      if (index !== -1) {
+        npc.trinkets.splice(index, 1)
+      }
+    } else {
+      npc.gear[item.equipClass] = undefined
+    }
+
     // item.attributes.forEach(attribute => {
     //   npc = NPCModel.modifyNPC(npc, attribute.modifiers, true)
     // })
@@ -50,7 +66,7 @@ export class NPCModel {
   }
 
   static calculateNPCCost(npc: NPCModel) {
-    npc.cost = npc.calcCost
+    npc.cost = NPCModel.calcCost(npc)
 
     return npc
   }
@@ -64,31 +80,37 @@ export class NPCModel {
       NPCModel.setStats(npc, npc.originalStats)
     }
 
+    // Although implicit reference, just in case
+    npc = NPCModel.recalculateDamage(npc)
+    npc = NPCModel.recalculateDodge(npc)
+    npc = NPCModel.recalculateHP(npc)
+    npc = NPCModel.recalculateNRG(npc)
+
     return npc
   }
 
   static recalculateDamage(npc: NPCModel) {
-    npc.maxDamage = npc.calcMaxDamage
-    npc.minDamage = npc.calcMinDamage
+    npc.maxDamage = NPCModel.calcMaxDamage(npc)
+    npc.minDamage = NPCModel.calcMinDamage(npc)
 
     return npc
   }
 
   static recalculateDodge(npc: NPCModel) {
-    npc.evasion = npc.calcEvasion
-    npc.accuracy = npc.calcAccuracy
+    npc.evasion = NPCModel.calcEvasion(npc)
+    npc.accuracy = NPCModel.calcAccuracy(npc)
 
     return npc
   }
 
   static recalculateHP(npc: NPCModel) {
-    npc.maxHP = npc.calcMaxHP
+    npc.maxHP = NPCModel.calcMaxHP(npc)
 
     return npc
   }
 
   static recalculateNRG(npc: NPCModel) {
-    npc.maxNRG = npc.calcMaxNRG
+    npc.maxNRG = NPCModel.calcMaxNRG(npc)
 
     return npc
   }
@@ -120,11 +142,11 @@ export class NPCModel {
   }
 
   static levelUp(npc: NPCModel) {
-    if (npc.nowXP >= npc.nextLevelXP) {
+    if (npc.nowXP >= NPCModel.nextLevelXP(npc)) {
       npc.level += 1
       // Recalculate per level
       NPCModel.recalculateStats(npc, true)
-      if (npc.nowXP >= npc.nextLevelXP) {
+      if (npc.nowXP >= NPCModel.nextLevelXP(npc)) {
         NPCModel.levelUp(npc)
       } else {
         NPCModel.heal(npc, true)
@@ -178,6 +200,65 @@ export class NPCModel {
     NPCModel.recalculateStats(npc)
 
     return npc
+  }
+
+  static calcCost(npc: NPCModel): number {
+    return npc.cost
+  }
+
+  static nextLevelXP(npc: NPCModel): number {
+    // Pokemon
+    return Math.round((4 * (npc.level ** 3)) / 5)
+    // DnD v1
+    // return 500 * (npc.level ** 2) - (500 * npc.level)
+  }
+
+  static calcEvasion(npc: NPCModel) {
+    return (Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[npc.baseStat].dexMod * npc.DEX + npc.level) / 100
+  }
+
+  static calcAccuracy(npc: NPCModel) {
+    return (Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[npc.baseStat].dexMod * npc.DEX + npc.level) /  100
+  }
+
+  static calcMaxNRG(npc: NPCModel) {
+    return Math.round(npc.level * npc.maxNRG
+        + npc.NRG * NPCBASESTATS[npc.baseStat].nrgMod
+        + NPCBASESTATS[npc.baseStat].nrgMod)
+  }
+
+  static calcMaxHP(npc: NPCModel) {
+    return Math.round(npc.level * npc.maxHP
+        + npc.STR * NPCBASESTATS[npc.baseStat].strMod
+        + npc.DEX * NPCBASESTATS[npc.baseStat].dexMod
+        + NPCBASESTATS[npc.baseStat].dexMod * npc.accuracy)
+  }
+
+  static calcMinDamage(npc: NPCModel) {
+    return Math.round(npc.level * npc.minDamage
+      + (Math.floor((Math.random() * 10) + 1) / 10)
+      + NPCBASESTATS[npc.baseStat].strMod * npc.STR
+      + NPCBASESTATS[npc.baseStat].dexMod * npc.DEX
+      + NPCBASESTATS[npc.baseStat].nrgMod * npc.NRG)
+  }
+
+  static calcMaxDamage(npc: NPCModel) {
+    return Math.round(npc.level * npc.maxDamage + 3
+      + (Math.floor((Math.random() * 10) + 1) / 10)
+      + NPCBASESTATS[npc.baseStat].strMod * npc.STR
+      + NPCBASESTATS[npc.baseStat].dexMod * npc.DEX
+      + NPCBASESTATS[npc.baseStat].nrgMod * npc.NRG)
+  }
+
+  static calcDamage(npc: NPCModel) {
+    return Math.floor((Math.random() * npc.maxDamage) + npc.minDamage)
+  }
+
+  static calcArmor(npc: NPCModel) {
+    return Math.round(npc.level * .8
+      + .5 * npc.evasion
+      + NPCBASESTATS[npc.baseStat].strMod * npc.STR
+      + NPCBASESTATS[npc.baseStat].dexMod * npc.DEX)
   }
 
   id: string
@@ -250,6 +331,7 @@ export class NPCModel {
       [EQUIP_CLASS.Legs]: undefined
     }
     this.attributes = stats.attributes || []
+    this.trinkets = stats.trinkets || []
     this.maxTrinkets = stats.maxTrinkets || NPCBASESTATS.BASE.maxTrinkets
 
     this.originalStats = stats
@@ -260,65 +342,7 @@ export class NPCModel {
   }
 
   // TODO: ExpressionChangedAfterItHasBeenCheckedError
-  // Cannot get these views to work properly
-  get calcCost(): number {
-    return this.cost
-  }
-
-  get nextLevelXP(): number {
-    // Pokemon
-    return Math.round((4 * (this.level ** 3)) / 5)
-    // DnD v1
-    // return 500 * (this.level ** 2) - (500 * this.level)
-  }
-
-  get calcEvasion() {
-    return (Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) / 100
-  }
-
-  get calcAccuracy() {
-    return (Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[this.baseStat].dexMod * this.DEX + this.level) /  100
-  }
-
-  get calcMaxNRG() {
-    return Math.round(this.level * this.maxNRG
-        + this.NRG * NPCBASESTATS[this.baseStat].nrgMod
-        + NPCBASESTATS[this.baseStat].nrgMod)
-  }
-
-  get calcMaxHP() {
-    return Math.round(this.level * this.maxHP
-        + this.STR * NPCBASESTATS[this.baseStat].strMod
-        + this.DEX * NPCBASESTATS[this.baseStat].dexMod
-        + NPCBASESTATS[this.baseStat].dexMod * this.accuracy)
-  }
-
-  get calcMinDamage() {
-    return Math.round(this.level * this.minDamage
-      + (Math.floor((Math.random() * 10) + 1) / 10)
-      + NPCBASESTATS[this.baseStat].strMod * this.STR
-      + NPCBASESTATS[this.baseStat].dexMod * this.DEX
-      + NPCBASESTATS[this.baseStat].nrgMod * this.NRG)
-  }
-
-  get calcMaxDamage() {
-    return Math.round(this.level * this.maxDamage + 3
-      + (Math.floor((Math.random() * 10) + 1) / 10)
-      + NPCBASESTATS[this.baseStat].strMod * this.STR
-      + NPCBASESTATS[this.baseStat].dexMod * this.DEX
-      + NPCBASESTATS[this.baseStat].nrgMod * this.NRG)
-  }
-
-  get calcDamage() {
-    return Math.floor((Math.random() * this.maxDamage) + this.minDamage)
-  }
-
-  get calcArmor() {
-    return Math.round(this.level * .8
-      + .5 * this.evasion
-      + NPCBASESTATS[this.baseStat].strMod * this.STR
-      + NPCBASESTATS[this.baseStat].dexMod * this.DEX)
-  }
+  // Cannot static these npc: NPCModelviews to work properly
 }
 
 export enum NPC_BASE_STAT {

@@ -63,7 +63,7 @@ export class ItemModel implements IItemModel {
     this.quality = params.quality || 1 // number // [0, 1]: 0 = destroyed
 
     // UX
-    // That gets you a true value except when hasWheels is explicitly false.
+    // That gets you a true value except when isVisible is explicitly false.
     // (Other falsy values, including null and undefined, will result in true)
     this.isVisible = params.isVisible !== false // boolean
     this.isAvailable = params.isAvailable !== false // boolean

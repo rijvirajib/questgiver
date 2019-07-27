@@ -17,14 +17,15 @@
         <Label text="{{ villain.gear.leg.name }}" *ngIf="villain.gear.leg"></Label>
         <Label *ngFor="let trinket of villain.trinkets" text="{{ trinket.name }}"></Label>
       </StackLayout>
-      <Button verticalAlignment="top" row="0" col="2" text="Fire" class="pay-amount" (tap)="fire(villain)"></Button>
+      <Button verticalAlignment="top" row="0" col="2" text="Fire" class="btn btn-outline pay-amount" (tap)="fire(villain)"></Button>
     </GridLayout>
-    <FlexboxLayout flexDirection="row" justifyContent="space-between" class="mission-info-container">
-      <Button class="btn btn-primary" (tap)="onTapEquip(villain, 'weapon')" text="Weapon" [isEnabled]="isSlotAvailable(villain, 'weapon')"></Button>
-      <Button class="btn btn-primary" (tap)="onTapEquip(villain, 'offhand')" text="Off Hand" [isEnabled]="isSlotAvailable(villain, 'offhand')"></Button>
-      <Button class="btn btn-primary" (tap)="onTapEquip(villain, 'helm')" text="Helm" [isEnabled]="isSlotAvailable(villain, 'helm')"></Button>
-      <Button class="btn btn-primary" (tap)="onTapEquip(villain, 'chest')" text="Chest" [isEnabled]="isSlotAvailable(villain, 'chest')"></Button>
-      <Button class="btn btn-primary" (tap)="onTapEquip(villain, 'leg')" text="Pants" [isEnabled]="isSlotAvailable(villain, 'pants')"></Button>
+    <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
+      <Button class="btn btn-outline" (tap)="onTapEquip(villain, 'weapon')" text="Weapon" [isEnabled]="isSlotAvailable(villain, 'weapon')"></Button>
+      <Button class="btn btn-outline" (tap)="onTapEquip(villain, 'offhand')" text="Off Hand" [isEnabled]="isSlotAvailable(villain, 'offhand')"></Button>
+      <Button class="btn btn-outline" (tap)="onTapEquip(villain, 'helm')" text="Helm" [isEnabled]="isSlotAvailable(villain, 'helm')"></Button>
+      <Button class="btn btn-outline" (tap)="onTapEquip(villain, 'chest')" text="Chest" [isEnabled]="isSlotAvailable(villain, 'chest')"></Button>
+      <Button class="btn btn-outline" (tap)="onTapEquip(villain, 'leg')" text="Pants" [isEnabled]="isSlotAvailable(villain, 'pants')"></Button>
+      <Button class="btn btn-outline" (tap)="onTapEquip(villain, 'trinket')" text="Trinkets ({{ villain.trinkets.length }}/{{ villain.maxTrinkets }})"></Button>
     </FlexboxLayout>
     <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-secondary-info">
       <Label row="0" col="0" text="{{ villain.baseStat }}" class="time-information"></Label>
@@ -63,7 +64,7 @@
           <Label text="{{ villain.gear.leg.name }}" *ngIf="villain.gear.leg"></Label>
           <Label *ngFor="let trinket of villain.trinkets" text="{{ trinket.name }}"></Label>
         </StackLayout>
-        <Button verticalAlignment="top" row="0" col="2" text="Hire (${{ villain.cost }})" class="pay-amount" (tap)="hire(villain)"></Button>
+        <Button verticalAlignment="top" row="0" col="2" text="Hire (${{ villain.cost }})" class="btn btn-outline pay-amount" (tap)="hire(villain)"></Button>
       </GridLayout>
       <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-secondary-info">
         <Label row="0" col="0" text="{{ villain.baseStat }}" class="time-information"></Label>

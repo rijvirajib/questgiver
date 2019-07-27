@@ -61,9 +61,17 @@ export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
   CCTV_SPLICE: new ItemModel({
     id: 'CCTV_SPLICE',
     name: 'CCTV Splice',
-    description: 'Disables CCTVs up to level 1.',
+    description: 'Disables CCTVs up to level 3.',
     class: ITEM_CLASS.Consumable,
     equipClass: EQUIP_CLASS.Trinket,
     antiObstacles: [OBSTACLE_TYPE.CCTV]
+  }),
+  KEYPAD_HACK: new ItemModel({
+    id: 'KEYPAD_HACK',
+    name: 'Keypad Hack',
+    description: 'Keypad Hack that disables keypad up to level 3.',
+    class: ITEM_CLASS.Consumable,
+    equipClass: EQUIP_CLASS.Trinket,
+    antiObstacles: [OBSTACLE_TYPE.KEYPAD]
   })
 }

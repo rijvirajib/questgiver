@@ -1,5 +1,6 @@
 import { AcceptMission, RejectMission, HireCrew, FireCrew } from '~/app/states'
 import { Component, OnInit, Input } from '@angular/core'
+import { EQUIP_CLASS } from '~/app/models/item.model'
 import { EVENT_TYPES } from '~/app/models/event.model'
 import { MissionModel, MISSION_STEP } from '~/app/models/mission.model'
 import { MissionStateModel } from '~/app/states/missions/missions.model'
@@ -56,6 +57,10 @@ export class MissionTabCrewComponent implements OnInit {
   }
 
   isSlotAvailable(villain: NPCModel, equipClass: string) {
+    if (equipClass === EQUIP_CLASS.Trinket) {
+      return villain.trinkets.length < villain.maxTrinkets
+    }
+
     return !villain.gear[equipClass] || (villain.gear && !villain.gear[equipClass].isSignature)
   }
 }
