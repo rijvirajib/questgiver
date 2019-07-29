@@ -46,7 +46,7 @@
     "use-output-property-decorator": true,
     "use-pipe-transform-interface": true,
     "semicolon": [true, "never"],
-    "trailing-comma": [true, {
+    "trailing-comma": [false, {
       "multiline": {
         "objects": "never",
         "arrays": "always",

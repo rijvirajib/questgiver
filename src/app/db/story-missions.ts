@@ -16,7 +16,7 @@ export const STORYMODIFIERS: Array<TargetModifier> = [{
   targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
 }]
 
-export const STORYOBSTACLES: Array<ObstacleModel> = [{
+export const STORYOBSTACLES: Array<ObstacleModel> = [new ObstacleModel({
   id: 'STORYOBSTACLES0',
   name: 'CCTV',
   description: 'Simple cameras. A tool should suffice.',
@@ -32,7 +32,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
       ]
     }
   }
-}, {
+}), new ObstacleModel({
   id: 'STORYOBSACLES1',
   name: 'Mage',
   description: 'There are many tools to disable a mage.',
@@ -41,7 +41,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   icon: '~/images/icons/mage.png',
   type: OBSTACLE_TYPE.NPC,
   npcId: 'STORYNPC1'
-}, {
+}), new ObstacleModel({
   id: 'STORYOBSTACLES2',
   name: 'Keypad',
   description: 'A keypad to gain entrance into loot area.',
@@ -57,7 +57,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
       ]
     }
   }
-}, {
+}), new ObstacleModel({
   id: 'STORYOBSTACLES3',
   name: 'Chameleon',
   description: 'Chameleons can easily be seen by more than eyes.',
@@ -67,7 +67,7 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [{
   icon: '~/images/icons/chameleon.png',
   type: OBSTACLE_TYPE.NPC,
   npcId: 'STORYNPC2'
-}]
+})]
 
 export const STORYMISSIONS: Array<MissionModel> = [new MissionModel({
   id: 'STORYMISSIONS1',

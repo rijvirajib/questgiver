@@ -1,7 +1,7 @@
 import { AttributeModel } from './attribute.model'
-import { TargetModifier } from './target-modifier.model'
 import { NPCModel } from './npc.model'
-import { Weakness } from './weakness.model'
+import { TargetModifier } from './target-modifier.model'
+import { v4 as uuid } from 'uuid'
 
 export class ObstacleModel {
   id: string
@@ -20,7 +20,7 @@ export class ObstacleModel {
   npcId?: NPCModel['id']
 
   attributes?: Array<AttributeModel>
-  weaknesses?: Array<Weakness>
+  weaknesses?: Array<TargetModifier>
 
   // check for score  to generate effects 'COMBAT'
   score?: number
@@ -29,9 +29,29 @@ export class ObstacleModel {
   }
 
   constructor(params) {
-    if (!params.isCased) {
-      this.isCased = false
-    }
+    this.id = params.id || uuid()
+    this.name = params.name || 'Generic name'
+    this.description = params.description || 'Generic Obstacle Description'
+    this.icon  = params.icon || '~/images/icons/unknown.png'
+    this.isHidden  = !!params.isHidden
+
+    this.caseTime = params.caseTime
+    this.casedTime = params.casedTime
+
+    this.isCased  = !!params.isCased
+    this.isDisabled  = !!params.isDisabled
+
+    this.requiredObstacles  = params.requiredObstacles || []
+
+    this.type = params.type || OBSTACLE_TYPE.UNKNOWN
+    this.npcId  = params.npcId
+
+    this.attributes  = params.attributes || []
+    this.weaknesses  = params.weaknesses || []
+
+    // check for score  to generate effects 'COMBAT'
+    this.score  = params.score || 100
+    this.results = params.results || {}
   }
 }
 

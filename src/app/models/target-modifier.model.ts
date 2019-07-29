@@ -1,6 +1,6 @@
 export class TargetModifier {
   targetType: TARGET_TYPE
-  targetID?: string
+  targetId?: string
   targetKey?: string
   willDisable?: boolean // Will the target be disabled?
   targetChange?: number | boolean
@@ -13,7 +13,7 @@ export class TargetModifier {
 
   constructor(params: any) {
     this.targetType = params.targetType
-    this.targetID = params.targetID
+    this.targetId = params.targetId
     this.targetKey = params.targetKey
     this.willDisable = params.willDisable || false
     this.targetChange = params.targetChange || 0

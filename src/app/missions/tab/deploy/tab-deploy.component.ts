@@ -18,6 +18,7 @@ import { map } from 'rxjs/operators'
 })
 export class MissionTabDeployComponent implements OnInit {
   @Input() activeMission: MissionModel
+  activeMission$: Observable<MissionModel>
 
   constructor(
     private store: Store,
@@ -26,6 +27,10 @@ export class MissionTabDeployComponent implements OnInit {
 
   ngOnInit() {
     // Do something
+    this.activeMission$ = this.store.select(MissionsState.missionById).pipe(map(filterFn => filterFn(this.activeMission.id)))
+    this.activeMission$.subscribe(aM => {
+      this.activeMission = aM
+    })
   }
 
   isDeployable() {
@@ -34,5 +39,13 @@ export class MissionTabDeployComponent implements OnInit {
 
   onDeploy() {
     this.store.dispatch(new DeployMission(this.activeMission))
+  }
+
+  combatLog() {
+    return this.activeMission.log.map(event => {
+      if (event.type === EVENT_TYPES.COMBAT) {
+        return event.message
+      }
+    }).join('\n')
   }
 }

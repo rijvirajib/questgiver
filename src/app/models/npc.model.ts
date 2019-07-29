@@ -174,6 +174,8 @@ export class NPCModel {
     npc.criticalChance = .2
     npc.criticalDamage = (Math.floor((Math.random() * 100) + 10) / 1000)
 
+    npc.speed = stats.speed || (Math.floor((Math.random() * 100) + npc.DEX) / (npc.DEX + 10))
+    npc.initiative = stats.initiative || 0
     NPCModel.recalculateDodge(npc)
 
     npc.morale = stats.morale
@@ -270,11 +272,14 @@ export class NPCModel {
   isVillain?: boolean
   isAvailable?: boolean
   isInjured?: boolean
+  isRunAway?: boolean
 
   injuredTimeLeft?: number
 
   baseStat: NPC_BASE_STAT
   level: number
+  status: NPC_STATUS
+
   nowXP?: number
 
   maxHP?: number
@@ -293,6 +298,8 @@ export class NPCModel {
   criticalChance?: number
   criticalDamage?: number
 
+  speed?: number
+  initiative?: number
   evasion?: number
   accuracy?: number
 
@@ -317,8 +324,10 @@ export class NPCModel {
     this.isVillain = !!stats.isVillain
     this.isAvailable = stats.isAvailable !== false
     this.isInjured = !!stats.isInjured
+    this.isRunAway = !!stats.isRunAway
     this.baseStat = stats.baseStat || NPC_BASE_STAT.STR
     this.level = stats.level || 1
+    this.status = stats.status || NPC_STATUS.INACTIVE
 
     this.icon = stats.icon || '~/images/icons/unknown.png'
 
@@ -333,6 +342,7 @@ export class NPCModel {
     this.attributes = stats.attributes || []
     this.trinkets = stats.trinkets || []
     this.maxTrinkets = stats.maxTrinkets || NPCBASESTATS.BASE.maxTrinkets
+    this.morale = stats.morale || NPCBASESTATS.BASE.morale
 
     this.originalStats = stats
 
@@ -340,9 +350,6 @@ export class NPCModel {
     NPCModel.heal(this, true)
     NPCModel.energize(this, true)
   }
-
-  // TODO: ExpressionChangedAfterItHasBeenCheckedError
-  // Cannot static these npc: NPCModelviews to work properly
 }
 
 export enum NPC_BASE_STAT {
@@ -358,6 +365,15 @@ export enum NPC_SLOT {
   TRINKETS,
   RIGHTHAND,
   LEFTHAND
+}
+
+export enum NPC_STATUS {
+  INACTIVE,
+  ACTIVE,
+  DEPLOY,
+  COMBAT,
+  RUNAWAY,
+  INJURED, // DEAD
 }
 
 export const NPCBASESTATS = {

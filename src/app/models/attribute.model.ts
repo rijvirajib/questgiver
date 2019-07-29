@@ -1,6 +1,5 @@
 import { NPC_BASE_STAT } from './npc.model'
 import { TargetModifier, TARGET_TYPE } from './target-modifier.model'
-import { Weakness } from './weakness.model'
 import { v4 as uuid } from 'uuid'
 
 export class AttributeModel {
@@ -23,10 +22,7 @@ export class AttributeModel {
 
   canDisable?: boolean
   isDisabled?: boolean
-  weaknesses?: {
-    items?: Weakness
-    attributes?: Weakness
-  }
+  weaknesses?: Array<TargetModifier>
 
   constructor(params) {
     this.id = params.id || uuid()
@@ -42,7 +38,7 @@ export class AttributeModel {
     this.modifiers = params.modifers || []
     this.canDisable = !!params.canDisable
     this.isDisabled = !!params.isDisabled
-    this.weaknesses = params.weakness || { items: {}, attribtues: {}}
+    this.weaknesses = params.weakness || []
 
   }
 

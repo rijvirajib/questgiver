@@ -27,6 +27,7 @@
     "@ngxs-labs/immer-adapter": "^3.0.5",
     "@ngxs/storage-plugin": "^3.4.3",
     "@ngxs/store": "^3.4.3",
+    "dice-typescript": "^1.6.1",
     "immer": "^3.1.3",
     "lodash": "^4.17.15",
     "nativescript-angular": "^8.0.2",

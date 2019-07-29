@@ -59,14 +59,11 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
     description: 'A villain who is trained in the use of magic.',
     icon: '~/images/icons/mage.png',
     canDisable: true,
-    weaknesses: {
-      attributes: {
-        NTH: [{
-          targetType: TARGET_TYPE.ATTRIBUTE,
-          willDisable: true
-        }]
-      }
-    },
+    weaknesses: [new TargetModifier({
+      targetType: TARGET_TYPE.ATTRIBUTE,
+      targetId: 'NTH',
+      willDisable: true
+    })],
     modifiers: [new TargetModifier({
       targetType: TARGET_TYPE.NPC,
       targetKey: 'INT',
@@ -80,16 +77,13 @@ export const NPC_ATTRIBUTES: { [id: string]: AttributeModel } = {
     baseStat: NPC_BASE_STAT.DEX,
     class: ATTRIBUTE_CLASS.CHARACTER_CLASS,
     icon: '~/images/icons/chameleon.png',
-    description: 'A villain who is can shape shift. They are harder to hit and their unique skin reduces damage taken.',
+    description: 'A villain who can shape shift. They are harder to hit and their unique skin reduces damage taken.',
     canDisable: true,
-    weaknesses: {
-      attributes: {
-        PSYCHIC: [{
-          targetType: TARGET_TYPE.ATTRIBUTE,
-          willDisable: true
-        }]
-      }
-    },
+    weaknesses: [{
+      targetType: TARGET_TYPE.ATTRIBUTE,
+      targetId: 'PSYCHIC',
+      willDisable: true
+    }],
     modifiers: [new TargetModifier({
       targetType: TARGET_TYPE.NPC,
       targetKey: 'chanceToDodge',

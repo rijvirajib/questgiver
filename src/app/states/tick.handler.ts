@@ -1,5 +1,5 @@
 import { Actions, ofActionCompleted, Store } from '@ngxs/store'
-import { CaseMissions } from './missions/missions.actions'
+import { CaseMissions, CombatMissions } from './missions/missions.actions'
 import { Injectable } from '@angular/core'
 import { Tick } from './game.actions'
 
@@ -15,5 +15,6 @@ export class TickHandler {
 
   caseMissions() {
     this.store.dispatch(new CaseMissions())
+    this.store.dispatch(new CombatMissions())
   }
 }

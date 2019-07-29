@@ -1,3 +1,4 @@
+import { CombatModel } from './combat.model'
 import { EventModel } from './event.model'
 import { ItemModel } from './item.model'
 import { NPCModel } from './npc.model'
@@ -47,6 +48,9 @@ export class MissionModel {
   goons?: number // Usually always 0, if > 0, generate or retrieve NPCs before combat (these are random)
   obstacles: Array<ObstacleModel> // Store in reverse order for UI reasons...
   crew?: {[id: string]: NPCModel }
+  heroes?: {[id: string]: NPCModel }
+
+  combat?: CombatModel
 
   rewards: MissionReward
 
@@ -77,6 +81,7 @@ export class MissionModel {
     this.goons = params.goons || 0
     this.obstacles = params.obstacles || []
     this.crew = params.crew || {}
+    this.heroes = params.heroes || {}
 
     this.rewards = params.rewards || new MissionReward()
 
