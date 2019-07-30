@@ -155,8 +155,12 @@ export class NPCModel {
     return npc
   }
 
+  static randomNumber(min = 10, max = 30) {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+
   static setStats(npc: NPCModel, stats: NPCModel) {
-    npc.cost = stats.cost || (Math.floor((Math.random() * 100) + 300) / 1000) * 1000
+    npc.cost = stats.cost || this.randomNumber(100, 300)
     npc.maxHP = stats.maxHP || NPCBASESTATS.BASE.maxHP
     npc.nowHP = stats.nowHP || NPCBASESTATS.BASE.maxHP
     npc.maxNRG = stats.maxNRG || NPCBASESTATS.BASE.maxNRG
@@ -164,17 +168,17 @@ export class NPCModel {
     npc.nowXP = stats.nowXP || 0
     NPCModel.addXP(npc, npc.nowXP)
 
-    npc.minDamage = stats.minDamage || Math.floor((Math.random() * 1) + 100)
-    npc.maxDamage = stats.maxDamage || Math.floor((Math.random() * 50) + 100)
+    npc.minDamage = stats.minDamage || this.randomNumber(1, 100)
+    npc.maxDamage = stats.maxDamage || this.randomNumber(1, 100)
 
-    npc.STR = stats.STR || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
-    npc.DEX = stats.DEX || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
-    npc.NRG = stats.NRG || (Math.floor((Math.random() * 10) + 30) / 1000) * 1000
+    npc.STR = stats.STR || this.randomNumber(10, 30)
+    npc.DEX = stats.DEX || this.randomNumber(10, 30)
+    npc.NRG = stats.NRG || this.randomNumber(10, 30)
 
     npc.criticalChance = .2
     npc.criticalDamage = (Math.floor((Math.random() * 100) + 10) / 1000)
 
-    npc.speed = stats.speed || (Math.floor((Math.random() * 100) + npc.DEX) / (npc.DEX + 10))
+    npc.speed = stats.speed || Math.floor(((Math.random() * 100) + npc.DEX) / (npc.DEX + 10))
     npc.initiative = stats.initiative || 0
     NPCModel.recalculateDodge(npc)
 
@@ -252,7 +256,7 @@ export class NPCModel {
 
   static defaultFightMove(npc: NPCModel) {
     return new FightMove({
-      name: 'Basic Attack',
+      name: 'Basic',
       description: 'Your basic attack with no modifiers.',
       nrgCost: 0
     })
@@ -260,7 +264,7 @@ export class NPCModel {
 
   static restMove(npc: NPCModel) {
     return new FightMove({
-      name: 'Basic Rest',
+      name: 'Rest',
       description: 'Your basic rest move.',
       nrgCost: 0,
       modifiers: [

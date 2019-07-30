@@ -1,3 +1,4 @@
+import { FightMove } from './fight-move.model'
 import { NPC_BASE_STAT } from './npc.model'
 import { TargetModifier, TARGET_TYPE } from './target-modifier.model'
 import { v4 as uuid } from 'uuid'
@@ -23,6 +24,7 @@ export class AttributeModel {
   canDisable?: boolean
   isDisabled?: boolean
   weaknesses?: Array<TargetModifier>
+  moves: Array<FightMove>
 
   constructor(params) {
     this.id = params.id || uuid()
@@ -39,6 +41,7 @@ export class AttributeModel {
     this.canDisable = !!params.canDisable
     this.isDisabled = !!params.isDisabled
     this.weaknesses = params.weakness || []
+    this.moves = params.moves || []
 
   }
 

@@ -19,8 +19,10 @@ import { map } from 'rxjs/operators'
 export class MissionTabDeployComponent implements OnInit {
   @Input() activeMission: MissionModel
   activeMission$: Observable<MissionModel>
+  crew$: Observable<Array<NPCModel>>
   crew: Array<NPCModel>
   heroes: Array<NPCModel>
+  isDeployable = false
 
   constructor(
     private store: Store,
@@ -32,6 +34,10 @@ export class MissionTabDeployComponent implements OnInit {
     this.activeMission$ = this.store.select(MissionsState.missionById).pipe(map(filterFn => filterFn(this.activeMission.id)))
     this.activeMission$.subscribe(aM => {
       this.activeMission = aM
+      console.log('but is activeMission loaded?')
+      if (this.activeMission.times.accepted && this.activeMission.crewIds.length > 0) {
+        this.isDeployable = true
+      }
       this.store.select(MissionsState.npcByIds).pipe(map(filterFn => filterFn([...aM.crewIds]))).subscribe(crew => {
         this.crew = crew || []
       })
@@ -39,14 +45,15 @@ export class MissionTabDeployComponent implements OnInit {
         this.heroes = heroes || []
       })
     })
-  }
-
-  isDeployable() {
-    return this.activeMission.times.accepted && this.activeMission.crewIds.length > 0
+    this.crew$ = this.store.select(MissionsState.npcByIds).pipe(map(filterFn => filterFn([...this.activeMission.crewIds])))
+    this.crew$.subscribe(o => {
+      console.log('crew loaded...')
+    })
   }
 
   onDeploy() {
     this.store.dispatch(new DeployMission(this.activeMission))
+    this.isDeployable = false
   }
 
   combatLog() {

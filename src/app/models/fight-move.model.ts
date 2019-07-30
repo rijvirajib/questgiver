@@ -17,7 +17,7 @@ export class FightMove {
 
   constructor(params: any) {
     this.id = params.id // || uuid() // For some reason the uuid causes a crypto.Random issue
-    this.name = params.name || 'Basic Attack'
+    this.name = params.name || 'Basic'
     this.description = params.description || 'A basic attack.'
     this.levelRequirement = params.levelRequirement || 0
     this.nrgCost = params.nrgCost || 0

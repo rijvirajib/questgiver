@@ -317,7 +317,6 @@ export class MissionsState {
 
       // Remove NPC
       state.missions[mission.id].crewIds = state.missions[mission.id].crewIds.filter(npcId => npcId !== npc.id)
-      // delete state.missions[mission.id].crew[npc.id]
 
       return state
     })
