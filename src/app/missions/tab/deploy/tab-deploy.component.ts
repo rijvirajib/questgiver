@@ -53,10 +53,10 @@ export class MissionTabDeployComponent implements OnInit {
   }
 
   combatLog() {
-    return this.activeMission.log.map(event => {
+    return this.activeMission.log.filter(event => {
       if (event.type === EVENT_TYPES.COMBAT) {
-        return event.message
+        return event
       }
-    }).join('\n')
+    }).map(l => l.message).join('\n')
   }
 }
