@@ -27,6 +27,9 @@
       <Button class="btn btn-outline" (tap)="onTapEquip(villain, 'leg')" text="Pants" [isEnabled]="isSlotAvailable(villain, 'pants')"></Button>
       <Button class="btn btn-outline" (tap)="onTapEquip(villain, 'trinket')" text="Trinkets ({{ villain.trinkets.length }}/{{ villain.maxTrinkets }})"></Button>
     </FlexboxLayout>
+    <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
+      <Button class="btn btn-outline" *ngFor="let move of villain.moves" text="{{ move.name }} [{{ move.nrgCost }} NRG] [+{{ move.minDamageDelta }} MINDMG] [+{{ move.maxDamageDelta }} MAXDMG]"></Button>
+    </FlexboxLayout>
     <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-secondary-info">
       <Label row="0" col="0" text="{{ villain.baseStat }}" class="time-information"></Label>
       <GridLayout row="0" col="2" columns="auto, auto, auto" rows="auto">
@@ -66,6 +69,9 @@
         </StackLayout>
         <Button verticalAlignment="top" row="0" col="2" text="{{ activeMission.times.accepted ? 'Hire - ' : ''}}${{ villain.cost }}" class="btn btn-outline" (tap)="hire(villain)" [isEnabled]="activeMission.times.accepted"></Button>
       </GridLayout>
+      <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
+        <Button class="btn btn-outline" *ngFor="let move of villain.moves" text="{{ move.name }} [{{ move.nrgCost }} NRG] [+{{ move.minDamageDelta }} MINDMG] [+{{ move.maxDamageDelta }} MAXDMG]"></Button>
+      </FlexboxLayout>
       <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-secondary-info">
         <Label row="0" col="0" text="{{ villain.baseStat }}" class="time-information"></Label>
         <GridLayout row="0" col="2" columns="auto, auto, auto" rows="auto">

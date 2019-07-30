@@ -22,9 +22,10 @@ export class TargetModifier {
 }
 
 // Ordered by tick priority
+// Ordered by tick priority
 export enum TARGET_TYPE {
   GAME = 0,
-  CHARACTER,
+  CHARACTER, // not sure if character is ever needed
   QUEST,
   OBSTACLE,
   ATTRIBUTE,

@@ -5,6 +5,9 @@
   <Label class="small-text" text="{{ npc.value.name }}"></Label>
   <Label class="small-text" text="HP:[{{ npc.value.nowHP }}] | Morale[{{ npc.value.morale }}] | Initiative[{{ npc.value.initiative}}]"></Label>
   <Label class="small-text" text="Evasion:[{{ npc.value.evasion }}] | Accuracy[{{ npc.value.accuracy }}]"></Label>
+  <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
+    <Button class="btn btn-outline" *ngFor="let move of npc.moves" text="{{ move.name }} [{{ move.nrgCost }} NRG] [+{{ move.minDamageDelta }} MINDMG] [+{{ move.maxDamageDelta }} MAXDMG]"></Button>
+  </FlexboxLayout>
 </StackLayout>
 <FlexboxLayout *ngIf="isDeployable()" orientation="horizontal" justifyContent="space-between">
   <Button text="Deploy!" (tap)="onDeploy()" class="btn btn-outline"></Button>>
@@ -14,6 +17,9 @@
   <Label class="small-text" text="{{ npc.value.name }}"></Label>
   <Label class="small-text" text="HP:[{{ npc.value.nowHP }}] | Morale[{{ npc.value.morale }}] | Initiative[{{ npc.value.initiative}}]"></Label>
   <Label class="small-text" text="Evasion:[{{ npc.value.evasion }}] | Accuracy[{{ npc.value.accuracy }}]"></Label>
+  <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
+    <Button class="btn btn-outline" *ngFor="let move of npc.moves" text="{{ move.name }} [{{ move.nrgCost }} NRG] [+{{ move.minDamageDelta }} MINDMG] [+{{ move.maxDamageDelta }} MAXDMG]"></Button>
+  </FlexboxLayout>
 </StackLayout>
 <TextView *ngIf="activeMission.log?.length > 0" [text]="combatLog()" editable="false" class="input input-border"></TextView>
 

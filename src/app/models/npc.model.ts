@@ -1,6 +1,7 @@
 import { AttributeModel } from './attribute.model'
+import { FightMove } from './fight-move.model'
 import { ItemModel, EQUIP_CLASS } from './item.model'
-import { TARGET_TYPE, TargetModifier, TARGET_MODIFIER_RUNNER } from './target-modifier.model'
+import { TARGET_TYPE, TargetModifier, TARGET_MODIFIER_RUNNER, TARGET_CHANGE_SYMBOL } from './target-modifier.model'
 import { v4 as uuid } from 'uuid'
 
 export class NPCModel {
@@ -153,9 +154,11 @@ export class NPCModel {
         NPCModel.energize(npc, true)
       }
     }
+
+    return npc
   }
 
-  static setStats(npc: NPCModel, stats: NPCModel | any) {
+  static setStats(npc: NPCModel, stats: NPCModel) {
     npc.cost = stats.cost || (Math.floor((Math.random() * 100) + 300) / 1000) * 1000
     npc.maxHP = stats.maxHP || NPCBASESTATS.BASE.maxHP
     npc.nowHP = stats.nowHP || NPCBASESTATS.BASE.maxHP
@@ -263,11 +266,37 @@ export class NPCModel {
       + NPCBASESTATS[npc.baseStat].dexMod * npc.DEX)
   }
 
+  static defaultFightMove(npc: NPCModel) {
+    return new FightMove({
+      name: 'Basic Attack',
+      description: 'Your basic attack with no modifiers.',
+      nrgCost: 0
+    })
+  }
+
+  static restMove(npc: NPCModel) {
+    return new FightMove({
+      name: 'Basic Rest',
+      description: 'Your basic rest move.',
+      nrgCost: 0,
+      modifiers: [
+        new TargetModifier({
+          targetType: TARGET_TYPE.NPC,
+          targetId: npc.id,
+          targetKey: 'nowNRG',
+          targetChange: 1 + (npc.NRG / 100),
+          targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
+        })
+      ]
+    })
+  }
+
   id: string
   name: string
   description: string
   icon?: string
   cost?: number
+  moves?: Array<FightMove>
 
   isVillain?: boolean
   isAvailable?: boolean
@@ -321,6 +350,7 @@ export class NPCModel {
     this.id = stats.id || uuid()
     this.name = stats.name || ''
     this.description = stats.description || ''
+
     this.isVillain = !!stats.isVillain
     this.isAvailable = stats.isAvailable !== false
     this.isInjured = !!stats.isInjured
@@ -343,12 +373,14 @@ export class NPCModel {
     this.trinkets = stats.trinkets || []
     this.maxTrinkets = stats.maxTrinkets || NPCBASESTATS.BASE.maxTrinkets
     this.morale = stats.morale || NPCBASESTATS.BASE.morale
-
+    this.moves = [NPCModel.defaultFightMove(this), NPCModel.restMove(this)]
     this.originalStats = stats
 
     NPCModel.setStats(this, stats)
     NPCModel.heal(this, true)
     NPCModel.energize(this, true)
+
+    this.moves = [NPCModel.defaultFightMove(this), NPCModel.restMove(this)]
   }
 }
 
