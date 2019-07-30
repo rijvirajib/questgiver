@@ -47,7 +47,7 @@ export class InventoryComponent implements OnInit {
         })
       }
       if (this.npcId) {
-        this.activeNPC$ = this.store.select(MissionsState.crewById).pipe(map(filterFn => filterFn(this.missionId, this.npcId)))
+        this.activeNPC$ = this.store.select(MissionsState.npcByIds).pipe(map(filterFn => filterFn([this.npcId])))[0]
       }
     })
   }
@@ -64,10 +64,10 @@ export class InventoryComponent implements OnInit {
   }
 
   onTapItem(itemId: string) {
-    this.store.dispatch(new EquipNPC(this.missionId, this.npcId, itemId))
+    this.store.dispatch(new EquipNPC(this.npcId, itemId))
   }
 
   onTapUnequip(itemId: string) {
-    this.store.dispatch(new UnequipNPC(this.missionId, this.npcId, itemId))
+    this.store.dispatch(new UnequipNPC(this.npcId, itemId))
   }
 }

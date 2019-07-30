@@ -51,12 +51,12 @@ export class HireCrew {
 
 export class EquipNPC {
   static readonly type = '[Mission] Equip NPC'
-  constructor(public missionId: string, public npcId: string, public itemId: string) {}
+  constructor(public npcId: string, public itemId: string) {}
 }
 
 export class UnequipNPC {
   static readonly type = '[Mission] Unequip NPC'
-  constructor(public missionId: string, public npcId: string, public itemId: string) {}
+  constructor(public npcId: string, public itemId: string) {}
 }
 
 export class FireCrew {

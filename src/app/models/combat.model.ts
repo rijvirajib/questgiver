@@ -1,28 +1,29 @@
 import { Dice } from 'dice-typescript'
 import { EVENT_TYPES } from './event.model'
 import { MissionModel } from './mission.model'
+import { MissionStateModel } from '../states/missions/missions.model'
 import { NPC_STATUS } from './npc.model'
 import { ObstacleModel, OBSTACLE_TYPE } from './obstacle.model'
 import { TargetModifier, TARGET_TYPE } from './target-modifier.model'
 
 export class CombatModel {
-  static startDeploy(mission: MissionModel) {
-    mission = this.setInitiatives(mission)
-    mission = this.processObstaclesDisable(mission)
-    mission = this.processObstaclesActive(mission)
+  static startDeploy(state: MissionStateModel, missionId: string) {
+    state = this.setInitiatives(state, missionId)
+    state = this.processObstaclesDisable(state, missionId)
+    state = this.processObstaclesActive(state, missionId)
 
-    return mission
+    return state
   }
 
   // TODO: This is a TOTAL MESS :D
   // Disable Obstacles based on Trinkets and Attributes
-  static processObstaclesDisable(mission: MissionModel) {
+  static processObstaclesDisable(state: MissionStateModel, missionId: string) {
     let activeObstacles = 0
     const antiObstacles = Array<OBSTACLE_TYPE>()
-    mission.obstacles.forEach((obstacle: ObstacleModel, o) => {
+    state.missions[missionId].obstacles.forEach((obstacle: ObstacleModel, o) => {
       if (antiObstacles.length > 0 && antiObstacles.includes(obstacle.type)) {
-        mission = CombatModel.disableObstacle(mission, obstacle)
-        mission.log.push({
+        state = CombatModel.disableObstacle(state, missionId, obstacle.id)
+        state.missions[missionId].log.push({
           type: EVENT_TYPES.COMBAT,
           time: -1,
           message: `${obstacle.name} has been disabled.`
@@ -36,42 +37,42 @@ export class CombatModel {
           case TARGET_TYPE.ITEM:
           case TARGET_TYPE.ATTRIBUTE: {
             // Go through each NPC
-            Object.keys(mission.crew).forEach((villainId) => {
+            state.missions[missionId].crewIds.forEach((villainId) => {
               // Go through each Trinket
-              mission.crew[villainId].trinkets.forEach(trinket => {
-                if (trinket.id === target.targetId) {
-                  mission = CombatModel.disableObstacle(mission, obstacle)
+              state.npcs[villainId].trinkets.forEach(trinketId => {
+                if (trinketId === target.targetId) {
+                  state = CombatModel.disableObstacle(state, missionId, obstacle.id)
                   activeObstacles--
 
-                  mission.log.push({
+                  state.missions[missionId].log.push({
                     type: EVENT_TYPES.COMBAT,
                     time: -1,
-                    message: `${trinket.name} disabled ${obstacle.name}`
+                    message: `${state.inventory[trinketId].name} disabled ${obstacle.name}`
                   })
                 }
                 // Since I am already at the Trinkets.. check their antiObstacles
-                trinket.antiObstacles.forEach((obstacleType: OBSTACLE_TYPE) => {
+                state.inventory[trinketId].antiObstacles.forEach((obstacleType: OBSTACLE_TYPE) => {
                   antiObstacles.push(obstacleType)
                   if (obstacleType === obstacle.type) {
-                    mission = CombatModel.disableObstacle(mission, obstacle)
+                    state = CombatModel.disableObstacle(state, missionId, obstacle.id)
                     activeObstacles--
 
-                    mission.log.push({
+                    state.missions[missionId].log.push({
                       type: EVENT_TYPES.COMBAT,
                       time: -1,
-                      message: `${trinket.name} disabled ${obstacle.name}`
+                      message: `${state.inventory[trinketId].name} disabled ${obstacle.name}`
                     })
                   }
                 })
               })
 
               // Go through each attribute
-              mission.crew[villainId].attributes.forEach(attribute => {
+              state.npcs[villainId].attributes.forEach(attribute => {
                 if (attribute.id === target.targetId) {
-                  mission = CombatModel.disableObstacle(mission, obstacle)
+                  state = CombatModel.disableObstacle(state, missionId, obstacle.id)
                   activeObstacles--
 
-                  mission.log.push({
+                  state.missions[missionId].log.push({
                     type: EVENT_TYPES.COMBAT,
                     time: -1,
                     message: `${attribute.name} disabled ${obstacle.name}`
@@ -94,76 +95,75 @@ export class CombatModel {
       // Do obstacle negatives for active obstacles
     }
 
-    return mission
+    return state
   }
 
-  // TODO: Is this really pass by reference? Not sure
-  // Grab the ID just in case it's not an ObstacleModel()
-  static disableObstacle(mission: MissionModel, obstacle: ObstacleModel) {
-    const index = mission.obstacles.findIndex(o => o.id === obstacle.id)
+  static disableObstacle(state: MissionStateModel, missionId: string, obstacleId: string) {
+    const index = state.missions[missionId].obstacles.findIndex(o => o.id === obstacleId)
     // -1 should never be possible but why not
     if (index !== -1) {
-      mission.obstacles[index].isDisabled = true
+      state.missions[missionId].obstacles[index].isDisabled = true
       // This is always an NPC ID now
+      const obstacle = state.missions[missionId].obstacles[index]
       if (obstacle.type === OBSTACLE_TYPE.NPC && obstacle.npcId) {
-        if (mission.heroes[obstacle.npcId]) {
-          mission.heroes[obstacle.npcId].isRunAway = true
-          mission.heroes[obstacle.npcId].status = NPC_STATUS.RUNAWAY
+        if (state.npcs[obstacle.npcId]) {
+          state.npcs[obstacle.npcId].isRunAway = true
+          state.npcs[obstacle.npcId].status = NPC_STATUS.RUNAWAY
 
-          mission.log.push({
+          state.missions[missionId].log.push({
             type: EVENT_TYPES.COMBAT,
             time: -1,
-            message: `${mission.heroes[obstacle.npcId].name} ran away.`
+            message: `${state.npcs[obstacle.npcId].name} ran away.`
           })
         }
       }
     }
 
-    return mission
+    return state
   }
 
   // Do bad stuff of obstacles not disabled
-  static processObstaclesActive(mission: MissionModel) {
-    return mission
+  static processObstaclesActive(state: MissionStateModel, missionId: string) {
+    return state
   }
 
   // Set the initial initiative for everyone
-  static setInitiatives(mission: MissionModel) {
+  static setInitiatives(state: MissionStateModel, missionId: string) {
     const dice = new Dice()
     const surpriseAttack = dice.roll('1d20').total
 
-    Object.keys(mission.crew).forEach(npcId => {
+    state.missions[missionId].crewIds.forEach(npcId => {
       if (surpriseAttack >= 18) {
-        mission.crew[npcId].initiative = 100
-        mission.log.push({
+        state.npcs[npcId].initiative = 100
+        state.missions[missionId].log.push({
           type: EVENT_TYPES.COMBAT,
           time: -1,
-          message: `Surprise attack by ${mission.crew[npcId].name}!`
+          message: `Surprise attack by ${state.npcs[npcId].name}!`
         })
       } else {
-        mission.crew[npcId].initiative = Math.floor(dice.roll('1d20').total + mission.crew[npcId].speed)
-        if (mission.crew[npcId].initiative > 100) {
-          mission.crew[npcId].initiative = 100
+        state.npcs[npcId].initiative = Math.floor(dice.roll('1d20').total + state.npcs[npcId].speed)
+        if (state.npcs[npcId].initiative > 100) {
+          state.npcs[npcId].initiative = 100
         }
       }
     })
 
-    Object.keys(mission.heroes).forEach(npcId => {
+    state.missions[missionId].heroIds.forEach(npcId => {
       if (surpriseAttack <= 1) {
-        mission.heroes[npcId].initiative = 100
-        mission.log.push({
+        state.npcs[npcId].initiative = 100
+        state.missions[missionId].log.push({
           type: EVENT_TYPES.COMBAT,
           time: -1,
-          message: `Surprise attack by enemy ${mission.heroes[npcId].name}!`
+          message: `Surprise attack by enemy ${state.npcs[npcId].name}!`
         })
       } else {
-        mission.heroes[npcId].initiative = Math.floor(dice.roll('1d20').total + mission.heroes[npcId].speed)
-        if (mission.heroes[npcId].initiative > 100) {
-          mission.heroes[npcId].initiative = 100
+        state.npcs[npcId].initiative = Math.floor(dice.roll('1d20').total + state.npcs[npcId].speed)
+        if (state.npcs[npcId].initiative > 100) {
+          state.npcs[npcId].initiative = 100
         }
       }
     })
 
-    return mission
+    return state
   }
 }

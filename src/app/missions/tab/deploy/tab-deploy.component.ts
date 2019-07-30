@@ -19,6 +19,8 @@ import { map } from 'rxjs/operators'
 export class MissionTabDeployComponent implements OnInit {
   @Input() activeMission: MissionModel
   activeMission$: Observable<MissionModel>
+  crew: Array<NPCModel>
+  heroes: Array<NPCModel>
 
   constructor(
     private store: Store,
@@ -30,11 +32,17 @@ export class MissionTabDeployComponent implements OnInit {
     this.activeMission$ = this.store.select(MissionsState.missionById).pipe(map(filterFn => filterFn(this.activeMission.id)))
     this.activeMission$.subscribe(aM => {
       this.activeMission = aM
+      this.store.select(MissionsState.npcByIds).pipe(map(filterFn => filterFn([...aM.crewIds]))).subscribe(crew => {
+        this.crew = crew || []
+      })
+      this.store.select(MissionsState.npcByIds).pipe(map(filterFn => filterFn([...aM.heroIds]))).subscribe(heroes => {
+        this.heroes = heroes || []
+      })
     })
   }
 
   isDeployable() {
-    return this.activeMission.times.accepted && Object.keys(this.activeMission.crew).length > 0
+    return this.activeMission.times.accepted && this.activeMission.crewIds.length > 0
   }
 
   onDeploy() {

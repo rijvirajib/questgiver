@@ -1,54 +1,51 @@
 import { AttributeModel } from './attribute.model'
 import { FightMove } from './fight-move.model'
 import { ItemModel, EQUIP_CLASS } from './item.model'
+import { MissionStateModel } from '../states/missions/missions.model'
 import { TARGET_TYPE, TargetModifier, TARGET_MODIFIER_RUNNER, TARGET_CHANGE_SYMBOL } from './target-modifier.model'
 import { v4 as uuid } from 'uuid'
 
 export class NPCModel {
 
-  static equipItem(npc: NPCModel, item: ItemModel): NPCModel {
+  static equipItem(state: MissionStateModel, npcId: string, itemId: string) {
     // Attributes First
-    if (item.equipClass === EQUIP_CLASS.Trinket) {
+    if (state.inventory[itemId].equipClass === EQUIP_CLASS.Trinket) {
       // Already maxed out
-      if (npc.trinkets.length >= npc.maxTrinkets) {
-        return npc
+      if (state.npcs[npcId].trinkets.length >= state.npcs[npcId].maxTrinkets) {
+        console.log('Cannot equip trinket, maxed out')
+
+        return state
       }
-      npc.trinkets.push(item)
+      state.npcs[npcId].trinkets.push(itemId)
     } else {
-      npc.gear[item.equipClass] = item
+      state.npcs[npcId].gear[state.inventory[itemId].equipClass] = itemId
     }
-    item.attributes.forEach(attribute => {
-      npc = NPCModel.modifyNPC(npc, attribute.modifiers)
+    state.inventory[itemId].attributes.forEach(attribute => {
+      state.npcs[npcId] = NPCModel.modifyNPC(state.npcs[npcId], attribute.modifiers)
     })
 
     // Run through item modifiers
-    npc = NPCModel.modifyNPC(npc, item.modifiers)
-    NPCModel.recalculateStats(npc)
+    state.npcs[npcId] = NPCModel.modifyNPC(state.npcs[npcId], state.inventory[itemId].modifiers)
+    state.npcs[npcId] = NPCModel.recalculateStats(state.npcs[npcId])
 
-    return npc
+    return state
   }
 
-  static unEquipItem(npc: NPCModel, item: ItemModel): NPCModel {
+  static unEquipItem(state: MissionStateModel, npcId: string, itemId: string) {
     // Attributes First
     // TODO: UNDO LOGIC NEEDS WORK - right now we just recalculate all the stats
-    if (item.equipClass === EQUIP_CLASS.Trinket) {
-      const index: number = npc.trinkets.findIndex(x => x.id === item.id)
+    if (state.inventory[itemId].equipClass === EQUIP_CLASS.Trinket) {
+      const index: number = state.npcs[npcId].trinkets.findIndex(x => x === state.inventory[itemId].id)
       if (index !== -1) {
-        npc.trinkets.splice(index, 1)
+        state.npcs[npcId].trinkets.splice(index, 1)
       }
     } else {
-      npc.gear[item.equipClass] = undefined
+      state.npcs[npcId].gear[state.inventory[itemId].equipClass] = undefined
     }
 
-    // item.attributes.forEach(attribute => {
-    //   npc = NPCModel.modifyNPC(npc, attribute.modifiers, true)
-    // })
+    NPCModel.recalculateStats(state.npcs[npcId], false, true)
 
-    // Run through item modifiers
-    // npc = NPCModel.modifyNPC(npc, item.modifiers, true)
-    NPCModel.recalculateStats(npc, false, true)
-
-    return npc
+    return state
   }
 
   static modifyNPC(npc: NPCModel, modifiers: Array<TargetModifier>, undo = false) {
@@ -182,19 +179,6 @@ export class NPCModel {
     NPCModel.recalculateDodge(npc)
 
     npc.morale = stats.morale
-
-    // Equip Items
-    if (stats.gear) {
-      Object.keys(stats.gear).forEach(slot => {
-        NPCModel.equipItem(npc, stats.gear[slot])
-      })
-    }
-
-    if (stats.trinkets && stats.trinkets.length > 0) {
-      for (const trinket of stats.trinkets) {
-        NPCModel.equipItem(npc, trinket)
-      }
-    }
 
     // Process attributes
     npc.attributes.forEach(attribute => {
@@ -335,13 +319,13 @@ export class NPCModel {
   attributes?: Array<AttributeModel>
 
   gear: {
-    [EQUIP_CLASS.Weapon]?: ItemModel
-    [EQUIP_CLASS.Offhand]?: ItemModel
-    [EQUIP_CLASS.Helm]?: ItemModel
-    [EQUIP_CLASS.Chest]?: ItemModel
-    [EQUIP_CLASS.Legs]?: ItemModel
+    [EQUIP_CLASS.Weapon]?: ItemModel['id']
+    [EQUIP_CLASS.Offhand]?: ItemModel['id']
+    [EQUIP_CLASS.Helm]?: ItemModel['id']
+    [EQUIP_CLASS.Chest]?: ItemModel['id']
+    [EQUIP_CLASS.Legs]?: ItemModel['id']
   }
-  trinkets?: Array<ItemModel>
+  trinkets?: Array<ItemModel['id']>
   maxTrinkets?: number
 
   originalStats: any

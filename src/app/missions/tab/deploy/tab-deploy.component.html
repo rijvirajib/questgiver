@@ -1,22 +1,24 @@
 <Label text="Deploy" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
 <speed-controls></speed-controls>
 <Label text="Crew" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
-<StackLayout *ngFor="let npc of activeMission.crew | keyvalue">
-  <Label class="small-text" text="{{ npc.value.name }}"></Label>
-  <Label class="small-text" text="HP:[{{ npc.value.nowHP }}] | Morale[{{ npc.value.morale }}] | Initiative[{{ npc.value.initiative}}]"></Label>
-  <Label class="small-text" text="Evasion:[{{ npc.value.evasion }}] | Accuracy[{{ npc.value.accuracy }}]"></Label>
-  <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
-    <Button class="btn btn-outline" *ngFor="let move of npc.moves" text="{{ move.name }} [{{ move.nrgCost }} NRG] [+{{ move.minDamageDelta }} MINDMG] [+{{ move.maxDamageDelta }} MAXDMG]"></Button>
+<ng-container *ngIf="crew">
+  <StackLayout *ngFor="let npc of crew">
+    <Label class="small-text" text="{{ npc.name }}"></Label>
+    <Label class="small-text" text="HP:[{{ npc.nowHP }}] | Morale[{{ npc.morale }}] | Initiative[{{ npc.initiative}}]"></Label>
+    <Label class="small-text" text="Evasion:[{{ npc.evasion }}] | Accuracy[{{ npc.accuracy }}]"></Label>
+    <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
+      <Button class="btn btn-outline" *ngFor="let move of npc.moves" text="{{ move.name }} [{{ move.nrgCost }} NRG] [+{{ move.minDamageDelta }} MINDMG] [+{{ move.maxDamageDelta }} MAXDMG]"></Button>
+    </FlexboxLayout>
+  </StackLayout>
+  <FlexboxLayout *ngIf="isDeployable()" orientation="horizontal" justifyContent="space-between">
+    <Button text="Deploy!" (tap)="onDeploy()" class="btn btn-outline"></Button>>
   </FlexboxLayout>
-</StackLayout>
-<FlexboxLayout *ngIf="isDeployable()" orientation="horizontal" justifyContent="space-between">
-  <Button text="Deploy!" (tap)="onDeploy()" class="btn btn-outline"></Button>>
-</FlexboxLayout>
+</ng-container>
 <Label text="Heroes" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
-<StackLayout *ngFor="let npc of activeMission.heroes | keyvalue">
-  <Label class="small-text" text="{{ npc.value.name }}"></Label>
-  <Label class="small-text" text="HP:[{{ npc.value.nowHP }}] | Morale[{{ npc.value.morale }}] | Initiative[{{ npc.value.initiative}}]"></Label>
-  <Label class="small-text" text="Evasion:[{{ npc.value.evasion }}] | Accuracy[{{ npc.value.accuracy }}]"></Label>
+<StackLayout *ngFor="let npc of heroes">
+  <Label class="small-text" text="{{ npc.name }}"></Label>
+  <Label class="small-text" text="HP:[{{ npc.nowHP }}] | Morale[{{ npc.morale }}] | Initiative[{{ npc.initiative}}]"></Label>
+  <Label class="small-text" text="Evasion:[{{ npc.evasion }}] | Accuracy[{{ npc.accuracy }}]"></Label>
   <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
     <Button class="btn btn-outline" *ngFor="let move of npc.moves" text="{{ move.name }} [{{ move.nrgCost }} NRG] [+{{ move.minDamageDelta }} MINDMG] [+{{ move.maxDamageDelta }} MAXDMG]"></Button>
   </FlexboxLayout>

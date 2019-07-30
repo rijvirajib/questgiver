@@ -22,7 +22,9 @@ export class MissionTabCrewComponent implements OnInit {
   @Select(MissionsState.availableVillains)
   availableVillains$: Observable<MissionStateModel>
 
-  hiredVillains$: Observable<Array<NPCModel>>
+  // This observable doesn't work for some reason when the initial response is []
+  // hiredVillains$: Observable<Array<NPCModel>>
+  hiredVillains: Array<NPCModel>
 
   constructor(
     private store: Store,
@@ -30,7 +32,9 @@ export class MissionTabCrewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.hiredVillains$ = this.store.select(MissionsState.crewByMissionId).pipe(map(filterFn => filterFn(this.activeMission.id)))
+    this.store.select(MissionsState.crewByMissionId).pipe(map(filterFn => filterFn(this.activeMission.id))).subscribe(npcs => {
+      this.hiredVillains = npcs || []
+    })
   }
 
   fire(villain: NPCModel) {
