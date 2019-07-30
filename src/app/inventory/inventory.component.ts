@@ -22,7 +22,9 @@ export class InventoryComponent implements OnInit {
   npcId: string
   equipClass: string
   activeMission: MissionModel
-  activeNPC$: Observable<NPCModel>
+  activeNPC$: Observable<Array<NPCModel>>
+  activeNPC: NPCModel
+  npcItems$: Observable<{[id: string]: ItemModel}>
 
   inventoryItems$: Observable<Array<ItemModel>>
 
@@ -47,7 +49,11 @@ export class InventoryComponent implements OnInit {
         })
       }
       if (this.npcId) {
-        this.activeNPC$ = this.store.select(MissionsState.npcByIds).pipe(map(filterFn => filterFn([this.npcId])))[0]
+        this.activeNPC$ = this.store.select(MissionsState.npcByIds).pipe(map(filterFn => filterFn([this.npcId])))
+        this.activeNPC$.subscribe(npcs => {
+          this.activeNPC = npcs[0]
+          this.npcItems$ = this.store.select(MissionsState.npcItems).pipe(map(filterFn => filterFn(this.activeNPC)))
+        })
       }
     })
   }

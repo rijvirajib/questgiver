@@ -94,7 +94,7 @@ export class MissionsState {
 
   @Selector()
   static inventoryItems(state: MissionStateModel) {
-    return (equipClass?: string) => {
+    return (equipClass?: string, availableOnly = true) => {
       if (equipClass) {
         return Object.values(state.inventory).map(v => v).filter(v => {
           if (v.isAvailable && v.equipClass === equipClass) {
@@ -103,11 +103,28 @@ export class MissionsState {
         })
       }
 
-      return Object.values(state.inventory).map(v => {
+      return Object.values(state.inventory).filter(v => {
         if (v.isAvailable) {
           return v
         }
       })
+    }
+  }
+
+  @Selector()
+  static npcItems(state: MissionStateModel) {
+    return (npc?: NPCModel) => {
+      const items = {}
+
+      Object.values(npc.gear).map(itemId => {
+        items[itemId] = state.inventory[itemId]
+      })
+
+      npc.trinkets.forEach(itemId => {
+        items[itemId] = state.inventory[itemId]
+      })
+
+      return items
     }
   }
 
@@ -285,6 +302,7 @@ export class MissionsState {
   ) {
     setState((state: MissionStateModel) => {
       // Attach Item to NPC state
+      state.inventory[itemId].isAvailable = false
       state = NPCModel.equipItem(state, npcId, itemId)
 
       return state
@@ -298,6 +316,7 @@ export class MissionsState {
     { npcId, itemId }: UnequipNPC
   ) {
     setState((state: MissionStateModel) => {
+      console.log('got itemId', itemId)
       state.inventory[itemId].isAvailable = true
 
       // Attach Item

@@ -34,7 +34,6 @@ export class MissionTabDeployComponent implements OnInit {
     this.activeMission$ = this.store.select(MissionsState.missionById).pipe(map(filterFn => filterFn(this.activeMission.id)))
     this.activeMission$.subscribe(aM => {
       this.activeMission = aM
-      console.log('but is activeMission loaded?')
       if (this.activeMission.times.accepted && this.activeMission.crewIds.length > 0) {
         this.isDeployable = true
       }
@@ -46,9 +45,6 @@ export class MissionTabDeployComponent implements OnInit {
       })
     })
     this.crew$ = this.store.select(MissionsState.npcByIds).pipe(map(filterFn => filterFn([...this.activeMission.crewIds])))
-    this.crew$.subscribe(o => {
-      console.log('crew loaded...')
-    })
   }
 
   onDeploy() {

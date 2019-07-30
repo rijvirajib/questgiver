@@ -12,8 +12,6 @@ export class NPCModel {
     if (state.inventory[itemId].equipClass === EQUIP_CLASS.Trinket) {
       // Already maxed out
       if (state.npcs[npcId].trinkets.length >= state.npcs[npcId].maxTrinkets) {
-        console.log('Cannot equip trinket, maxed out')
-
         return state
       }
       state.npcs[npcId].trinkets.push(itemId)

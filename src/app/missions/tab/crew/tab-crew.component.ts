@@ -1,6 +1,6 @@
 import { AcceptMission, RejectMission, HireCrew, FireCrew } from '~/app/states'
 import { Component, OnInit, Input } from '@angular/core'
-import { EQUIP_CLASS } from '~/app/models/item.model'
+import { EQUIP_CLASS, ItemModel } from '~/app/models/item.model'
 import { EVENT_TYPES } from '~/app/models/event.model'
 import { MissionModel, MISSION_STEP } from '~/app/models/mission.model'
 import { MissionStateModel } from '~/app/states/missions/missions.model'
@@ -23,8 +23,8 @@ export class MissionTabCrewComponent implements OnInit {
   availableVillains$: Observable<MissionStateModel>
 
   // This observable doesn't work for some reason when the initial response is []
-  // hiredVillains$: Observable<Array<NPCModel>>
-  hiredVillains: Array<NPCModel>
+  hiredVillains$: Observable<Array<NPCModel>>
+  inventory$: Observable<{[id: string]: ItemModel}>
 
   constructor(
     private store: Store,
@@ -32,9 +32,8 @@ export class MissionTabCrewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.store.select(MissionsState.crewByMissionId).pipe(map(filterFn => filterFn(this.activeMission.id))).subscribe(npcs => {
-      this.hiredVillains = npcs || []
-    })
+    this.hiredVillains$ = this.store.select(MissionsState.crewByMissionId).pipe(map(filterFn => filterFn(this.activeMission.id)))
+    this.inventory$ = this.store.select(state => state.missions.inventory)
   }
 
   fire(villain: NPCModel) {
