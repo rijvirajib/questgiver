@@ -269,7 +269,9 @@ export class MissionsState {
       state.npcs[npc.id].isAvailable = false
       state.npcs[npc.id].status = NPC_STATUS.ACTIVE
       // Attach NPC
-      state.missions[mission.id].crewIds.push(npc.id)
+      if (state.missions[mission.id].crewIds.indexOf(npc.id) === -1) {
+        state.missions[mission.id].crewIds.push(npc.id)
+      }
 
       return state
     })
@@ -315,7 +317,7 @@ export class MissionsState {
       state.npcs[npc.id].isAvailable = true
       state.npcs[npc.id].status = NPC_STATUS.INACTIVE
 
-      // Remove NPC
+      // Remove NPC from Mission Crew
       state.missions[mission.id].crewIds = state.missions[mission.id].crewIds.filter(npcId => npcId !== npc.id)
 
       return state
@@ -414,7 +416,9 @@ export class MissionsState {
           state.npcs[obstacle.npcId].status = NPC_STATUS.DEPLOY
           state.npcs[obstacle.npcId].morale = 100
 
-          state.missions[mission.id].heroIds.push(obstacle.npcId)
+          if (state.missions[mission.id].heroIds.indexOf(obstacle.npcId) === -1) {
+            state.missions[mission.id].heroIds.push(obstacle.npcId)
+          }
         }
       })
 
