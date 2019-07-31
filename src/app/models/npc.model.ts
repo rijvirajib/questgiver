@@ -14,7 +14,7 @@ export class NPCModel {
       if (state.npcs[npcId].trinkets.length >= state.npcs[npcId].maxTrinkets) {
         return state
       }
-      state.npcs[npcId].trinkets.push(itemId)
+      state.npcs[npcId].trinkets = state.npcs[npcId].trinkets.concat(itemId)
     } else {
       state.npcs[npcId].gear[state.inventory[itemId].equipClass] = itemId
     }
@@ -205,11 +205,11 @@ export class NPCModel {
   }
 
   static calcEvasion(npc: NPCModel) {
-    return (Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[npc.baseStat].dexMod * npc.DEX + npc.level) / 100
+    return Math.floor((Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[npc.baseStat].dexMod * npc.DEX + npc.level) / 100)
   }
 
   static calcAccuracy(npc: NPCModel) {
-    return (Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[npc.baseStat].dexMod * npc.DEX + npc.level) /  100
+    return Math.floor((Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[npc.baseStat].dexMod * npc.DEX + npc.level) /  100)
   }
 
   static calcMaxNRG(npc: NPCModel) {

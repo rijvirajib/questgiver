@@ -18,6 +18,7 @@ import { map } from 'rxjs/operators'
 })
 export class MissionTabCrewComponent implements OnInit {
   @Input() activeMission: MissionModel
+  activeMission$: Observable<MissionModel>
 
   @Select(MissionsState.availableVillains)
   availableVillains$: Observable<MissionStateModel>
@@ -32,6 +33,10 @@ export class MissionTabCrewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.activeMission$ = this.store.select(MissionsState.missionById).pipe(map(filterFn => filterFn(this.activeMission.id)))
+    this.activeMission$.subscribe(aM => {
+      this.activeMission = aM
+    })
     this.hiredVillains$ = this.store.select(MissionsState.crewByMissionId).pipe(map(filterFn => filterFn(this.activeMission.id)))
     this.inventory$ = this.store.select(state => state.missions.inventory)
   }

@@ -1,7 +1,8 @@
+<speed-controls></speed-controls>
 <ScrollView backgroundColor="#e8e7e7">
   <StackLayout>
     <Label text="Crew" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
-    <FlexboxLayout flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
+    <FlexboxLayout *ngIf="hiredVillains$ | async" flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
       <StackLayout *ngFor="let villain of hiredVillains$ | async; index as i" id="villain{{i}}" orientation="vertical" class="mission-list-item" width="100%">
         <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-main-info" verticalAlignment="top">
           <Image row="0" col="0" src="{{ villain.icon }}" class="mission-category-icon"></Image>
@@ -50,7 +51,7 @@
       </StackLayout>
     </FlexboxLayout>
     <Label text="Villain Directory" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
-    <FlexboxLayout flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
+    <FlexboxLayout *ngIf="availableVillains$ | async" flexDirection="column" class="mission-list" backgroundColor="#e8e7e7">
       <StackLayout *ngFor="let villain of availableVillains$ | async; index as i" id="availableVillains{{i}}" orientation="vertical" class="mission-list-item" width="100%">
         <GridLayout columns="auto, *, auto" rows="auto" width="100%" height="auto" class="mission-main-info" verticalAlignment="top">
           <Image row="0" col="0" src="{{ villain.icon }}" class="mission-category-icon"></Image>
