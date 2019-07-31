@@ -590,7 +590,7 @@ export class MissionsState {
       }
       const targetNPC: NPCModel = targetNPCId ? state.npcs[targetNPCId] : state.npcs[this.getRandomTarget(state.missions[missionId].heroIds)]
       const fightMove: FightMove = state.npcs[npcId].moves[moveIndex]
-      const hitChance = Math.floor(((npc.accuracy - targetNPC.evasion) / npc.accuracy) * 100)
+      const hitChance = Math.abs(Math.floor(((npc.accuracy - targetNPC.evasion) / npc.accuracy) * 100))
       const randomNumber = (Math.floor(Math.random() * (25 - 2)) + 2)
       if (hitChance <= 0 || randomNumber > hitChance) {
         dispatch(new MissionLog(

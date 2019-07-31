@@ -22,7 +22,7 @@
         <Label class="small-text" text="HP {{ npc.nowHP }} | Morale {{ npc.morale }} | Initiative {{ npc.initiative }}"></Label>
         <Label class="small-text" text="Evasion {{ npc.evasion }} | Accuracy {{ npc.accuracy }}"></Label>
       </StackLayout>
-      <TextView *ngIf="activeMission.log.length > 0" [text]="combatLog()" editable="false" class="input input-border"></TextView>
+      <TextView class="log-combat" *ngIf="activeMission.log.length > 0" [text]="combatLog()" editable="false" class="input input-border"></TextView>
     </div>
   </StackLayout>
 </ScrollView>

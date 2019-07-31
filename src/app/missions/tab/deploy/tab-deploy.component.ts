@@ -67,6 +67,6 @@ export class MissionTabDeployComponent implements OnInit {
       if (event.type === EVENT_TYPES.COMBAT) {
         return event
       }
-    }).map(l => l.message).join('\n')
+    }).map(l => l.message).reverse().join('\n')
   }
 }
