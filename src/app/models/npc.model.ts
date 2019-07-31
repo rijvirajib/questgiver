@@ -1,5 +1,5 @@
 import { AttributeModel } from './attribute.model'
-import { FightMove } from './fight-move.model'
+import { FightMove, FIGHTMOVE_TARGET } from './fight-move.model'
 import { ItemModel, EQUIP_CLASS } from './item.model'
 import { MissionStateModel } from '../states/missions/missions.model'
 import { TARGET_TYPE, TargetModifier, TARGET_MODIFIER_RUNNER, TARGET_CHANGE_SYMBOL } from './target-modifier.model'
@@ -275,6 +275,7 @@ export class NPCModel {
       name: 'Rest',
       description: 'Your basic rest move.',
       nrgCost: 0,
+      target: FIGHTMOVE_TARGET.SELF,
       modifiers: [
         new TargetModifier({
           targetType: TARGET_TYPE.NPC,
@@ -411,7 +412,7 @@ export const NPCBASESTATS = {
     STR: 2,
     DEX: 2,
     NRG: 2,
-    maxHP: 1000,
+    maxHP: 500,
     maxNRG: 5,
     morale: 100,
     maxTrinkets: 2

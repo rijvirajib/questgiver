@@ -16,6 +16,7 @@ export class FightMove {
 
   // Can do ANYTHING!
   // TODO: Inflict Attributes and DOTs
+  target?: FIGHTMOVE_TARGET
   modifiers?: Array<TargetModifier>
 
   constructor(params: FightMove) {
@@ -30,6 +31,15 @@ export class FightMove {
     this.maxDamageDelta = params.maxDamageDelta || 0
     this.isMultiplier = !!params.isMultiplier
 
+    this.target = params.target || FIGHTMOVE_TARGET.ENEMY
     this.modifiers = params.modifiers || []
   }
+}
+
+export enum FIGHTMOVE_TARGET {
+  ALL, // Could potentially damage allies (UNLESS YOU HAVE NONE, MWHAHAHAHA)
+  SELF, // Heals
+  ALLIES, // Global Heals
+  ENEMY,
+  ENEMIES,
 }
