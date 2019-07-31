@@ -25,6 +25,6 @@ export class SpeedComponent implements OnInit {
   }
 
   onSpeed(event: any) {
-    this.store.dispatch(new ChangeSpeed(2))
+    this.store.dispatch(new ChangeSpeed(8))
   }
 }
