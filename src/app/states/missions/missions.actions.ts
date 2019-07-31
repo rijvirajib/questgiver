@@ -67,7 +67,7 @@ export class FireCrew {
 
 export class AttackNPC {
   static readonly type = '[Mission] Attack NPC'
-  constructor(public missionId: string, public npcId: string, public moveIndex: number) {}
+  constructor(public missionId: string, public npcId: string, public moveIndex: number, public targetNPCId?: string) {}
 }
 
 export class MissionLog {
