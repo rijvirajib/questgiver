@@ -8,11 +8,11 @@
     <ng-container *ngIf="activeNPC as npc;">
       <ng-container *ngIf="npcItems$ | async; let npcItems">
         <Label text="Currently Equipped" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
-        <Button (tap)="onTapUnequip(npc.gear.weapon)" text="Uneqip Weapon: {{ npcItems[npc.gear.weapon].name }}" *ngIf="npc.gear.weapon" [isEnabled]="!npcItems[npc.gear.weapon].isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
-        <Button (tap)="onTapUnequip(npc.gear.offhand)" text="Uneqip IsTwoHanded: {{ npcItems[npc.gear.offhand].name }}" *ngIf="npc.gear.offhand" [isEnabled]="!npcItems[npc.gear.weapon].isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
-        <Button (tap)="onTapUnequip(npc.gear.helm)" text="Uneqip Helm: {{ npcItems[npc.gear.helm].name }}" *ngIf="npc.gear.helm" [isEnabled]="!npcItems[npc.gear.helm].isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
-        <Button (tap)="onTapUnequip(npc.gear.chest)" text="Uneqip Chest: {{ npcItems[npc.gear.chest].name }}" *ngIf="npc.gear.chest" [isEnabled]="!npcItems[npc.gear.chest].isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
-        <Button (tap)="onTapUnequip(npc.gear.leg)" text="Uneqip Leg: {{ npcItems[npc.gear.leg].name }}" *ngIf="npc.gear.leg" [isEnabled]="!npcItems[npc.gear.leg].isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
+        <Button (tap)="onTapUnequip(npc.gear.weapon)" text="Uneqip Weapon: {{ npcItems[npc.gear.weapon].name }}" *ngIf="npc.gear?.weapon" [isEnabled]="!npcItems[npc.gear?.weapon].isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
+        <Button (tap)="onTapUnequip(npc.gear.offhand)" text="Uneqip IsTwoHanded: {{ npcItems[npc.gear.offhand].name }}" *ngIf="npc.gear?.offhand" [isEnabled]="!npcItems[npc.gear?.weapon].isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
+        <Button (tap)="onTapUnequip(npc.gear.helm)" text="Uneqip Helm: {{ npcItems[npc.gear.helm].name }}" *ngIf="npc.gear?.helm" [isEnabled]="!npcItems[npc.gear?.helm].isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
+        <Button (tap)="onTapUnequip(npc.gear.chest)" text="Uneqip Chest: {{ npcItems[npc.gear.chest].name }}" *ngIf="npc.gear?.chest" [isEnabled]="!npcItems[npc.gear?.chest].isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
+        <Button (tap)="onTapUnequip(npc.gear.leg)" text="Uneqip Leg: {{ npcItems[npc.gear.leg].name }}" *ngIf="npc.gear?.leg" [isEnabled]="!npcItems[npc.gear?.leg].isSignature" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
         <Button (tap)="onTapUnequip(trinketId)" *ngFor="let trinketId of npc.trinkets" text="Trinket: {{ npcItems[trinketId].name }}" textWrap="true" class="btn btn-primary m-15 h4 text-center"></Button>
       </ng-container>
     </ng-container>

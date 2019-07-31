@@ -1,6 +1,7 @@
 import { ATTRIBUTES, NPC_ATTRIBUTES } from './attributes'
 import { AttributeModel } from '../models/attribute.model'
 import { EQUIP_CLASS, ItemModel } from '../models/item.model'
+import { FightMove } from '../models/fight-move.model'
 import { INVENTORY_ITEMS } from './inventory-items'
 import { NPCModel, NPC_BASE_STAT } from '../models/npc.model'
 
@@ -23,7 +24,15 @@ export const NPC: { [id: string]: NPCModel } = {
     ],
     gear: {
       [EQUIP_CLASS.Weapon]: new ItemModel(INVENTORY_ITEMS.HawkPersonAxe)
-    }
+    },
+    moves: [
+      new FightMove({
+        name: 'Air Drop',
+        description: 'Flying straight up and diving down, a hit from this can be devastating.',
+        minDamageDelta: 1.5,
+        maxDamageDelta: 1.5
+      })
+    ]
   }),
   Batmanuel: new NPCModel({
     id: 'Batmanuel',

@@ -4,12 +4,11 @@
     <div *ngIf="crew">
       <Label text="Crew" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
       <StackLayout *ngFor="let npc of crew$ | async">
-        <Label class="small-text" text="{{ npc.name }}"></Label>
-        <Label class="small-text" text="STR {{ npc.STR }} | DEX {{ npc.DEX }} | NRG {{ npc.NRG }}"></Label>
+        <Label class="small-text" text="{{ npc.name }} STR {{ npc.STR }} | DEX {{ npc.DEX }} | NRG {{ npc.NRG }}"></Label>
         <Label class="small-text" text="HP {{ npc.nowHP }} | Morale {{ npc.morale }} | Initiative {{ npc.initiative }}"></Label>
         <Label class="small-text" text="Evasion {{ npc.evasion }} | Accuracy {{ npc.accuracy }}"></Label>
         <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
-          <Button class="btn btn-outline btn-small" *ngFor="let move of npc.moves; let i = index" (tap)="onAttack(npc.id, i)" text="{{ move.name }} {{ move.nrgCost }} +{{ move.minDamageDelta }}/+{{ move.maxDamageDelta }}"></Button>
+          <Button class="btn btn-outline btn-small" *ngFor="let move of npc.moves; let i = index" (tap)="onAttack(npc, i)" text="{{ move.name }} {{ move.nrgCost }} +{{ move.minDamageDelta }}/+{{ move.maxDamageDelta }}"></Button>
         </FlexboxLayout>
       </StackLayout>
       <FlexboxLayout *ngIf="isDeployable" orientation="horizontal" justifyContent="space-between">
@@ -19,13 +18,9 @@
     <div *ngIf="heroes">
       <Label text="Heroes" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
       <StackLayout *ngFor="let npc of heroes">
-        <Label class="small-text" text="{{ npc.name }}"></Label>
-        <Label class="small-text" text="STR {{ npc.STR }} | DEX {{ npc.DEX }} | NRG {{ npc.NRG }}"></Label>
+        <Label class="small-text" text="{{ npc.name }} STR {{ npc.STR }} | DEX {{ npc.DEX }} | NRG {{ npc.NRG }}"></Label>
         <Label class="small-text" text="HP {{ npc.nowHP }} | Morale {{ npc.morale }} | Initiative {{ npc.initiative }}"></Label>
         <Label class="small-text" text="Evasion {{ npc.evasion }} | Accuracy {{ npc.accuracy }}"></Label>
-        <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
-          <Button class="btn btn-outline btn-small" *ngFor="let move of npc.moves" text="{{ move.name }} {{ move.nrgCost }} [+{{ move.minDamageDelta }} - +{{ move.maxDamageDelta }}"></Button>
-        </FlexboxLayout>
       </StackLayout>
       <TextView *ngIf="activeMission.log.length > 0" [text]="combatLog()" editable="false" class="input input-border"></TextView>
     </div>

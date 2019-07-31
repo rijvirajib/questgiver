@@ -93,8 +93,8 @@ export class NPCModel {
   }
 
   static recalculateDodge(npc: NPCModel) {
-    npc.evasion = NPCModel.calcEvasion(npc)
-    npc.accuracy = NPCModel.calcAccuracy(npc)
+    npc.evasion = parseFloat(NPCModel.calcEvasion(npc).toPrecision(5))
+    npc.accuracy = parseFloat(NPCModel.calcAccuracy(npc).toPrecision(5))
 
     return npc
   }
@@ -174,7 +174,7 @@ export class NPCModel {
     npc.NRG = stats.NRG || this.randomNumber(10, 30)
 
     npc.criticalChance = .2
-    npc.criticalDamage = (Math.floor((Math.random() * 100) + 10) / 1000)
+    npc.criticalDamage = Math.floor(Math.random() * (500 - 50)) + 50
 
     npc.speed = stats.speed || Math.floor(((Math.random() * 100) + npc.DEX) / (npc.DEX + 10))
     npc.initiative = stats.initiative || 0
@@ -205,11 +205,11 @@ export class NPCModel {
   }
 
   static calcEvasion(npc: NPCModel) {
-    return Math.floor((Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[npc.baseStat].dexMod * npc.DEX + npc.level) / 100)
+    return ((Math.floor((Math.random() * 10) + 1) / 100) + (NPCBASESTATS[npc.baseStat].dexMod * npc.DEX + npc.level)) / 100
   }
 
   static calcAccuracy(npc: NPCModel) {
-    return Math.floor((Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[npc.baseStat].dexMod * npc.DEX + npc.level) /  100)
+    return ((Math.floor((Math.random() * 100) + 90) / 100) + (NPCBASESTATS[npc.baseStat].dexMod * npc.DEX + npc.level)) / 100
   }
 
   static calcMaxNRG(npc: NPCModel) {
@@ -241,12 +241,18 @@ export class NPCModel {
       + NPCBASESTATS[npc.baseStat].nrgMod * npc.NRG)
   }
 
-  static calcDamage(npc: NPCModel) {
-    return Math.floor((Math.random() * npc.maxDamage) + npc.minDamage)
-  }
+  static calcDamage(npc: NPCModel, moveIndex = 0) {
+      let max = npc.maxDamage
+      let min = npc.minDamage
+      if (npc.moves[moveIndex].isMultiplier) {
+        max *= npc.moves[moveIndex].maxDamageDelta
+        min *= npc.moves[moveIndex].minDamageDelta
+      } else {
+        max += npc.moves[moveIndex].maxDamageDelta
+        min += npc.moves[moveIndex].minDamageDelta
+      }
 
-  static calcPowerDamage(npc: NPCModel, moveIndex) {
-    return Math.floor((Math.random() * (npc.maxDamage + npc.moves[moveIndex].maxDamageDelta)) + (npc.minDamage + npc.moves[moveIndex].minDamageDelta))
+      return Math.floor((Math.random() * (max - min) + min))
   }
 
   static calcArmor(npc: NPCModel) {
@@ -405,7 +411,7 @@ export const NPCBASESTATS = {
     STR: 2,
     DEX: 2,
     NRG: 2,
-    maxHP: 100,
+    maxHP: 1000,
     maxNRG: 5,
     morale: 100,
     maxTrinkets: 2

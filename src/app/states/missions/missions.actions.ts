@@ -1,3 +1,4 @@
+import { EventModel, EVENT_TYPES } from '~/app/models/event.model'
 import { ItemModel } from '~/app/models/item.model'
 import { MissionModel } from '../../models/mission.model'
 import { NPCModel } from '~/app/models/npc.model'
@@ -67,4 +68,9 @@ export class FireCrew {
 export class AttackNPC {
   static readonly type = '[Mission] Attack NPC'
   constructor(public missionId: string, public npcId: string, public moveIndex: number) {}
+}
+
+export class MissionLog {
+  static readonly type = '[Mission] Log Entry'
+  constructor(public missionId: string, public type: EVENT_TYPES, public message: string) {}
 }

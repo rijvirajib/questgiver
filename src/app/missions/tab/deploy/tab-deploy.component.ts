@@ -1,7 +1,7 @@
-import { AcceptMission, RejectMission, HireCrew, FireCrew, DeployMission, AttackNPC } from '~/app/states'
+import { AcceptMission, RejectMission, HireCrew, FireCrew, DeployMission, AttackNPC, MissionLog } from '~/app/states'
 import { Component, OnInit, Input } from '@angular/core'
 import { EQUIP_CLASS } from '~/app/models/item.model'
-import { EVENT_TYPES } from '~/app/models/event.model'
+import { EVENT_TYPES, EventModel } from '~/app/models/event.model'
 import { MissionModel, MISSION_STEP } from '~/app/models/mission.model'
 import { MissionStateModel } from '~/app/states/missions/missions.model'
 import { MissionsState } from '~/app/states/missions/missions.state'
@@ -52,9 +52,14 @@ export class MissionTabDeployComponent implements OnInit {
     this.isDeployable = false
   }
 
-  onAttack(npcId: string, moveIndex: number) {
-    console.log('onAttack', npcId, moveIndex)
-    this.store.dispatch(new AttackNPC(this.activeMission.id, npcId, moveIndex))
+  onAttack(npc: NPCModel, moveIndex: number) {
+    if (npc.initiative >= 100) {
+      this.store.dispatch(new AttackNPC(this.activeMission.id, npc.id, moveIndex))
+    } else {
+      this.store.dispatch(new MissionLog(
+        this.activeMission.id, EVENT_TYPES.COMBAT, `${npc.name} tried to use ${npc.moves[moveIndex].name} too early!`
+      ))
+    }
   }
 
   combatLog() {
