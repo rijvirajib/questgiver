@@ -245,6 +245,10 @@ export class NPCModel {
     return Math.floor((Math.random() * npc.maxDamage) + npc.minDamage)
   }
 
+  static calcPowerDamage(npc: NPCModel, moveIndex) {
+    return Math.floor((Math.random() * (npc.maxDamage + npc.moves[moveIndex].maxDamageDelta)) + (npc.minDamage + npc.moves[moveIndex].minDamageDelta))
+  }
+
   static calcArmor(npc: NPCModel) {
     return Math.round(npc.level * .8
       + .5 * npc.evasion
@@ -331,6 +335,8 @@ export class NPCModel {
   maxTrinkets?: number
 
   originalStats: any
+
+  lastTargetId?: NPCModel['id']
 
   constructor(stats: any) {
     this.id = stats.id || uuid()

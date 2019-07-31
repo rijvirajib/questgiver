@@ -9,7 +9,7 @@
         <Label class="small-text" text="HP {{ npc.nowHP }} | Morale {{ npc.morale }} | Initiative {{ npc.initiative }}"></Label>
         <Label class="small-text" text="Evasion {{ npc.evasion }} | Accuracy {{ npc.accuracy }}"></Label>
         <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
-          <Button class="btn btn-outline btn-small" *ngFor="let move of npc.moves" text="{{ move.name }} {{ move.nrgCost }} +{{ move.minDamageDelta }}/+{{ move.maxDamageDelta }}"></Button>
+          <Button class="btn btn-outline btn-small" *ngFor="let move of npc.moves; let i = index" (tap)="onAttack(npc.id, i)" text="{{ move.name }} {{ move.nrgCost }} +{{ move.minDamageDelta }}/+{{ move.maxDamageDelta }}"></Button>
         </FlexboxLayout>
       </StackLayout>
       <FlexboxLayout *ngIf="isDeployable" orientation="horizontal" justifyContent="space-between">

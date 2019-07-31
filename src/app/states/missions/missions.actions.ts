@@ -63,3 +63,8 @@ export class FireCrew {
   static readonly type = '[Mission] Fire Crew'
   constructor(public mission: MissionModel, public npc: NPCModel) {}
 }
+
+export class AttackNPC {
+  static readonly type = '[Mission] Attack NPC'
+  constructor(public missionId: string, public npcId: string, public moveIndex: number) {}
+}

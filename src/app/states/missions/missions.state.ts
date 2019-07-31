@@ -11,11 +11,13 @@ import {
   StartCasing,
   DeployMission,
   CombatMissions,
+  AttackNPC,
 } from './missions.actions'
 import * as _ from 'lodash'
 import { CASEMESSAGES } from '~/app/db/case-messages'
 import { CombatModel } from '~/app/models/combat.model'
 import { EVENT_TYPES } from '~/app/models/event.model'
+import { FightMove } from '~/app/models/fight-move.model'
 import { GameState } from '../game.state'
 import { INVENTORY_ITEMS } from '~/app/db/inventory-items'
 import { ITEM_ATTRIBUTES, NPC_ATTRIBUTES } from '~/app/db/attributes'
@@ -508,7 +510,12 @@ export class MissionsState {
               if (activeNPC.initiative >= 100) {
                 // Do combat to a single active enemy NPC
                 const currentTime = this.store.selectSnapshot(GameState.currentTime)
-                const targetNPC = state.npcs[this.getRandomTarget(state.missions[missionId].crewIds)]
+                let targetNPC = state.npcs[this.getRandomTarget(state.missions[missionId].crewIds)]
+                // Was there someone attacked last time who is still alive?
+                if (activeNPC.lastTargetId && state.npcs[activeNPC.lastTargetId].nowHP > 0) {
+                  targetNPC = state.npcs[activeNPC.lastTargetId]
+                }
+                state.npcs[targetNPC.id].lastTargetId = targetNPC.id
                 const hitChance = ((activeNPC.accuracy - targetNPC.evasion) / activeNPC.accuracy) * 100
                 if (hitChance <= 0 || (Math.floor(Math.random() * (100 - 0)) + 0) > hitChance) {
                   state.missions[missionId].log.push({
@@ -546,46 +553,99 @@ export class MissionsState {
           // Update Crew NPCs
           state.missions[missionId].crewIds.forEach(id => {
             const activeNPC = state.npcs[id]
-            if (activeNPC.nowHP > 0 && activeNPC.initiative >= 100) {
-              // Do combat to a single active enemy NPC
-              const currentTime = this.store.selectSnapshot(GameState.currentTime)
-              const targetNPC = state.npcs[this.getRandomTarget(state.missions[missionId].heroIds)]
-              const hitChance = Math.floor(((activeNPC.accuracy - targetNPC.evasion) / activeNPC.accuracy) * 100)
-              if (hitChance <= 0 || (Math.floor(Math.random() * (100 - 0)) + 0) > hitChance) {
-                state.missions[missionId].log.push({
-                  type: EVENT_TYPES.COMBAT,
-                  time: currentTime,
-                  message: `[CREW]${activeNPC.name} MISSED hitting ${targetNPC.name} with hitChance ${hitChance}`
-                })
-              } else {
-                const atk = NPCModel.calcDamage(activeNPC)
-                const def = NPCModel.calcArmor(targetNPC)
-                const damage = atk - def
-                state.npcs[targetNPC.id].nowHP -= damage
+            if (activeNPC.nowHP > 0) {
+              // if (activeNPC.initiative >= 100) {
+              //   // Do combat to a single active enemy NPC
+              //   const currentTime = this.store.selectSnapshot(GameState.currentTime)
+              //   const targetNPC = state.npcs[this.getRandomTarget(state.missions[missionId].heroIds)]
+              //   const hitChance = Math.floor(((activeNPC.accuracy - targetNPC.evasion) / activeNPC.accuracy) * 100)
+              //   if (hitChance <= 0 || (Math.floor(Math.random() * (100 - 0)) + 0) > hitChance) {
+              //     state.missions[missionId].log.push({
+              //       type: EVENT_TYPES.COMBAT,
+              //       time: currentTime,
+              //       message: `[CREW]${activeNPC.name} MISSED hitting ${targetNPC.name} with hitChance ${hitChance}`
+              //     })
+              //   } else {
+              //     const atk = NPCModel.calcDamage(activeNPC)
+              //     const def = NPCModel.calcArmor(targetNPC)
+              //     const damage = atk - def
+              //     state.npcs[targetNPC.id].nowHP -= damage
 
-                state.missions[missionId].log.push({
-                  type: EVENT_TYPES.COMBAT,
-                  time: currentTime,
-                  message: `[CREW]${activeNPC.name} HIT ${targetNPC.name} for ${damage} damage, atk ${atk}, def: ${def}.`
-                })
+              //     state.missions[missionId].log.push({
+              //       type: EVENT_TYPES.COMBAT,
+              //       time: currentTime,
+              //       message: `[CREW]${activeNPC.name} HIT ${targetNPC.name} for ${damage} damage, atk ${atk}, def: ${def}.`
+              //     })
 
-                if (state.npcs[targetNPC.id].nowHP <= 0) {
-                  state.npcs[targetNPC.id].isInjured = true
-                  state.npcs[targetNPC.id].status = NPC_STATUS.INJURED
-                  state.missions[missionId].log.push({
-                    type: EVENT_TYPES.COMBAT,
-                    time: currentTime,
-                    message: `[CREW] ${activeNPC.name} KILLED ${targetNPC.name}.`
-                  })
-                }
-              }
-              state.npcs[id].initiative = 0
+              //     if (state.npcs[targetNPC.id].nowHP <= 0) {
+              //       state.npcs[targetNPC.id].isInjured = true
+              //       state.npcs[targetNPC.id].status = NPC_STATUS.INJURED
+              //       state.missions[missionId].log.push({
+              //         type: EVENT_TYPES.COMBAT,
+              //         time: currentTime,
+              //         message: `[CREW] ${activeNPC.name} KILLED ${targetNPC.name}.`
+              //       })
+              //     }
+              //   }
+              //   state.npcs[id].initiative = 0
+              // }
             } else {
               state.npcs[id].initiative += state.npcs[id].speed
             }
           })
         }
       }
+
+      return state
+    })
+  }
+
+  @Action(AttackNPC)
+  @ImmutableContext()
+  attackNPC(
+    { setState }: StateContext<MissionStateModel>,
+    { missionId, npcId, moveIndex }: AttackNPC
+  ) {
+    setState((state: MissionStateModel) => {
+      const currentTime = this.store.selectSnapshot(GameState.currentTime)
+      const npc = state.npcs[npcId]
+      const fightMove: FightMove = state.npcs[npcId].moves[moveIndex]
+      let targetNPC = state.npcs[this.getRandomTarget(state.missions[missionId].heroIds)]
+      // Was there someone attacked last time who is still alive?
+      if (npc.lastTargetId && state.npcs[npc.lastTargetId].nowHP > 0) {
+        targetNPC = state.npcs[npc.lastTargetId]
+      }
+      state.npcs[targetNPC.id].lastTargetId = targetNPC.id
+      const hitChance = Math.floor(((npc.accuracy - targetNPC.evasion) / npc.accuracy) * 100)
+      if (hitChance <= 0 || (Math.floor(Math.random() * (100 - 0)) + 0) > hitChance) {
+        state.missions[missionId].log.push({
+          type: EVENT_TYPES.COMBAT,
+          time: currentTime,
+          message: `[CREW]${npc.name}'s ${fightMove.name} MISSED ${targetNPC.name} with hitChance ${hitChance}`
+        })
+      } else {
+        const atk = NPCModel.calcPowerDamage(npc, moveIndex)
+        const def = NPCModel.calcArmor(targetNPC)
+        const damage = atk - def
+        state.npcs[targetNPC.id].nowHP -= damage
+
+        state.missions[missionId].log.push({
+          type: EVENT_TYPES.COMBAT,
+          time: currentTime,
+          message: `[CREW]${npc.name}'s ${fightMove.name} HIT ${targetNPC.name} for ${damage} damage, atk ${atk}, def: ${def}.`
+        })
+
+        if (state.npcs[targetNPC.id].nowHP <= 0) {
+          state.npcs[targetNPC.id].isInjured = true
+          state.npcs[targetNPC.id].status = NPC_STATUS.INJURED
+          state.missions[missionId].log.push({
+            type: EVENT_TYPES.COMBAT,
+            time: currentTime,
+            message: `[CREW] ${npc.name} KILLED ${targetNPC.name}.`
+          })
+        }
+      }
+      state.npcs[npcId].initiative -= 100
 
       return state
     })
