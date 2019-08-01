@@ -65,6 +65,11 @@ export class FireCrew {
   constructor(public mission: MissionModel, public npc: NPCModel) {}
 }
 
+export class NPCInitiativeGain {
+  static readonly type = '[Mission] NPC Initiative Gain'
+  constructor(public npcId: string) {}
+}
+
 export class AttackNPC {
   static readonly type = '[Mission] Attack NPC'
   constructor(public missionId: string, public npcId: string, public moveIndex: number, public targetNPCId?: string) {}

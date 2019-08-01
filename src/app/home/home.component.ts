@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   }
 
   onReset(event: Event) {
-    this.store.dispatch(new StateClear())
+    // this.store.dispatch([new StateClear()])
     this.store.dispatch(new StateResetAll())
     this.store.dispatch(Start)
     this.store.dispatch(LoadMissions)

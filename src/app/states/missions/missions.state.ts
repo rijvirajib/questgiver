@@ -13,12 +13,13 @@ import {
   CombatMissions,
   AttackNPC,
   MissionLog,
+  NPCInitiativeGain,
 } from './missions.actions'
 import * as _ from 'lodash'
 import { CASEMESSAGES } from '~/app/db/case-messages'
 import { CombatModel } from '~/app/models/combat.model'
 import { EVENT_TYPES } from '~/app/models/event.model'
-import { FightMove } from '~/app/models/fight-move.model'
+import { FightMove, FIGHTMOVE_TARGET } from '~/app/models/fight-move.model'
 import { GameState } from '../game.state'
 import { INVENTORY_ITEMS } from '~/app/db/inventory-items'
 import { ITEM_ATTRIBUTES, NPC_ATTRIBUTES } from '~/app/db/attributes'
@@ -26,10 +27,12 @@ import { ImmutableContext, ImmutableSelector } from '@ngxs-labs/immer-adapter'
 import { MissionModel, MISSION_STEP } from '~/app/models/mission.model'
 import { MissionStateModel } from './missions.model'
 import { NPC } from '~/app/db/npcs'
-import { NPCModel, NPC_STATUS } from '~/app/models/npc.model'
+import { NPCModel, NPC_STATUS, NPC_SLOT } from '~/app/models/npc.model'
 import { OBSTACLE_TYPE } from '~/app/models/obstacle.model'
 import { STORYMISSIONS } from '~/app/db/story-missions'
 import { State, Action, StateContext, Selector, Store, createSelector } from '@ngxs/store'
+import { TARGET_MODIFIER_RUNNER, TARGET_TYPE } from '~/app/models/target-modifier.model';
+import { EQUIP_CLASS } from '~/app/models/item.model';
 @State<MissionStateModel>({
   name: 'missions',
   defaults: {
@@ -509,31 +512,48 @@ export class MissionsState {
           // Go through Iniatitives
           state.missions[missionId].heroIds.forEach(id => {
             const activeNPC = state.npcs[id]
-            if (activeNPC.nowHP > 0) {
+            if (activeNPC.status === NPC_STATUS.COMBAT) {
               if (activeNPC.initiative >= 100) {
                 // Do combat to a single active enemy NPC
                 const currentTime = this.store.selectSnapshot(GameState.currentTime)
                 let targetNPC = state.npcs[this.getRandomTarget(state.missions[missionId].crewIds)]
+                while (targetNPC.status !== NPC_STATUS.COMBAT) {
+                  targetNPC = state.npcs[this.getRandomTarget(state.missions[missionId].crewIds)]
+                }
                 // Was there someone attacked last time who is still alive?
                 if (activeNPC.lastTargetId && state.npcs[activeNPC.lastTargetId].nowHP > 0) {
                   targetNPC = state.npcs[activeNPC.lastTargetId]
                 }
-                state.npcs[targetNPC.id].lastTargetId = targetNPC.id
+                state.npcs[activeNPC.id].lastTargetId = targetNPC.id
                 dispatch(new AttackNPC(missionId, activeNPC.id, 0, targetNPC.id))
               } else {
-                state.npcs[id].initiative += state.npcs[id].speed
+                dispatch(new NPCInitiativeGain(activeNPC.id))
               }
             }
           })
 
           state.missions[missionId].crewIds.forEach(id => {
             const activeNPC = state.npcs[id]
-            if (activeNPC.nowHP > 0) {
-              state.npcs[id].initiative += state.npcs[id].speed
+            if (activeNPC.status === NPC_STATUS.COMBAT) {
+              dispatch(new NPCInitiativeGain(id))
             }
           })
         }
       }
+      state.npcs = _.cloneDeep(state.npcs)
+
+      return state
+    })
+  }
+
+  @Action(NPCInitiativeGain)
+  @ImmutableContext()
+  NPCInitiativeGain(
+    { setState }: StateContext<MissionStateModel>,
+    { npcId }: NPCInitiativeGain
+  ) {
+    setState((state: MissionStateModel) => {
+      state.npcs[npcId].initiative = state.npcs[npcId].initiative + state.npcs[npcId].speed
 
       return state
     })
@@ -549,36 +569,67 @@ export class MissionsState {
       const currentTime = this.store.selectSnapshot(GameState.currentTime)
       const npc = state.npcs[npcId]
       let npcType = '[HERO]'
+      let npcIds = state.missions[missionId].crewIds
       if (npc.isVillain) {
         npcType = '[CREW]'
+        npcIds = state.missions[missionId].heroIds
       }
-      const targetNPC: NPCModel = targetNPCId ? state.npcs[targetNPCId] : state.npcs[this.getRandomTarget(state.missions[missionId].heroIds)]
+      let targetNPC: NPCModel = targetNPCId ? state.npcs[targetNPCId] : state.npcs[this.getRandomTarget(npcIds)]
       const fightMove: FightMove = state.npcs[npcId].moves[moveIndex]
-      const hitChance = Math.abs(Math.floor(((npc.accuracy - targetNPC.evasion) / npc.accuracy) * 100))
-      const randomNumber = (Math.floor(Math.random() * (10 - 1)) + 1)
-      if (hitChance <= 0 || randomNumber > hitChance) {
-        dispatch(new MissionLog(
-          missionId, EVENT_TYPES.COMBAT,
-          `${npcType} ${npc.name}'s ${fightMove.name} MISSED ${targetNPC.name}: ${randomNumber} >  ${hitChance}`
-        ))
-      } else {
-        const atk = NPCModel.calcDamage(npc, moveIndex)
-        const def = NPCModel.calcArmor(targetNPC)
-        const damage = atk - def
-        state.npcs[targetNPC.id].nowHP -= damage
 
-        if (state.npcs[targetNPC.id].nowHP <= 0) {
-          state.npcs[targetNPC.id].isInjured = true
-          state.npcs[targetNPC.id].status = NPC_STATUS.INJURED
+      if (fightMove.target === FIGHTMOVE_TARGET.SELF) {
+        // something
+        // Process modifiers
+        fightMove.modifiers.forEach(modifier => {
+          if (modifier.targetType === TARGET_TYPE.NPC) {
+            const oldValue = state.npcs[modifier.targetId][modifier.targetKey]
+            state.npcs[modifier.targetId][modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](
+              state.npcs[modifier.targetId][modifier.targetKey],
+              modifier.targetChange
+            )
+            const valueDelta = state.npcs[modifier.targetId][modifier.targetKey] - oldValue
+            dispatch(new MissionLog(
+              missionId, EVENT_TYPES.COMBAT,
+              `${npcType} ${fightMove.name} used on ${state.npcs[modifier.targetId].name} for ${valueDelta}.`
+            ))
+          }
+        })
+      } else {
+        // Was there someone attacked last time who is still alive?
+        if (!targetNPCId && npc.lastTargetId && state.npcs[npc.lastTargetId].status === NPC_STATUS.COMBAT) {
+          targetNPC = state.npcs[npc.lastTargetId]
+        }
+        // This is combat, the target NPC needs to be alive
+        while (targetNPC.status !== NPC_STATUS.COMBAT) {
+          targetNPC = state.npcs[this.getRandomTarget(npcIds)]
+        }
+        state.npcs[npcId].lastTargetId = targetNPC.id
+        const hitChance = Math.abs(Math.floor(((npc.accuracy - targetNPC.evasion) / npc.accuracy) * 100))
+        const randomNumber = (Math.floor(Math.random() * (10 - 1)) + 1)
+        if (hitChance <= 0 || randomNumber > hitChance) {
           dispatch(new MissionLog(
             missionId, EVENT_TYPES.COMBAT,
-            `${npcType}  ${npc.name}'s ${fightMove.name} KILLED ${targetNPC.name} for ${damage} damage, atk ${atk}, def: ${def}.`
+            `${npcType} ${npc.name}'s ${fightMove.name} MISSED ${targetNPC.name}: ${randomNumber} >  ${hitChance}`
           ))
         } else {
-          dispatch(new MissionLog(
-            missionId, EVENT_TYPES.COMBAT,
-            `${npcType} ${npc.name}'s ${fightMove.name} HIT ${targetNPC.name} for ${damage} damage, atk ${atk}, def: ${def}.`
-          ))
+          const atk = NPCModel.calcDamage(npc, moveIndex)
+          const def = NPCModel.calcArmor(targetNPC)
+          const damage = atk - def
+          state.npcs[targetNPC.id].nowHP -= damage
+
+          if (state.npcs[targetNPC.id].nowHP <= 0) {
+            state.npcs[targetNPC.id].isInjured = true
+            state.npcs[targetNPC.id].status = NPC_STATUS.INJURED
+            dispatch(new MissionLog(
+              missionId, EVENT_TYPES.COMBAT,
+              `${npcType}  ${npc.name}'s ${fightMove.name} KILLED ${targetNPC.name} for dmg: ${damage}, atk: ${atk}, def: ${def}.`
+            ))
+          } else {
+            dispatch(new MissionLog(
+              missionId, EVENT_TYPES.COMBAT,
+              `${npcType} ${npc.name}'s ${fightMove.name} HIT ${targetNPC.name} for dmg: ${damage}, atk: ${atk}, def: ${def}.`
+            ))
+          }
         }
       }
       state.npcs[npcId].initiative =  state.npcs[npcId].initiative - fightMove.initiativeCost

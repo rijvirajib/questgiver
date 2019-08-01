@@ -5,11 +5,11 @@ import { OBSTACLE_TYPE } from '../models/obstacle.model'
 
 // These cannot be duplicated
 export const INVENTORY_ITEMS: { [id: string]: ItemModel } = {
-  HawkPersonAxe: new ItemModel({
-    id: 'HawkPersonAxe',
-    name: `HawkPerson's Nth Metal Axe`,
-    description: `HawkPerson's legendary axe made of Nth metal. Strong against magic.`,
-    class: ITEM_CLASS.Axe,
+  HawkPersonMace: new ItemModel({
+    id: 'HawkPersonMace',
+    name: `HawkPerson's Nth Metal Mace`,
+    description: `HawkPerson's legendary mace made of Nth metal. Strong against magic.`,
+    class: ITEM_CLASS.Mace,
     equipClass: EQUIP_CLASS.Weapon,
     attributes: [ITEM_ATTRIBUTES.NTH],
     isAvailable: false,

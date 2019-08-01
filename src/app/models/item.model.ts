@@ -85,6 +85,7 @@ export enum ITEM_CLASS {
   Consumable,
   Dagger,
   Helm,
+  Mace,
   Melee,
   Pistol,
   Radioactive,

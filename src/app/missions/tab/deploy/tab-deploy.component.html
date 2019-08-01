@@ -6,7 +6,7 @@
       <StackLayout *ngFor="let npc of crew$ | async">
         <Label class="small-text" text="{{ npc.name }} STR {{ npc.STR }} | DEX {{ npc.DEX }} | NRG {{ npc.NRG }}"></Label>
         <Label class="small-text" text="HP {{ npc.nowHP }} | Morale {{ npc.morale }} | Initiative {{ npc.initiative }}"></Label>
-        <Label class="small-text" text="Evasion {{ npc.evasion }} | Accuracy {{ npc.accuracy }}"></Label>
+        <Label class="small-text" text="Status: {{ npc.status }} | Evasion {{ npc.evasion }} | Accuracy {{ npc.accuracy }}"></Label>
         <FlexboxLayout width="100%" flexDirection="row" flexWrap="wrap" justifyContent="space-between" class="mission-info-container">
           <Button class="btn btn-outline btn-small" *ngFor="let move of npc.moves; let i = index" (tap)="onAttack(npc, i)" text="{{ move.name }} {{ move.nrgCost }} +{{ move.minDamageDelta }}/+{{ move.maxDamageDelta }}"></Button>
         </FlexboxLayout>

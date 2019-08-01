@@ -23,7 +23,7 @@ export const NPC: { [id: string]: NPCModel } = {
       NPC_ATTRIBUTES.FLYING,
     ],
     gear: {
-      [EQUIP_CLASS.Weapon]: new ItemModel(INVENTORY_ITEMS.HawkPersonAxe)
+      [EQUIP_CLASS.Weapon]: 'HawkPersonMace'
     },
     moves: [
       new FightMove({

@@ -345,20 +345,20 @@ export class NPCModel {
 
   lastTargetId?: NPCModel['id']
 
-  constructor(stats: any) {
-    this.id = stats.id || uuid()
-    this.name = stats.name || ''
-    this.description = stats.description || ''
+  constructor(params: any) {
+    this.id = params.id || uuid()
+    this.name = params.name || ''
+    this.description = params.description || ''
 
-    this.isVillain = !!stats.isVillain
-    this.isAvailable = stats.isAvailable !== false
-    this.isInjured = !!stats.isInjured
-    this.isRunAway = !!stats.isRunAway
-    this.baseStat = stats.baseStat || NPC_BASE_STAT.STR
-    this.level = stats.level || 1
-    this.status = stats.status || NPC_STATUS.INACTIVE
+    this.isVillain = !!params.isVillain
+    this.isAvailable = params.isAvailable !== false
+    this.isInjured = !!params.isInjured
+    this.isRunAway = !!params.isRunAway
+    this.baseStat = params.baseStat || NPC_BASE_STAT.STR
+    this.level = params.level || 1
+    this.status = params.status || NPC_STATUS.INACTIVE
 
-    this.icon = stats.icon || '~/images/icons/unknown.png'
+    this.icon = params.icon || '~/images/icons/unknown.png'
 
     // Initialize systems
     this.gear = {
@@ -368,14 +368,19 @@ export class NPCModel {
       [EQUIP_CLASS.Chest]: undefined,
       [EQUIP_CLASS.Legs]: undefined
     }
-    this.attributes = stats.attributes || []
-    this.trinkets = stats.trinkets || []
-    this.maxTrinkets = stats.maxTrinkets || NPCBASESTATS.BASE.maxTrinkets
-    this.morale = stats.morale || NPCBASESTATS.BASE.morale
+    if (params.gear) {
+      Object.keys(params.gear).forEach(equipClass => {
+        this.gear[equipClass] = params.gear[equipClass]
+      })
+    }
+    this.attributes = params.attributes || []
+    this.trinkets = params.trinkets || []
+    this.maxTrinkets = params.maxTrinkets || NPCBASESTATS.BASE.maxTrinkets
+    this.morale = params.morale || NPCBASESTATS.BASE.morale
     this.moves = [NPCModel.defaultFightMove(this), NPCModel.restMove(this)]
-    this.originalStats = stats
+    this.originalStats = params
 
-    NPCModel.setStats(this, stats)
+    NPCModel.setStats(this, params)
     NPCModel.heal(this, true)
     NPCModel.energize(this, true)
 
