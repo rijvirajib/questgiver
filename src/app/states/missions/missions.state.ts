@@ -18,6 +18,7 @@ import {
 import * as _ from 'lodash'
 import { CASEMESSAGES } from '~/app/db/case-messages'
 import { CombatModel } from '~/app/models/combat.model'
+import { EQUIP_CLASS } from '~/app/models/item.model'
 import { EVENT_TYPES } from '~/app/models/event.model'
 import { FightMove, FIGHTMOVE_TARGET } from '~/app/models/fight-move.model'
 import { GameState } from '../game.state'
@@ -31,8 +32,7 @@ import { NPCModel, NPC_STATUS, NPC_SLOT } from '~/app/models/npc.model'
 import { OBSTACLE_TYPE } from '~/app/models/obstacle.model'
 import { STORYMISSIONS } from '~/app/db/story-missions'
 import { State, Action, StateContext, Selector, Store, createSelector } from '@ngxs/store'
-import { TARGET_MODIFIER_RUNNER, TARGET_TYPE } from '~/app/models/target-modifier.model';
-import { EQUIP_CLASS } from '~/app/models/item.model';
+import { TARGET_MODIFIER_RUNNER, TARGET_TYPE } from '~/app/models/target-modifier.model'
 @State<MissionStateModel>({
   name: 'missions',
   defaults: {

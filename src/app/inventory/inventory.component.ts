@@ -10,6 +10,7 @@ import { Observable } from 'rxjs/internal/Observable'
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer'
 import { RouterExtensions } from 'nativescript-angular/router'
 import { Store } from '@ngxs/store'
+import { Toasty, ToastDuration } from 'nativescript-toasty'
 import { map } from 'rxjs/internal/operators/map'
 @Component({
   selector: 'ns-inventory',
@@ -25,6 +26,7 @@ export class InventoryComponent implements OnInit {
   activeNPC$: Observable<Array<NPCModel>>
   activeNPC: NPCModel
   npcItems$: Observable<{[id: string]: ItemModel}>
+  npcItems: {[id: string]: ItemModel}
 
   inventoryItems$: Observable<Array<ItemModel>>
 
@@ -54,6 +56,9 @@ export class InventoryComponent implements OnInit {
           this.activeNPC = npcs[0]
           this.npcItems$ = this.store.select(MissionsState.npcItems).pipe(map(filterFn => filterFn(this.activeNPC)))
         })
+        this.npcItems$.subscribe((items) => {
+          this.npcItems = items
+        })
       }
     })
   }
@@ -70,7 +75,24 @@ export class InventoryComponent implements OnInit {
   }
 
   onTapItem(itemId: string) {
-    this.store.dispatch(new EquipNPC(this.npcId, itemId))
+    let canEquip = true
+    // Find the equipped item if NPC has one
+    const npcEquippedId = this.activeNPC.gear[this.equipClass]
+    if (npcEquippedId) {
+      const npcItem = this.npcItems[npcEquippedId]
+      // If it's signature, then no
+      if (npcItem.isSignature) {
+        canEquip = false
+        new Toasty({ text: `Signature Gear cannot be replaced` })
+        .setToastDuration(ToastDuration.LONG)
+        // .setToastPosition(ToastPosition.BOTTOM)
+        .setBackgroundColor('#ff9999')
+        .show()
+      }
+    }
+    if (canEquip) {
+      this.store.dispatch(new EquipNPC(this.npcId, itemId))
+    }
   }
 
   onTapUnequip(itemId: string) {
