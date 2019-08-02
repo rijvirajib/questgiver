@@ -1,6 +1,7 @@
 <speed-controls></speed-controls>
 <ScrollView backgroundColor="#e8e7e7">
   <StackLayout>
+    <Label class="small-text" text="{{ activeMission.goons }} Goons | {{ activeMission.rewards.gold }} Gold | {{ activeMission.rewards.experience }} EXP"></Label>
     <div *ngIf="crew">
       <Label text="Crew" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
       <StackLayout *ngFor="let npc of crew$ | async">

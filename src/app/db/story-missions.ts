@@ -4,18 +4,6 @@ import { NPC_ATTRIBUTES } from './attributes'
 import { ObstacleModel, OBSTACLE_TYPE } from '../models/obstacle.model'
 import { TargetModifier, TARGET_TYPE, TARGET_CHANGE_SYMBOL } from '../models/target-modifier.model'
 
-export const STORYMODIFIERS: Array<TargetModifier> = [{
-  targetType: TARGET_TYPE.QUEST,
-  targetKey: 'goons',
-  targetChange: 1,
-  targetChangeSymbol: TARGET_CHANGE_SYMBOL['+']
-}, {
-  targetType: TARGET_TYPE.QUEST,
-  targetKey: 'rewards.gold',
-  targetChange: -.5, // lose 50% of the gold
-  targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
-}]
-
 export const STORYOBSTACLES: Array<ObstacleModel> = [new ObstacleModel({
   id: 'STORYOBSTACLES0',
   name: 'CCTV',
@@ -24,14 +12,16 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [new ObstacleModel({
   casedTime: 0,
   icon: '~/images/icons/cctv.png',
   type: OBSTACLE_TYPE.CCTV,
-  results: {
-    .4: {
-      chance: .5,
-      modifiers: [
-        STORYMODIFIERS[0],
-      ]
-    }
-  }
+  results: [{
+    chance: .5,
+    modifiers: [{
+      targetType: TARGET_TYPE.QUEST,
+      targetId: 'STORYMISSIONS1',
+      targetKey: 'goons',
+      targetChange: 1,
+      targetChangeSymbol: TARGET_CHANGE_SYMBOL['+']
+    }]
+  }]
 }), new ObstacleModel({
   id: 'STORYOBSACLES1',
   name: 'Mage',
@@ -49,14 +39,16 @@ export const STORYOBSTACLES: Array<ObstacleModel> = [new ObstacleModel({
   casedTime: 0,
   icon: '~/images/icons/keypad.png',
   type: OBSTACLE_TYPE.KEYPAD,
-  results: {
-    .5: {
-      chance: 1,
-      modifiers: [
-        STORYMODIFIERS[1],
-      ]
-    }
-  }
+  results: [{
+    chance: 1,
+    modifiers: [{
+      targetType: TARGET_TYPE.QUEST,
+      targetId: 'STORYMISSIONS1',
+      targetKey: 'rewards.gold',
+      targetChange: .5, // lose 50% of the gold
+      targetChangeSymbol: TARGET_CHANGE_SYMBOL['*']
+    }]
+  }]
 }), new ObstacleModel({
   id: 'STORYOBSTACLES3',
   name: 'Chameleon',

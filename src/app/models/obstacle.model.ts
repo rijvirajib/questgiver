@@ -24,9 +24,7 @@ export class ObstacleModel {
 
   // check for score  to generate effects 'COMBAT'
   score?: number
-  results?: {
-    [threshold: number]: Result
-  }
+  results?: Array<Result>
 
   constructor(params) {
     this.id = params.id || uuid()
@@ -51,7 +49,7 @@ export class ObstacleModel {
 
     // check for score  to generate effects 'COMBAT'
     this.score  = params.score || 100
-    this.results = params.results || {}
+    this.results = params.results || []
   }
 }
 
@@ -61,27 +59,20 @@ export enum OBSTACLE_TYPE {
   NPC = 'Hero',
   KEYPAD = 'Keypad'
 }
+
 class Result {
-  chance: number
-  modifiers: Array<TargetModifier>
+  chance?: number
+  threshold?: number // Divide the score by 100, if gt, do modifier
+  modifiers?: Array<TargetModifier>
 }
 
 /* Example Obstacle:
 [Environment] - Security Cameras
-[results] A score of .2 will add 6 random NPC total
+[results] A score of .8 will add 6 random NPC total
 * If score = 0, DISABLED
+* If score > .2 (we do nothing, we are kind)
 * If score > .4 +2 random NPC at a chance of .5
 * If score > .6 +2 random NPC at a chance of .5
 * If score > .8 +2 random NPC at a chance of .5
 * If score = 1 +2 random NPC at a chance of .5
 */
-
-export class EnvironmentObstacleModel extends ObstacleModel {
-
-}
-
-export class NPCObstacleModel extends ObstacleModel {
-
-}
-
-// targetType[targetId].targetStat = targetType[targetId].targetStat {{targetChangeSymbol}} targetChange

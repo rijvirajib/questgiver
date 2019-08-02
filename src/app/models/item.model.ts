@@ -15,6 +15,7 @@ export interface IItemModel {
 
   attributes?: Array<AttributeModel>
   antiObstacles?: Array<OBSTACLE_TYPE>
+  antiAttributes?: Array<AttributeModel['id']>
 
   isSignature?: boolean
   modifiers?: Array<TargetModifier>
@@ -36,6 +37,7 @@ export class ItemModel implements IItemModel {
 
   attributes?: Array<AttributeModel>
   antiObstacles?: Array<OBSTACLE_TYPE>
+  antiAttributes?: Array<AttributeModel['id']>
 
   isSignature?: boolean
   modifiers?: Array<TargetModifier>

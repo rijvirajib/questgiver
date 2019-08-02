@@ -1,4 +1,31 @@
+import { MissionStateModel } from '../states/missions/missions.model'
+
 export class TargetModifier {
+
+  static modifyTarget(state: MissionStateModel, modifier: TargetModifier) {
+    if (modifier.targetType === TARGET_TYPE.NPC) {
+      const npc = state.npcs[modifier.targetId]
+      state.npcs[modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](npc[modifier.targetKey], modifier.targetChange)
+    }
+    if (modifier.targetType === TARGET_TYPE.ITEM) {
+      const item = state.inventory[modifier.targetId]
+      state.npcs[modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](item[modifier.targetKey], modifier.targetChange)
+    }
+    if (modifier.targetType === TARGET_TYPE.QUEST) {
+      const mission = state.missions[modifier.targetId]
+
+      if (modifier.targetKey === 'rewards.gold') {
+        state.missions[modifier.targetId].rewards.gold = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](mission.rewards.gold, modifier.targetChange)
+      } else if (modifier.targetKey === 'rewards.experience') {
+        state.missions[modifier.targetId].rewards.experience = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](mission.rewards.experience, modifier.targetChange)
+      } else {
+        state.missions[modifier.targetId][modifier.targetKey] = TARGET_MODIFIER_RUNNER[modifier.targetChangeSymbol](mission[modifier.targetKey], modifier.targetChange)
+      }
+    }
+
+    return state
+  }
+
   targetType: TARGET_TYPE
   targetId?: string
   targetKey?: string
