@@ -291,6 +291,7 @@ export class MissionsState {
       // Attach NPC
       if (state.missions[mission.id].crewIds.indexOf(npc.id) === -1) {
         state.missions[mission.id].crewIds = state.missions[mission.id].crewIds.concat(npc.id)
+        state.missions[mission.id].step = MISSION_STEP.Ready
       }
       state.missions = _.cloneDeep(state.missions)
 
@@ -343,6 +344,9 @@ export class MissionsState {
 
       // Remove NPC from Mission Crew
       state.missions[mission.id].crewIds = state.missions[mission.id].crewIds.filter(npcId => npcId !== npc.id)
+      if (state.missions[mission.id].crewIds.length === 0) {
+        state.missions[mission.id].step = MISSION_STEP.Accepted
+      }
       state.missions = _.cloneDeep(state.missions)
 
       return state
@@ -356,7 +360,8 @@ export class MissionsState {
   ) {
     setState((state: MissionStateModel) => {
       for (const key of Object.keys(state.missions)) {
-        if (state.missions[key].times.casing && !state.missions[key].times.cased) {
+        // if (state.missions[key].times.casing && !state.missions[key].times.cased) {
+          if (state.missions[key].step === MISSION_STEP.Intel) {
           // Go through ONE obstacle and increment time spent
           let isComplete = true
           // tslint:disable-next-line:prefer-for-of

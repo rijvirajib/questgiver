@@ -34,8 +34,11 @@ export class MissionTabDeployComponent implements OnInit {
     this.activeMission$ = this.store.select(MissionsState.missionById).pipe(map(filterFn => filterFn(this.activeMission.id)))
     this.activeMission$.subscribe(aM => {
       this.activeMission = aM
-      if (this.activeMission.times.accepted && this.activeMission.crewIds.length > 0) {
+      if (this.activeMission.times.accepted && this.activeMission.step === MISSION_STEP.Ready && this.activeMission.crewIds.length > 0
+      ) {
         this.isDeployable = true
+      } else {
+        this.isDeployable = false
       }
       this.store.select(MissionsState.npcByIds).pipe(map(filterFn => filterFn([...aM.crewIds]))).subscribe(crew => {
         this.crew = crew || []
