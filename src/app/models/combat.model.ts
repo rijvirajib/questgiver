@@ -2,7 +2,7 @@ import { Dice } from 'dice-typescript'
 import { EVENT_TYPES } from './event.model'
 import { MissionModel } from './mission.model'
 import { MissionStateModel } from '../states/missions/missions.model'
-import { NPC_STATUS } from './npc.model'
+import { NPC_STATUS, NPCModel, NPC_BASE_STAT } from './npc.model'
 import { ObstacleModel, OBSTACLE_TYPE } from './obstacle.model'
 import { TargetModifier, TARGET_TYPE } from './target-modifier.model'
 
@@ -11,7 +11,7 @@ export class CombatModel {
     state = this.setInitiatives(state, missionId)
     state = this.processObstaclesDisable(state, missionId)
     state = this.processObstaclesActive(state, missionId)
-    state = this.processGoons(state, missionId)
+    state = this.generateGoons(state, missionId)
 
     return state
   }

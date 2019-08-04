@@ -288,9 +288,9 @@ export class NPCModel {
     })
   }
 
-  id: string
+  id?: string
   name: string
-  description: string
+  description?: string
   icon?: string
   cost?: number
   moves?: Array<FightMove>
