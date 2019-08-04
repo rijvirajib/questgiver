@@ -183,11 +183,19 @@ export class CombatModel {
     return state
   }
 
-  static processGoons(state: MissionStateModel, missionId: string) {
+  static generateGoons(state: MissionStateModel, missionId: string) {
     const mission = state.missions[missionId]
     for (let i = 0; i < mission.goons; i++) {
-      // Pick an NPC and add them to the mission
-      console.log('we are adding goon GOOD', i)
+      // TODO: Update goon generation for balance and stats
+      console.log('Goon generated')
+      const goon = new NPCModel({
+        name: `Goon ${i}`,
+        baseStat: NPC_BASE_STAT.STR,
+        level: state.npcs[mission.crewIds[0]].level,
+        status: NPC_STATUS.COMBAT
+      })
+      state.npcs[goon.id] = goon
+      state.missions[missionId].heroIds = state.missions[missionId].heroIds.concat(goon.id)
     }
 
     return state

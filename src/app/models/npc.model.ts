@@ -331,7 +331,7 @@ export class NPCModel {
 
   attributes?: Array<AttributeModel>
 
-  gear: {
+  gear?: {
     [EQUIP_CLASS.Weapon]?: ItemModel['id']
     [EQUIP_CLASS.Offhand]?: ItemModel['id']
     [EQUIP_CLASS.Helm]?: ItemModel['id']
@@ -341,7 +341,7 @@ export class NPCModel {
   trinkets?: Array<ItemModel['id']>
   maxTrinkets?: number
 
-  originalStats: any
+  originalStats?: any
 
   lastTargetId?: NPCModel['id']
 
