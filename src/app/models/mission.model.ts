@@ -3,7 +3,7 @@ import { EventModel } from './event.model'
 import { ItemModel } from './item.model'
 import { NPCModel } from './npc.model'
 import { ObstacleModel } from './obstacle.model'
-import { v4 as uuid } from 'uuid'
+import { guid } from '../utils/uuid'
 
 export class TimesModel {
   available?: number
@@ -57,7 +57,7 @@ export class MissionModel {
   log?: Array<EventModel>
 
   constructor(params: any) {
-    this.id = params.id || uuid() // string
+    this.id = params.id || guid() // string
     this.name = params.name || 'Generic Mission' // string
     this.description = params.description || 'Generic Description' // string
     this.icon = params.icon || '~/images/icons/unknown.png' // string

@@ -1,7 +1,7 @@
 import { AttributeModel } from './attribute.model'
 import { NPCModel } from './npc.model'
 import { TargetModifier } from './target-modifier.model'
-import { v4 as uuid } from 'uuid'
+import { guid } from '../utils/uuid'
 
 export class ObstacleModel {
   id: string
@@ -27,7 +27,7 @@ export class ObstacleModel {
   results?: Array<Result>
 
   constructor(params) {
-    this.id = params.id || uuid()
+    this.id = params.id || guid()
     this.name = params.name || 'Generic name'
     this.description = params.description || 'Generic Obstacle Description'
     this.icon  = params.icon || '~/images/icons/unknown.png'

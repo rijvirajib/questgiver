@@ -1,6 +1,6 @@
 import { NPCModel } from './npc.model'
 import { TargetModifier, TARGET_TYPE, TARGET_CHANGE_SYMBOL } from './target-modifier.model'
-// import { v4 as uuid } from 'uuid'
+import { guid } from '../utils/uuid'
 
 export class FightMove {
   id?: string
@@ -20,7 +20,7 @@ export class FightMove {
   modifiers?: Array<TargetModifier>
 
   constructor(params: FightMove) {
-    this.id = params.id // || uuid() // For some reason the uuid causes a crypto.Random issue
+    this.id = params.id  || guid()
     this.name = params.name
     this.description = params.description || 'A basic attack.'
     this.levelRequirement = params.levelRequirement || 0

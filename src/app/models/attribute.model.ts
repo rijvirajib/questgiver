@@ -1,7 +1,7 @@
 import { FightMove } from './fight-move.model'
 import { NPC_BASE_STAT } from './npc.model'
 import { TargetModifier, TARGET_TYPE } from './target-modifier.model'
-import { v4 as uuid } from 'uuid'
+import { guid } from '../utils/uuid'
 
 export class AttributeModel {
   id: string
@@ -27,7 +27,7 @@ export class AttributeModel {
   moves: Array<FightMove>
 
   constructor(params) {
-    this.id = params.id || uuid()
+    this.id = params.id || guid()
     this.name = params.name || 'Attribute Random101010'
     this.class = params.class || ATTRIBUTE_CLASS.CHARACTER_CLASS
     this.baseStat = params.baseStat || NPC_BASE_STAT.STR

@@ -3,7 +3,7 @@ import { FightMove, FIGHTMOVE_TARGET } from './fight-move.model'
 import { ItemModel, EQUIP_CLASS } from './item.model'
 import { MissionStateModel } from '../states/missions/missions.model'
 import { TARGET_TYPE, TargetModifier, TARGET_MODIFIER_RUNNER, TARGET_CHANGE_SYMBOL } from './target-modifier.model'
-import { v4 as uuid } from 'uuid'
+import { guid } from '../utils/uuid';
 
 export class NPCModel {
 
@@ -346,7 +346,7 @@ export class NPCModel {
   lastTargetId?: NPCModel['id']
 
   constructor(params: any) {
-    this.id = params.id || uuid()
+    this.id = params.id || guid()
     this.name = params.name || ''
     this.description = params.description || ''
 

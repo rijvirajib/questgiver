@@ -1,7 +1,7 @@
 import { AttributeModel } from './attribute.model'
 import { TargetModifier } from './target-modifier.model'
 import { OBSTACLE_TYPE } from './obstacle.model'
-import { v4 as uuid } from 'uuid'
+import { guid } from '../utils/uuid'
 
 export interface IItemModel {
   id: string
@@ -48,7 +48,7 @@ export class ItemModel implements IItemModel {
   isAvailable?: boolean
 
   constructor(params: IItemModel) {
-    this.id = params.id || uuid()// string
+    this.id = params.id || guid()// string
     this.name = params.name || 'Random Item' // string
     this.description = params.description  || 'Random Description' // string
     this.icon = params.icon || '~/images/icons/unknown.png'
