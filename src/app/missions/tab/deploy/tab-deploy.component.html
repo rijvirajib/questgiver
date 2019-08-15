@@ -15,6 +15,9 @@
       <FlexboxLayout *ngIf="isDeployable" orientation="horizontal" justifyContent="space-between">
         <Button text="Deploy!" (tap)="onDeploy()" class="btn btn-outline"></Button>>
       </FlexboxLayout>
+      <FlexboxLayout orientation="horizontal" justifyContent="space-between">
+        <Button text="SHOW!" (tap)="onShow()" class="btn btn-outline"></Button>>
+      </FlexboxLayout>
     </div>
     <div *ngIf="heroes">
       <Label text="Heroes" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>

@@ -1,16 +1,17 @@
 import * as app from 'tns-core-modules/application'
 import { ActivatedRoute } from '@angular/router'
-import { Component, Input, ChangeDetectionStrategy, OnInit } from '@angular/core'
+import { Component, OnInit, ViewContainerRef } from '@angular/core'
 import { GameState } from '../../states/game.state'
+import { MissionCompleteModalComponent } from '../mission-complete-modal/mission-complete-modal.component'
 import { MissionModel } from '../../models/mission.model'
 import { MissionStateModel } from '../../states/missions/missions.model'
 import { MissionsState } from '../../states/missions/missions.state'
+import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/modal-dialog'
 import { Observable } from 'rxjs'
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer'
 import { RouterExtensions } from 'nativescript-angular/router'
-import { Store, Select, Actions, ofActionDispatched } from '@ngxs/store'
-import { map, mergeMap } from 'rxjs/operators'
-import { Tick } from '~/app/states'
+import { Store, Select, Actions, ofActionSuccessful } from '@ngxs/store'
+import { CompleteMission } from '~/app/states'
 
 @Component({
   selector: 'ns-mission',
@@ -31,7 +32,10 @@ export class MissionComponent implements OnInit {
   constructor(
     private store: Store,
     private routerExtensions: RouterExtensions,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalService: ModalDialogService,
+    private _vcRef: ViewContainerRef,
+    private actions$: Actions,
   ) {}
 
   ngOnInit() {
@@ -42,6 +46,7 @@ export class MissionComponent implements OnInit {
         this.activeMission = fn(missionId)
       })
     })
+    this.actions$.pipe(ofActionSuccessful(CompleteMission)).subscribe(() => this.showMissionCompleteModal())
   }
 
   onTapMission(mission: MissionModel) {
@@ -51,6 +56,28 @@ export class MissionComponent implements OnInit {
         name: 'slideLeft',
         duration: 200,
         curve: 'easeIn'
+      }
+    })
+  }
+
+  showMissionCompleteModal() {
+    const options: ModalDialogOptions = {
+      viewContainerRef: this._vcRef,
+      context: {
+        name: 'name',
+        value: 'VALUE',
+        meaning_up: 'UP',
+        meaning_rev: 'DOWN',
+        mission: this.activeMission
+      },
+      fullscreen: false
+    }
+
+    this.modalService.showModal(MissionCompleteModalComponent, options).then((result: any) => {
+      if (result) {
+        console.log(result)
+      } else {
+        console.log('nothing')
       }
     })
   }

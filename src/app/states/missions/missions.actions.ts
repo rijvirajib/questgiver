@@ -40,9 +40,24 @@ export class CombatMissions {
   static readonly type = '[Mission] Combat Missions'
 }
 
+export class EscapeMission {
+  static readonly type = '[Mission] Escape Mission'
+  constructor(public missionId: string) {}
+}
+
+export class LoseMission {
+  static readonly type = '[Mission] Lose Mission'
+  constructor(public missionId: string) {}
+}
+
+export class WinMission {
+  static readonly type = '[Mission] Win Mission'
+  constructor(public missionId: string) {}
+}
+
 export class CompleteMission {
   static readonly type = '[Mission] Complete Mission'
-  constructor(public mission: MissionModel) {}
+  constructor(public missionId: string) {}
 }
 
 export class HireCrew {

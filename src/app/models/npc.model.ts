@@ -3,7 +3,7 @@ import { FightMove, FIGHTMOVE_TARGET } from './fight-move.model'
 import { ItemModel, EQUIP_CLASS } from './item.model'
 import { MissionStateModel } from '../states/missions/missions.model'
 import { TARGET_TYPE, TargetModifier, TARGET_MODIFIER_RUNNER, TARGET_CHANGE_SYMBOL } from './target-modifier.model'
-import { guid } from '../utils/uuid';
+import { guid } from '../utils/uuid'
 
 export class NPCModel {
 
@@ -417,7 +417,7 @@ export const NPCBASESTATS = {
     STR: 2,
     DEX: 2,
     NRG: 2,
-    maxHP: 500,
+    maxHP: 100,
     maxNRG: 5,
     morale: 100,
     maxTrinkets: 2

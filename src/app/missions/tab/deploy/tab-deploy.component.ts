@@ -1,4 +1,4 @@
-import { AcceptMission, RejectMission, HireCrew, FireCrew, DeployMission, AttackNPC, MissionLog } from '~/app/states'
+import { AcceptMission, RejectMission, HireCrew, FireCrew, DeployMission, AttackNPC, MissionLog, CompleteMission } from '~/app/states'
 import { Component, OnInit, Input } from '@angular/core'
 import { EQUIP_CLASS } from '~/app/models/item.model'
 import { EVENT_TYPES, EventModel } from '~/app/models/event.model'
@@ -53,6 +53,10 @@ export class MissionTabDeployComponent implements OnInit {
   onDeploy() {
     this.store.dispatch(new DeployMission(this.activeMission))
     this.isDeployable = false
+  }
+
+  onShow() {
+    this.store.dispatch(new CompleteMission(this.activeMission.id))
   }
 
   onAttack(npc: NPCModel, moveIndex: number) {

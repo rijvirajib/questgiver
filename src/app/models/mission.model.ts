@@ -33,6 +33,7 @@ export class MissionModel {
   isVisible?: boolean
   isNew?: boolean // keeps track of NEW when viewing
   step: MISSION_STEP
+  status?: MISSION_STATUS
 
   times: TimesModel
 
@@ -55,6 +56,8 @@ export class MissionModel {
   rewards: MissionReward
 
   log?: Array<EventModel>
+  failMessage?: string
+  successMessage?: string
 
   constructor(params: any) {
     this.id = params.id || guid() // string
@@ -82,14 +85,16 @@ export class MissionModel {
     this.obstacles = params.obstacles || []
     this.crewIds = params.crewIds || []
     this.heroIds = params.heroIds || []
+    this.status = params.status
 
     this.rewards = params.rewards || new MissionReward()
 
     this.log = params.log || []
+    this.failMessage = params.failMessage
+    this.successMessage = params.successMessage
   }
 }
 
-// In order
 export enum MISSION_STEP {
   Unaccepted = 'Unaccepted',
   Accepted = 'Accepted',
@@ -99,5 +104,13 @@ export enum MISSION_STEP {
   Combat = 'Combat',
   Escape = 'Escape',
   Rejected = 'Rejected',
-  Compelted = 'Compelted'
+  Complete = 'Complete',
+}
+
+export enum MISSION_STATUS {
+  ACCEPTED,
+  SUCCESS,
+  FAIL,
+  DRAW,
+  REJECTED
 }

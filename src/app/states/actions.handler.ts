@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { Tick } from './game.actions'
 
 @Injectable()
-export class TickHandler {
+export class ActionsHandler {
   constructor(private store: Store, private actions$: Actions) {
     this.actions$
     .pipe(ofActionCompleted(Tick))

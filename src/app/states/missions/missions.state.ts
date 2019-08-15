@@ -14,6 +14,10 @@ import {
   AttackNPC,
   MissionLog,
   NPCInitiativeGain,
+  EscapeMission,
+  WinMission,
+  LoseMission,
+  CompleteMission,
 } from './missions.actions'
 import * as _ from 'lodash'
 import { CASEMESSAGES } from '~/app/db/case-messages'
@@ -25,7 +29,7 @@ import { GameState } from '../game.state'
 import { INVENTORY_ITEMS } from '~/app/db/inventory-items'
 import { ITEM_ATTRIBUTES, NPC_ATTRIBUTES } from '~/app/db/attributes'
 import { ImmutableContext, ImmutableSelector } from '@ngxs-labs/immer-adapter'
-import { MissionModel, MISSION_STEP } from '~/app/models/mission.model'
+import { MissionModel, MISSION_STEP, MISSION_STATUS } from '~/app/models/mission.model'
 import { MissionStateModel } from './missions.model'
 import { NPC } from '~/app/db/npcs'
 import { NPCModel, NPC_STATUS, NPC_SLOT } from '~/app/models/npc.model'
@@ -38,6 +42,7 @@ import { TARGET_MODIFIER_RUNNER, TARGET_TYPE } from '~/app/models/target-modifie
   defaults: {
     missions: {},
     missionIds: [],
+    completedMissionIds: [],
     inventory: {},
     inventoryIds: [],
     npcs: {},
@@ -143,6 +148,7 @@ export class MissionsState {
       // if (!state.inventoryIds || !state.npcIds) {
       //   state.missions = {}
       //   state.missionIds = []
+      //   state.completedMissionIds = []
       //   state.inventory = {}
       //   state.inventoryIds = []
       //   state.npcs = {}
@@ -221,6 +227,7 @@ export class MissionsState {
   ) {
     setState((state: MissionStateModel) => {
       state.missions[mission.id].times.rejected = this.store.selectSnapshot(GameState.currentTime)
+      state.missions[mission.id].status = MISSION_STATUS.REJECTED
       // state.missions[mission.id].isVisible = false
 
       return state
@@ -237,6 +244,7 @@ export class MissionsState {
       const currentTime = this.store.selectSnapshot(GameState.currentTime)
 
       state.missions[mission.id].step = MISSION_STEP.Accepted
+      state.missions[mission.id].status = MISSION_STATUS.ACCEPTED
       state.missions[mission.id].times.accepted = currentTime
 
       // Initialize the log
@@ -359,17 +367,17 @@ export class MissionsState {
     { setState }: StateContext<MissionStateModel>
   ) {
     setState((state: MissionStateModel) => {
-      for (const key of Object.keys(state.missions)) {
-        // if (state.missions[key].times.casing && !state.missions[key].times.cased) {
-          if (state.missions[key].step === MISSION_STEP.Intel) {
+      for (const missionId of Object.keys(state.missions)) {
+        // if (state.missions[missionId].times.casing && !state.missions[missionId].times.cased) {
+          if (state.missions[missionId].step === MISSION_STEP.Intel) {
           // Go through ONE obstacle and increment time spent
           let isComplete = true
           // tslint:disable-next-line:prefer-for-of
-          for (let obstacleIndex = 0; obstacleIndex < state.missions[key].obstacles.length; obstacleIndex++) {
-            const obstacle = state.missions[key].obstacles[obstacleIndex]
+          for (let obstacleIndex = 0; obstacleIndex < state.missions[missionId].obstacles.length; obstacleIndex++) {
+            const obstacle = state.missions[missionId].obstacles[obstacleIndex]
 
             // Already cased, go to the next obstacle
-            if (state.missions[key].obstacles[obstacleIndex].isCased) {
+            if (state.missions[missionId].obstacles[obstacleIndex].isCased) {
               continue
             }
             isComplete = false
@@ -394,16 +402,16 @@ export class MissionsState {
 
             if (obstacle.casedTime >= obstacle.caseTime) {
               // This obstacle is now 'cased'
-              state.missions[key].obstacles[obstacleIndex].isHidden = false
-              state.missions[key].obstacles[obstacleIndex].isCased = true
+              state.missions[missionId].obstacles[obstacleIndex].isHidden = false
+              state.missions[missionId].obstacles[obstacleIndex].isCased = true
               message = CASEMESSAGES[obstacle.type].cased[Math.floor(Math.random() * CASEMESSAGES[obstacle.type].cased.length)]
             } else {
-              state.missions[key].obstacles[obstacleIndex].casedTime += 1
-              state.missions[key].totalCasedTime += 1
+              state.missions[missionId].obstacles[obstacleIndex].casedTime += 1
+              state.missions[missionId].totalCasedTime += 1
             }
             // Only do one at a time
             if (message) {
-              state.missions[key].log.push({
+              state.missions[missionId].log.push({
                 type: EVENT_TYPES.INTEL,
                 time: this.store.selectSnapshot(GameState.currentTime),
                 message
@@ -415,12 +423,13 @@ export class MissionsState {
           // If the mission is ready
           if (isComplete) {
             const currentTime = this.store.selectSnapshot(GameState.currentTime)
-            state.missions[key].times.cased = currentTime
-            state.missions[key].step = MISSION_STEP.Ready
-            state.missions[key].log.push({
+            state.missions[missionId].times.cased = currentTime
+            state.missions[missionId].step = MISSION_STEP.Ready
+            state.completedMissionIds.push(missionId)
+            state.missions[missionId].log.push({
               type: EVENT_TYPES.MISSION,
               time: currentTime,
-              message: `Mission ${key} has been cased.`
+              message: `Mission ${missionId} has been cased.`
             })
             break
           }
@@ -433,7 +442,7 @@ export class MissionsState {
 
   @Action(DeployMission)
   @ImmutableContext()
-  DeployMission(
+  deployMission(
     { setState }: StateContext<MissionStateModel>,
     { mission }: DeployMission
   ) {
@@ -474,8 +483,10 @@ export class MissionsState {
     { setState, dispatch }: StateContext<MissionStateModel>
   ) {
     setState((state: MissionStateModel) => {
+      let hasDeployed = false
       for (const missionId of Object.keys(state.missions)) {
         if (state.missions[missionId].step === MISSION_STEP.Deploy) {
+          hasDeployed = true
           // Check NPC stats if there is a winner
           let isAHeroAlive = false
           state.missions[missionId].heroIds.forEach(npcId => {
@@ -486,12 +497,7 @@ export class MissionsState {
             }
           })
           if (!isAHeroAlive) {
-            dispatch(new MissionLog(
-              missionId,
-              EVENT_TYPES.COMBAT,
-              `[WIN] All enemy Heroes are gone.`
-            ))
-            state.missions[missionId].step = MISSION_STEP.Escape
+            dispatch(new WinMission(missionId))
 
             return state
           }
@@ -505,12 +511,7 @@ export class MissionsState {
             }
           })
           if (!isACrewAlive) {
-            dispatch(new MissionLog(
-              missionId,
-              EVENT_TYPES.COMBAT,
-              `[LOSE] All crew Villains are gone.`
-            ))
-            state.missions[missionId].step = MISSION_STEP.Escape
+            dispatch(new LoseMission(missionId))
 
             return state
           }
@@ -545,7 +546,11 @@ export class MissionsState {
           })
         }
       }
-      state.npcs = _.cloneDeep(state.npcs)
+      // Avoiding cloning every time we tick
+      if (hasDeployed) {
+        state.missions = _.cloneDeep(state.missions)
+        state.npcs = _.cloneDeep(state.npcs)
+      }
 
       return state
     })
@@ -558,7 +563,7 @@ export class MissionsState {
     { npcId }: NPCInitiativeGain
   ) {
     setState((state: MissionStateModel) => {
-      state.npcs[npcId].initiative = state.npcs[npcId].initiative + state.npcs[npcId].speed
+      state.npcs[npcId].initiative = 1 + state.npcs[npcId].initiative + state.npcs[npcId].speed
 
       return state
     })
@@ -571,7 +576,6 @@ export class MissionsState {
     { missionId, npcId, moveIndex, targetNPCId }: AttackNPC
   ) {
     setState((state: MissionStateModel) => {
-      const currentTime = this.store.selectSnapshot(GameState.currentTime)
       const npc = state.npcs[npcId]
       let npcType = '[HERO]'
       let npcIds = state.missions[missionId].crewIds
@@ -644,9 +648,86 @@ export class MissionsState {
     })
   }
 
+  @Action(WinMission)
+  @ImmutableContext()
+  winMission(
+    { setState, dispatch }: StateContext<MissionStateModel>,
+    { missionId }: WinMission
+  ) {
+    setState((state: MissionStateModel) => {
+      dispatch(new MissionLog(
+        missionId,
+        EVENT_TYPES.COMBAT,
+        `[WIN] All enemy Heroes are gone.`
+      ))
+      state.missions[missionId].status = MISSION_STATUS.SUCCESS
+      dispatch(new EscapeMission(missionId))
+
+      return state
+    })
+  }
+
+  @Action(LoseMission)
+  @ImmutableContext()
+  loseMission(
+    { setState, dispatch }: StateContext<MissionStateModel>,
+    { missionId }: LoseMission
+  ) {
+    setState((state: MissionStateModel) => {
+      dispatch(new MissionLog(
+        missionId,
+        EVENT_TYPES.COMBAT,
+        `[LOSE] All crew Villains are gone.`
+      ))
+      state.missions[missionId].status = MISSION_STATUS.FAIL
+      dispatch(new EscapeMission(missionId))
+
+      return state
+    })
+  }
+
+  @Action(EscapeMission)
+  @ImmutableContext()
+  escapeMission(
+    { setState, dispatch }: StateContext<MissionStateModel>,
+    { missionId }: EscapeMission
+  ) {
+    setState((state: MissionStateModel) => {
+      const mission = state.missions[missionId]
+
+      mission.step = MISSION_STEP.Escape
+      state.missions[missionId] = mission
+      dispatch(new MissionLog(
+        missionId,
+        EVENT_TYPES.COMBAT,
+        `[ESCAPE] Your villains successfully escaped!`
+      ))
+
+      /* Do some random stuff */
+      dispatch(new CompleteMission(missionId))
+
+      return state
+    })
+  }
+
+  @Action(CompleteMission)
+  @ImmutableContext()
+  completeMission(
+    { setState, dispatch }: StateContext<MissionStateModel>,
+    { missionId }: CompleteMission
+  ) {
+    setState((state: MissionStateModel) => {
+      state.missions[missionId].step = MISSION_STEP.Complete
+      state.missions[missionId].times.completed = this.store.selectSnapshot(GameState.currentTime)
+      state.missions = _.cloneDeep(state.missions)
+
+      return state
+    })
+  }
+
   @Action(MissionLog)
   @ImmutableContext()
-  MissionLog(
+  missionLog(
     { setState }: StateContext<MissionStateModel>,
     { missionId, type, message }: MissionLog
   ) {

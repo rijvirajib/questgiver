@@ -1,0 +1,12 @@
+<ModalStack class="modal-container">
+  <GridLayout class="card modal" rows="auto,auto" verticalAlignment="middle">
+    <Button row="0" (tap)="onClose()" class="fa" text="&#xf057;" horizontalAlignment="right"></Button>
+    <StackLayout row="1" ref="meaningContainer" class="list-item list-item-meaning">
+      <Label text="Mission Complete!" class="card-title" style="text-align: center;padding-bottom: 24;"></Label>
+      <Label [text]="mission.name"  class="card-title" style="text-align: center;padding-bottom: 24;" textWrap="true"></Label>
+      <Label text="{{ isMissionSuccess ? mission.successMessage : mission.failMessage }}" style="text-align: center;padding-bottom: 24;" textWrap="true"></Label>
+      <Label *ngIf="mission.rewards.gold" text="{{ mission.rewards.gold }} Gold" class="card-title" style="text-align: center;padding-bottom: 24;"></Label>
+      <Label *ngIf="mission.rewards.experience" text="{{ mission.rewards.experience }} EXP" class="card-title" style="text-align: center;padding-bottom: 24;"></Label>
+    </StackLayout>
+  </GridLayout>
+</ModalStack>
